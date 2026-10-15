@@ -1,5 +1,5 @@
-# kifirkin.github.io
+# braid presentation (superseded)
 
-Personal site root. Currently serves the [braid](https://github.com/kifirkin/pi-braid) presentation.
+The deck now lives at the site root: **https://kifirkin.github.io/**
 
-Live: **https://kifirkin.github.io/**
+This repository is kept only so the older URL keeps working.
