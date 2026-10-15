@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="deck-version" content="4.1.0">
+<link rel="icon" href="data:,">
+<title>Braid, a metacognitive extension suite for pi</title>
+<meta name="description" content="A presentation about Braid, the metacognitive extension suite for the pi coding agent. Numbers re-derived from the pi-braid repository.">
+<script>document.documentElement.className += " js";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens ──────────────────────────────────────────────────────────── */
+:root{
+  --paper:#FAF9F6;
+  --paper-2:#F3F1EA;
+  --ink:#191713;
+  --ink-2:#4E4A42;
+  --ink-3:#706A5F;
+  --rule:#E3DFD5;
+  --accent:#C2410C;
+  --braid:#0E6E7C;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gut:clamp(20px,4.6vw,72px);
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body,h1,h2,h3,p,ul,ol,li,dl,dd,figure,blockquote,pre{margin:0;padding:0}
+ul,ol{list-style:none}
+img,svg{display:block;max-width:100%}
+main section *{min-width:0}
+pre{max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+::selection{background:rgba(194,65,12,.16)}
+
+html{scroll-behavior:smooth}
+html.no-motion{scroll-behavior:auto}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:clamp(16px,.55vw + 14.6px,17.5px);
+  line-height:1.62;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ── Structure ───────────────────────────────────────────────────────── */
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:var(--gut)}
+main{position:relative}
+section.spread{
+  border-top:1px solid var(--rule);
+  padding-block:clamp(72px,11vh,128px);
+  display:grid;
+  align-content:start;
+}
+section.spread:first-of-type{border-top:0}
+@media (min-width:980px){
+  section.spread{min-height:100vh;min-height:100svh;align-content:center}
+}
+@media (min-width:1000px) and (prefers-reduced-motion: no-preference){
+  html:not(.no-motion){scroll-snap-type:y proximity}
+  section.spread{scroll-snap-align:start}
+}
+
+/* ── Type ────────────────────────────────────────────────────────────── */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:.68rem;
+  font-weight:500;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+  display:flex;align-items:baseline;gap:.9em;
+  margin-bottom:1.5rem;
+}
+.eyebrow .num{color:var(--accent)}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--rule)}
+h1.display{
+  font-family:var(--serif);
+  font-weight:340;
+  font-size:clamp(4rem,13vw,8.4rem);
+  line-height:.94;
+  letter-spacing:-.028em;
+  font-optical-sizing:auto;
+  text-wrap:balance;
+}
+h2.title{
+  font-family:var(--serif);
+  font-weight:360;
+  font-size:clamp(2rem,4.4vw,3.35rem);
+  line-height:1.06;
+  letter-spacing:-.018em;
+  font-optical-sizing:auto;
+  max-width:22ch;
+  text-wrap:balance;
+}
+h3{font-size:1.02rem;font-weight:600;letter-spacing:-.005em;line-height:1.3}
+.lede{
+  font-size:clamp(1.12rem,1.45vw,1.34rem);
+  line-height:1.55;
+  color:var(--ink-2);
+  max-width:62ch;
+  margin-top:1.3rem;
+  text-wrap:pretty;
+}
+p + p{margin-top:.9em}
+.body{color:var(--ink-2);max-width:68ch}
+.body strong{color:var(--ink);font-weight:500}
+.small{font-size:.82rem;line-height:1.55;color:var(--ink-3)}
+.mono{font-family:var(--mono);font-size:.78rem;letter-spacing:.01em}
+.mt{margin-top:clamp(2rem,4vw,3.4rem)}
+.mt-s{margin-top:1.4rem}
+
+/* ── Hero ────────────────────────────────────────────────────────────── */
+.hero{position:relative}
+.standfirst{
+  font-size:clamp(1.2rem,1.7vw,1.5rem);
+  line-height:1.5;
+  color:var(--ink-2);
+  max-width:54ch;
+  margin-top:1.6rem;
+  text-wrap:pretty;
+}
+.braid{margin-top:clamp(2.2rem,5vh,3.6rem);width:100%;height:auto}
+.braid path{
+  fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke;
+  stroke-dasharray:1;stroke-dashoffset:1;
+  animation:draw 1.9s cubic-bezier(.45,0,.2,1) forwards;
+}
+.braid path:nth-child(1){stroke:var(--ink);opacity:.82}
+.braid path:nth-child(2){stroke:var(--accent);opacity:.9;animation-delay:.22s}
+.braid path:nth-child(3){stroke:var(--ink-3);opacity:.45;animation-delay:.44s}
+@keyframes draw{to{stroke-dashoffset:0}}
+html.no-motion .braid path{animation:none;stroke-dashoffset:0}
+.meta{
+  display:flex;flex-wrap:wrap;
+  gap:.4rem 0;
+  margin-top:clamp(1.8rem,4vh,2.8rem);
+  border-top:1px solid var(--rule);
+  padding-top:1rem;
+  font-family:var(--mono);font-size:.74rem;color:var(--ink-3);
+}
+.meta span{padding-right:1.4rem;margin-right:1.4rem;border-right:1px solid var(--rule);white-space:nowrap}
+.meta span:last-child{border-right:0}
+.meta b{color:var(--ink);font-weight:500}
+.scroll-hint{
+  margin-top:clamp(2rem,5vh,3.2rem);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.scroll-hint::after{content:" ↓";color:var(--accent)}
+
+/* ── Hairline grids ──────────────────────────────────────────────────── */
+.grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cell{background:var(--paper);padding:1.45rem 1.5rem 1.6rem}
+.cell h3 + p{margin-top:.55rem}
+.cell p{color:var(--ink-2);font-size:.94rem;line-height:1.58;text-wrap:pretty}
+.cell .mono-tag{
+  font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);display:block;margin-bottom:.7rem;
+}
+.cols-2{grid-template-columns:repeat(2,1fr)}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-4{grid-template-columns:repeat(4,1fr)}
+
+/* ── Ledger rows (workspaces) ────────────────────────────────────────── */
+.rows{border-top:1px solid var(--rule)}
+.row{
+  display:grid;grid-template-columns:minmax(8.5rem,13rem) minmax(10rem,16rem) 1fr;
+  gap:1.2rem 2rem;align-items:baseline;
+  padding:1.15rem 0;border-bottom:1px solid var(--rule);
+}
+.row .name{font-family:var(--mono);font-size:.84rem;font-weight:500}
+.row .ver{font-family:var(--mono);font-size:.74rem;color:var(--ink-3)}
+.row .desc{color:var(--ink-2);font-size:.94rem;text-wrap:pretty}
+
+/* ── Stats band ──────────────────────────────────────────────────────── */
+.band{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:2.6rem}
+.band.cols-4{grid-template-columns:repeat(4,1fr)}
+.band + .band{margin-top:1.1rem}
+.stat{background:var(--paper);padding:1.5rem 1.4rem 1.7rem}
+.stat .n{
+  font-family:var(--serif);font-weight:380;font-optical-sizing:auto;
+  font-size:clamp(2.4rem,4.4vw,3.6rem);line-height:1;letter-spacing:-.03em;
+  display:block;
+}
+.stat .l{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:.8rem;display:block;
+}
+.stat .g{font-size:.85rem;color:var(--ink-2);margin-top:.5rem;display:block;line-height:1.5}
+/* Store-name heads on the memory slide: long identifiers need a smaller face. */
+.band .stat .n.k{font-size:clamp(1.45rem,2.2vw,1.85rem);letter-spacing:-.01em}
+
+/* ── Flow (pipeline) ─────────────────────────────────────────────────── */
+.flow{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  margin-top:2.6rem;
+}
+.flow .step{padding:1.2rem 1rem 1.3rem;border-left:1px solid var(--rule)}
+.flow .step:first-child{border-left:0}
+.flow .sn{font-family:var(--mono);font-size:.64rem;color:var(--accent);display:block;margin-bottom:.5rem}
+.flow .st{font-weight:600;font-size:.9rem;display:block}
+.flow .sd{font-size:.8rem;color:var(--ink-3);display:block;margin-top:.35rem;line-height:1.45}
+.flow.w4{grid-template-columns:repeat(4,1fr)}
+.flow.w7{grid-template-columns:repeat(7,1fr)}
+
+/* ── Transcript ──────────────────────────────────────────────────────── */
+.transcript{
+  background:var(--paper-2);
+  border:1px solid var(--rule);
+  border-left:3px solid var(--ink);
+  padding:1.3rem 1.5rem;
+  font-family:var(--mono);font-size:.78rem;line-height:1.8;
+  color:var(--ink-2);overflow-x:auto;
+}
+.transcript .tag{color:var(--accent)}
+.transcript .dim{color:var(--ink-3)}
+
+/* ── Channels table ──────────────────────────────────────────────────── */
+.channels{margin-top:2.4rem;border-top:1px solid var(--rule)}
+.channels .ch{
+  display:grid;grid-template-columns:minmax(9rem,14rem) 1fr;
+  gap:1rem 2rem;padding:.85rem 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
+}
+.channels .cn{font-family:var(--mono);font-size:.8rem;color:var(--ink)}
+.channels .cd{color:var(--ink-2);font-size:.92rem}
+.channels .cc{font-family:var(--mono);font-size:.72rem;color:var(--ink-3)}
+
+/* ── Quote ───────────────────────────────────────────────────────────── */
+.pull{
+  margin-top:clamp(2.4rem,5vw,3.6rem);
+  border-left:2px solid var(--accent);
+  padding:.2rem 0 .2rem 1.6rem;
+  max-width:64ch;
+}
+.pull p{
+  font-family:var(--serif);font-weight:360;font-style:italic;
+  font-size:clamp(1.25rem,2.2vw,1.7rem);line-height:1.4;letter-spacing:-.01em;
+  color:var(--ink);
+}
+.pull cite{
+  display:block;margin-top:.8rem;font-family:var(--mono);font-style:normal;
+  font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+}
+
+/* ── Tool rows ───────────────────────────────────────────────────────── */
+.tools{margin-top:2.2rem;border-top:1px solid var(--rule)}
+.tool{
+  display:grid;grid-template-columns:minmax(11rem,17rem) 1fr;
+  gap:.9rem 2rem;padding:.95rem 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
+}
+.tool .tn{font-family:var(--mono);font-size:.82rem;color:var(--braid)}
+.tool .td{color:var(--ink-2);font-size:.93rem;text-wrap:pretty}
+.tool .tn .ny{
+  font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-right:.85em;
+}
+.tool .tn .ny.yes{color:var(--braid)}
+
+/* ── Compare block (what Braid adds) ─────────────────────────────────── */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:2.6rem}
+.cmp .col{background:var(--paper);padding:1.5rem 1.6rem 1.7rem}
+.cmp h3{
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-3);margin-bottom:.9rem;
+}
+.cmp .col.with h3{color:var(--braid)}
+.cmp li{padding:.55rem 0;border-top:1px solid var(--rule);font-size:.9rem;line-height:1.5;color:var(--ink-2)}
+.cmp li:first-child{border-top:0}
+.cmp .mark{font-family:var(--mono);font-size:.75rem;margin-right:.6em;color:var(--ink-3)}
+.cmp .col.with .mark{color:var(--braid)}
+
+/* ── Index (skills) ──────────────────────────────────────────────────── */
+.index{margin-top:2.4rem;columns:3;column-gap:2.6rem}
+.index li{
+  break-inside:avoid;
+  padding:.42rem 0;border-top:1px solid var(--rule);
+  font-size:.82rem;line-height:1.45;
+}
+.index .sk{font-family:var(--mono);font-size:.76rem;color:var(--ink)}
+.index .gl{color:var(--ink-3);display:block}
+
+/* ── Install blocks ──────────────────────────────────────────────────── */
+pre.shell{
+  background:var(--paper-2);border:1px solid var(--rule);border-left:3px solid var(--accent);
+  padding:1.3rem 1.5rem;font-family:var(--mono);font-size:.78rem;line-height:1.75;
+  overflow-x:auto;color:var(--ink-2);margin-top:2.2rem;
+}
+pre.shell .c{color:var(--ink-3)}
+pre.shell .p{color:var(--accent)}
+pre.shell .k{color:var(--ink)}
+.files{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:1.4rem}
+.links{margin-top:2.6rem;border-top:1px solid var(--rule);padding-top:1.2rem;display:flex;flex-wrap:wrap;gap:.8rem 2.4rem}
+.links a{
+  font-family:var(--mono);font-size:.78rem;text-decoration:none;
+  border-bottom:1px solid var(--rule);padding-bottom:.15rem;
+}
+.links a:hover{border-bottom-color:var(--accent);color:var(--accent)}
+
+/* ── Fixed chrome ────────────────────────────────────────────────────── */
+.progress{position:fixed;inset:0 0 auto;height:3px;z-index:50;background:transparent}
+.progress i{
+  display:block;height:100%;background:var(--accent);
+  transform:scaleX(0);transform-origin:0 50%;
+}
+.counter{
+  position:fixed;right:clamp(14px,3vw,28px);bottom:clamp(12px,3vh,22px);z-index:40;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--ink-3);
+  background:var(--paper);border:1px solid var(--rule);padding:.3rem .6rem;
+}
+.totop{
+  position:fixed;left:clamp(14px,3vw,28px);bottom:clamp(12px,3vh,22px);z-index:40;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--ink-3);
+  border:1px solid var(--rule);background:var(--paper);padding:.3rem .6rem;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.totop.show{opacity:1;pointer-events:auto}
+.totop:hover{color:var(--accent)}
+.skip{
+  position:absolute;left:-9999px;top:0;background:var(--paper);color:var(--ink);
+  padding:.6rem 1rem;z-index:60;font-family:var(--mono);font-size:.8rem;
+}
+.skip:focus{left:12px;top:12px}
+
+/* ── Language toggle ─────────────────────────────────────────────────────── */
+.lang-btn{
+  position:fixed;top:clamp(12px,2.5vh,20px);right:clamp(14px,3vw,28px);z-index:45;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;color:var(--ink-3);
+  background:var(--paper);border:1px solid var(--rule);padding:.3rem .6rem;
+  transition:color .15s,border-color .15s;
+}
+.lang-btn:hover{color:var(--accent);border-color:var(--accent)}
+/* Default: English visible, Russian hidden; the <html> classes flip the side. */
+.lang-ru{display:none}
+html.show-lang-ru .lang-en{display:none}
+html.show-lang-ru .lang-ru{display:inline}
+html.show-lang-en .lang-ru{display:none}
+
+/* ── Reveal ──────────────────────────────────────────────────────────── */
+html.js [data-reveal]{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
+  transition-delay:var(--d,0s);
+}
+html.js [data-reveal].in{opacity:1;transform:none}
+html.js [data-reveal="fade"]{transform:none}
+html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;transition:none !important}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width:980px){
+  .cols-4{grid-template-columns:1fr 1fr}
+  .flow.w7{grid-template-columns:repeat(4,1fr)}
+  .band.cols-4{grid-template-columns:1fr 1fr}
+  .index{columns:2}
+}
+@media (max-width:720px){
+  .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
+  .band.cols-4{grid-template-columns:1fr 1fr}
+  .row{grid-template-columns:1fr;gap:.3rem;padding:1rem 0}
+  .row .ver{margin-bottom:.2rem}
+  .flow{grid-template-columns:1fr 1fr}
+  .flow.w4,.flow.w7{grid-template-columns:1fr 1fr}
+  .flow .step{border-top:1px solid var(--rule)}
+  .flow .step:nth-child(-n+2){border-top:0}
+  .flow .step:nth-child(2n+1){border-left:0}
+  .tool{grid-template-columns:1fr;gap:.25rem;padding:.85rem 0}
+  .channels .ch{grid-template-columns:1fr;gap:.15rem}
+  .files{grid-template-columns:1fr}
+  .cmp{grid-template-columns:1fr}
+  pre.shell,.transcript{white-space:pre-wrap;overflow-wrap:anywhere}
+  .eyebrow::after{display:none}
+  .totop{display:none}
+  .index{columns:1}
+  .meta span{padding-right:.9rem;margin-right:.9rem}
+  h2.title{max-width:none}
+}
+@media (max-width:420px){
+  .band.cols-4{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .flow.w4,.flow.w7{grid-template-columns:1fr}
+  .flow .step{border-left:0}
+  .meta{flex-direction:column;gap:.35rem}
+  .meta span{border-right:0;padding-right:0;margin-right:0}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .braid path{animation:none;stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#pi"><span class="lang-en">Skip to content</span><span class="lang-ru">К содержанию</span></a>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+<div class="counter" id="counter" aria-hidden="true">01 / 19</div>
+<button class="totop" id="totop" type="button"><span class="lang-en">↑ Top</span><span class="lang-ru">↑ Наверх</span></button>
+<button class="lang-btn" id="langToggle" onclick="toggleLang()" title="Switch language">RU</button>
+
+<main>
+
+<!-- ── 01. Hero ─────────────────────────────────────────────────────── -->
+<section class="spread hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">π</span> <span class="lang-en">A presentation about an agent, made by that agent</span><span class="lang-ru">Презентация об агенте, сделанная самим агентом</span></p>
+    <h1 class="display" data-reveal style="--d:.06s">Braid</h1>
+    <p class="standfirst" data-reveal style="--d:.12s"><span class="lang-en">A metacognitive extension suite for the pi coding agent. It rides pi's session loop and adds enforcement, memory, reasoning, and self-improvement, then verifies its own work before calling anything done.</span><span class="lang-ru">Набор метакогнитивных расширений для кодинг-агента pi. Он работает поверх цикла сессий pi и добавляет контроль, память, рассуждения и самоулучшение, а затем проверяет собственную работу, прежде чем объявить её готовой.</span></p>
+    <svg class="braid" viewBox="0 0 720 120" aria-hidden="true" data-reveal style="--d:.2s">
+      <path pathLength="1" d="M0,60 C40,22 80,22 120,60 S200,98 240,60 S320,22 360,60 S440,98 480,60 S560,22 600,60 S680,98 720,60"/>
+      <path pathLength="1" d="M0,60 C40,98 80,98 120,60 S200,22 240,60 S320,98 360,60 S440,22 480,60 S560,98 600,60 S680,22 720,60"/>
+      <path pathLength="1" d="M0,60 C60,38 120,38 180,60 S300,82 360,60 S480,38 540,60 S660,82 720,60"/>
+    </svg>
+    <p class="meta" data-reveal style="--d:.26s">
+      <span>pi <b>1.1.0</b></span>
+      <span>braid <b>0.3.2-main.23</b></span>
+      <span><span class="lang-en"><b>22</b> skills</span><span class="lang-ru"><b>22</b> навыка</span></span>
+      <span><span class="lang-en"><b>33</b> tools</span><span class="lang-ru"><b>33</b> инструмента</span></span>
+    </p>
+    <p class="scroll-hint" data-reveal style="--d:.32s"><span class="lang-en">Scroll</span><span class="lang-ru">Прокрутите</span></p>
+  </div>
+</section>
+
+<!-- ── 02. The harness ──────────────────────────────────────────────── -->
+<section class="spread" id="pi">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">02</span> <span class="lang-en">The harness</span><span class="lang-ru">Среда</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">A small core, an open surface</span><span class="lang-ru">Малое ядро, открытая поверхность</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi is a minimal terminal coding agent: a session loop and a handful of built-in tools, designed so that everything else arrives as an extension. Braid is one of those extensions, and a large one.</span><span class="lang-ru">pi — минимальный терминальный кодинг-агент: цикл сессии и несколько встроенных инструментов, устроенный так, что всё остальное приходит расширениями. Braid — одно из таких расширений, и немаленькое.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Nine native tools</span><span class="lang-ru">Девять нативных инструментов</span></h3>
+        <p><span class="lang-en">read, write, edit, and bash sit at the center; grep, find, ls, and PowerShell round out the working set. tool_search returns deferred tools to the active list when they are needed.</span><span class="lang-ru">read, write, edit и bash — в центре; grep, find, ls и PowerShell дополняют рабочий набор. tool_search возвращает отложенные инструменты в активный список, когда они нужны.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Sessions are trees</span><span class="lang-ru">Сессии — это деревья</span></h3>
+        <p><span class="lang-en">Every turn is a node in a JSON Lines (JSONL) session file. Branch, fork, resume, and compact in place, without losing the trail that led there.</span><span class="lang-ru">Каждый шаг — узел в файле сессии JSON Lines (JSONL). Ветвление, форки, возобновление и сжатие на месте — тропа, которая привела сюда, не теряется.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Four ways in, one loop</span><span class="lang-ru">Четыре входа, один цикл</span></h3>
+        <p><span class="lang-en">An interactive terminal user interface (TUI), a one-shot <span class="mono">--print</span>, machine-readable JSON, or Remote Procedure Call (RPC) over standard input and output. A Software Development Kit (SDK) embeds the same loop in your own programs.</span><span class="lang-ru">Интерактивный терминальный интерфейс (TUI), одноразовый <span class="mono">--print</span>, машиночитаемый JSON или RPC (Remote Procedure Call) поверх стандартного ввода-вывода. SDK (Software Development Kit) встраивает тот же цикл в ваши программы.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Extensible by design</span><span class="lang-ru">Расширяемость по замыслу</span></h3>
+        <p><span class="lang-en">Extensions are TypeScript modules, skills are Markdown procedures, and prompts and themes are plain files. Bundles ship as pi packages.</span><span class="lang-ru">Расширения — TypeScript-модули, навыки — Markdown-процедуры, промпты и темы — простые файлы. Собираются в pi-пакеты.</span></p>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">This build ran against pi 1.1.0. Native tool inventory: <span class="mono">packages/core/TOOLS.md</span>.</span><span class="lang-ru">Сборка выполнена на pi 1.1.0. Каталог нативных инструментов: <span class="mono">packages/core/TOOLS.md</span>.</span></p>
+  </div>
+</section>
+
+<!-- ── 03. Philosophy ──────────────────────────────────────────────── -->
+<section class="spread" id="philosophy">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">03</span> <span class="lang-en">Philosophy</span><span class="lang-ru">Философия</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">The shape of “No”</span><span class="lang-ru">Форма слова «нет»</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi's core says no on purpose: each no is a door an extension can walk through, and the answer is allowed to move. One of the doors below has already opened.</span><span class="lang-ru">Ядро pi говорит «нет» намеренно: каждое «нет» — дверь, в которую может войти расширение, и ответу позволено меняться. Одна из дверей ниже уже открылась.</span></p>
+    <div class="tools" data-reveal style="--d:.12s">
+      <div class="tool"><span class="tn"><span class="ny yes"><span class="lang-en">yes</span><span class="lang-ru">да</span></span>MCP</span><span class="td"><span class="lang-en">The 2025 no became a yes: pi now ships MCP as a built-in extension. Servers come from <span class="mono">mcp.json</span>, arrive with <span class="mono">pi mcp add</span>, and their tools are named <span class="mono">mcp__server__tool</span>.</span><span class="lang-ru">«Нет» 2025 года стало «да»: MCP теперь встроенное расширение pi. Серверы берутся из <span class="mono">mcp.json</span>, добавляются через <span class="mono">pi mcp add</span>, а их инструменты называются <span class="mono">mcp__server__tool</span>.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Sub-agents</span><span class="td"><span class="lang-en">No built-in sub-agents; the right way depends on the stack. Braid's answer is a fleet: worker panes, own branches, file locks.</span><span class="lang-ru">Встроенных субагентов нет; правильный способ зависит от стека. Ответ Braid — флот: панели воркеров, свои ветки, блокировки файлов.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Permission popups</span><span class="td"><span class="lang-en">The agent does not ask before every tool call; isolation beats interruption. Run it in a container, or wire your own confirmation where it matters.</span><span class="lang-ru">Агент не спрашивает разрешения перед каждым вызовом; изоляция лучше прерывания. Запускайте в контейнере или встройте своё подтверждение там, где это важно.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Plan mode</span><span class="td"><span class="lang-en">A plan is a file or a skill, not a mode. The scratchpad keeps plans where the work happens.</span><span class="lang-ru">План — это файл или навык, а не режим. Scratchpad держит планы там, где идёт работа.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>TODO tools</span><span class="td"><span class="lang-en">The core ships none; a file does the job better and does not pull the model off the work.</span><span class="lang-ru">В ядре их нет: файл справляется лучше и не отвлекает модель от работы.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Background bash</span><span class="td"><span class="lang-en">A watched terminal beats a background job: tmux, full observability, direct interaction.</span><span class="lang-ru">Наблюдаемый терминал лучше фонового процесса: tmux, полная наблюдаемость, прямое взаимодействие.</span></span></div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">The positions kept from the deck's earlier generations, checked against today's pi: one flipped, the rest hold.</span><span class="lang-ru">Позиции из прежних поколений презентации, сверенные с сегодняшним pi: одна перевернулась, остальные в силе.</span></p>
+  </div>
+</section>
+
+<!-- ── 04. The suite ────────────────────────────────────────────────── -->
+<section class="spread" id="suite">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">04</span> <span class="lang-en">The suite</span><span class="lang-ru">Набор</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Five workspaces, one suite</span><span class="lang-ru">Пять воркспейсов, один набор</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Braid installs into pi as a monorepo. The core carries the metacognitive layer; four satellites add the skill library, extra tools, providers, and a human channel.</span><span class="lang-ru">Braid устанавливается в pi как монорепозиторий. Ядро несёт метакогнитивный слой; четыре спутника добавляют библиотеку навыков, дополнительные инструменты, провайдеров и человеческий канал.</span></p>
+    <div class="rows mt" data-reveal style="--d:.12s">
+      <div class="row">
+        <span class="name">core</span>
+        <span class="ver">pi-braid 0.3.2-main.23</span>
+        <span class="desc"><span class="lang-en">Enforcement, three-store memory, reasoning, self-improvement, context lifecycle.</span><span class="lang-ru">Контроль, три хранилища памяти, рассуждения, самоулучшение, жизненный цикл контекста.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">skills</span>
+        <span class="ver">pi-braid-skills 0.2.0-main.1</span>
+        <span class="desc"><span class="lang-en">Optional pack: 8 Markdown procedures on demand, chosen by description. The core already ships 22 of its own.</span><span class="lang-ru">Опциональный пакет: 8 Markdown-процедур по запросу, выбираются по описанию. В самом ядре уже 22 своих.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">contrib</span>
+        <span class="ver">pi-braid-contrib 0.1.0-main.1</span>
+        <span class="desc"><span class="lang-en">Optional pack: 12 standalone extensions (browser, codebase, diff, healthcheck, network monitor, observatory, path security, rate limiter, repl, sleep, system monitor, tool config).</span><span class="lang-ru">Опциональный пакет: 12 самостоятельных расширений (browser, codebase, diff, healthcheck, network monitor, observatory, path-security, rate-limiter, repl, sleep, system-monitor, tool-config).</span></span>
+      </div>
+      <div class="row">
+        <span class="name">providers</span>
+        <span class="ver">pi-braid-providers 1.0.4-main.2</span>
+        <span class="desc"><span class="lang-en">Venice models through the a0 gateway, with a multi-key ring of application programming interface (API) keys.</span><span class="lang-ru">Модели Venice через шлюз a0, с кольцом из нескольких ключей программного интерфейса (API).</span></span>
+      </div>
+      <div class="row">
+        <span class="name">telegram</span>
+        <span class="ver">pi-braid-telegram 0.1.4-main.4</span>
+        <span class="desc"><span class="lang-en">A bidirectional Telegram channel: send out, poll in, inbound media, voice replies, pause control.</span><span class="lang-ru">Двусторонний канал Telegram: отправка, приём, входящие медиа, голосовые ответы, управление паузой.</span></span>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">Core alone gives you the metacognitive layer, skills included; every satellite is optional. Registered with pi through <span class="mono">packages/</span> entries in settings.</span><span class="lang-ru">Одно ядро даёт метакогнитивный слой; спутники опциональны. Регистрируются в pi через записи <span class="mono">packages/</span> в настройках.</span></p>
+  </div>
+</section>
+
+<!-- ── 05. What Braid adds ──────────────────────────────────────────── -->
+<section class="spread" id="adds">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">05</span> <span class="lang-en">The difference</span><span class="lang-ru">Разница</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">What Braid adds</span><span class="lang-ru">Что добавляет Braid</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Bare pi is a good agent with a short memory and no second opinion. Each workspace in the suite closes one of those gaps.</span><span class="lang-ru">Голый pi — хороший агент с короткой памятью и без второго мнения. Каждый воркспейс набора закрывает один из этих пробелов.</span></p>
+    <div class="cmp" data-reveal style="--d:.12s">
+      <div class="col without">
+        <h3><span class="lang-en">Without Braid</span><span class="lang-ru">Без Braid</span></h3>
+        <ul>
+          <li><span class="mark">—</span><span class="lang-en">Forgets past sessions</span><span class="lang-ru">Забывает прошлые сессии</span></li>
+          <li><span class="mark">—</span><span class="lang-en">Takes your word at face value</span><span class="lang-ru">Верит на слово</span></li>
+          <li><span class="mark">—</span><span class="lang-en">A flat tool list: read, write, edit, bash</span><span class="lang-ru">Плоский список инструментов: read, write, edit, bash</span></li>
+          <li><span class="mark">—</span><span class="lang-en">No self-improvement loop</span><span class="lang-ru">Нет цикла самоулучшения</span></li>
+          <li><span class="mark">—</span><span class="lang-en">Starts fresh every session</span><span class="lang-ru">Начинает с нуля каждую сессию</span></li>
+        </ul>
+      </div>
+      <div class="col with">
+        <h3><span class="lang-en">With Braid</span><span class="lang-ru">С Braid</span></h3>
+        <ul>
+          <li><span class="mark">+</span><span class="lang-en">Three memory stores and cross-session recall</span><span class="lang-ru">Три хранилища памяти и межсессионный поиск</span></li>
+          <li><span class="mark">+</span><span class="lang-en">verify, verify_claim, hypothesize: checks before trust</span><span class="lang-ru">verify, verify_claim, hypothesize: проверки прежде доверия</span></li>
+          <li><span class="mark">+</span><span class="lang-en">Cognitive tools: think, scratchpad, memory_store</span><span class="lang-ru">Когнитивные инструменты: think, scratchpad, memory_store</span></li>
+          <li><span class="mark">+</span><span class="lang-en">A fleet: workers in worktrees, verified before merge</span><span class="lang-ru">Флот: воркеры в ворктри, проверка до слияния</span></li>
+          <li><span class="mark">+</span><span class="lang-en">Working state that survives compaction</span><span class="lang-ru">Рабочее состояние, переживающее сжатие</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">None of this is pi's job: the harness stays small and the suite carries the metacognition. That division is the point.</span><span class="lang-ru">Ничто из этого не входит в задачи pi: среда остаётся маленькой, а метакогницию берёт на себя набор. В этом разделении и смысл.</span></p>
+  </div>
+</section>
+
+<!-- ── 06. Architecture ─────────────────────────────────────────────── -->
+<section class="spread" id="architecture">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">06</span> <span class="lang-en">Architecture</span><span class="lang-ru">Архитектура</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">It plugs into the loop; it does not replace it</span><span class="lang-ru">Встраивается в цикл, а не заменяет его</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Extensions register tools, listen for session events, and shape the system prompt. Nothing is forked and nothing is monkey-patched: the suite is a set of modules loaded into a session.</span><span class="lang-ru">Расширения регистрируют инструменты, слушают события сессии и формируют системный промпт. Ничего не форкается и не патчится в обход: весь набор — это модули, загружаемые в сессию.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Tools</span><span class="lang-ru">Инструменты</span></span>
+        <h3><span class="lang-en">24 of 33</span><span class="lang-ru">24 из 33</span></h3>
+        <p><span class="lang-en">Braid registers 24 documented tools alongside pi's 9 native ones. The full catalog lives in a single file, TOOLS.md, with each tool's enablement tier written next to it.</span><span class="lang-ru">Braid регистрирует 24 документированных инструмента рядом с 9 нативными у pi. Полный каталог живёт в одном файле TOOLS.md, а рядом с каждым инструментом указан уровень его включения.</span></p>
+      </div>
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Prompt</span><span class="lang-ru">Промпт</span></span>
+        <h3><span class="lang-en">One guideline per tool</span><span class="lang-ru">Одна директива на инструмент</span></h3>
+        <p><span class="lang-en">Each enabled tool contributes a one-line guideline to the system prompt. A lockstep test keeps those lines exactly equal to the catalog; change one side alone and the build fails.</span><span class="lang-ru">Каждый включённый инструмент добавляет в системный промпт одну строку-директиву. Lockstep-тест удерживает эти строки в точном соответствии с каталогом: изменишь одну сторону — сборка падает.</span></p>
+      </div>
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Loading</span><span class="lang-ru">Загрузка</span></span>
+        <h3><span class="lang-en">28 modules, three tiers</span><span class="lang-ru">28 модулей, три уровня</span></h3>
+        <p><span class="lang-en">Every module is always-on, default-on, or opt-in: 7, 19, and 2 in those tiers. Always-on modules cannot be disabled; opt-in ones stay dark until a setting asks for them.</span><span class="lang-ru">Каждый модуль — always-on, default-on или opt-in: 7, 19 и 2 по уровням. Always-on модули нельзя отключить; opt-in остаются тёмными, пока настройка их не включит.</span></p>
+      </div>
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Steering</span><span class="lang-ru">Управление</span></span>
+        <h3><span class="lang-en">Whispers, not rewrites</span><span class="lang-ru">Шёпот, а не перезапись</span></h3>
+        <p><span class="lang-en">Mid-session feedback arrives as short injected messages that steer the next turn, without rewriting the system prompt underneath the session.</span><span class="lang-ru">Обратная связь посреди сессии приходит короткими инъекциями, которые направляют следующий шаг, не переписывая системный промпт под сессией.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 07. Whispers ─────────────────────────────────────────────────── -->
+<section class="spread" id="whispers">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">07</span> <span class="lang-en">Injection</span><span class="lang-ru">Инъекция</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Whispers at the edge of a turn</span><span class="lang-ru">Шёпот на границе шага</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A whisper is a short message injected into a live session. The agent sees it on its next turn; the terminal shows it; the transcript keeps it. Delivery is best-effort and flood-safe, so a whisper can never block the turn it observes.</span><span class="lang-ru">Шёпот — короткое сообщение, инжектируемое в живую сессию. Агент видит его на следующем шаге; терминал показывает; транскрипт сохраняет. Доставка — best-effort и устойчива к флуду, поэтому шёпот никогда не блокирует шаг, за которым наблюдает.</span></p>
+    <p class="small mt" data-reveal style="--d:.1s"><span class="lang-en">The turn a whisper enters has a shape:</span><span class="lang-ru">Шаг, в который входит шёпот, имеет форму:</span></p>
+    <div class="flow w7" data-reveal style="--d:.12s">
+      <div class="step"><span class="sn">01</span><span class="st"><span class="lang-en">user</span><span class="lang-ru">пользователь</span></span><span class="sd"><span class="lang-en">your message</span><span class="lang-ru">ваше сообщение</span></span></div>
+      <div class="step"><span class="sn">02</span><span class="st"><span class="lang-en">prompt</span><span class="lang-ru">промпт</span></span><span class="sd"><span class="lang-en">assembled with signals</span><span class="lang-ru">собирается с сигналами</span></span></div>
+      <div class="step"><span class="sn">03</span><span class="st"><span class="lang-en">recall</span><span class="lang-ru">вспомнить</span></span><span class="sd"><span class="lang-en">memory lookups</span><span class="lang-ru">поиск в памяти</span></span></div>
+      <div class="step"><span class="sn">04</span><span class="st"><span class="lang-en">think</span><span class="lang-ru">подумать</span></span><span class="sd"><span class="lang-en">scratchpad, reasoning</span><span class="lang-ru">scratchpad, рассуждение</span></span></div>
+      <div class="step"><span class="sn">05</span><span class="st"><span class="lang-en">act</span><span class="lang-ru">действовать</span></span><span class="sd"><span class="lang-en">read · write · bash</span><span class="lang-ru">read · write · bash</span></span></div>
+      <div class="step"><span class="sn">06</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">проверить</span></span><span class="sd"><span class="lang-en">checks before done</span><span class="lang-ru">проверки перед завершением</span></span></div>
+      <div class="step"><span class="sn">07</span><span class="st"><span class="lang-en">respond</span><span class="lang-ru">ответ</span></span><span class="sd"><span class="lang-en">the turn ends, the reflector reads it</span><span class="lang-ru">шаг завершается, рефлектор читает его</span></span></div>
+    </div>
+    <div class="transcript mt" data-reveal style="--d:.18s">
+      <div><span class="tag">[braid-whisper - context-lifecycle]</span> <span class="dim"><span class="lang-en">Context at N tokens. Consider archiving a range before compaction.</span><span class="lang-ru">Контекст на N токенов. Стоит заархивировать диапазон до сжатия.</span></span></div>
+      <div><span class="tag">[braid-whisper - watchdog]</span> <span class="dim"><span class="lang-en">No tool activity for N turns. Checking liveness.</span><span class="lang-ru">Нет активности инструментов N шагов. Проверяю живость.</span></span></div>
+      <div><span class="tag">[braid-whisper - timer]</span> <span class="dim"><span class="lang-en">Reminder: check the worker pane, then continue.</span><span class="lang-ru">Напоминание: проверьте панель воркера и продолжайте.</span></span></div>
+    </div>
+    <div class="channels" data-reveal style="--d:.24s">
+      <div class="ch"><span class="cn">enforcement</span><span class="cd"><span class="lang-en">Quality and turn gates</span><span class="lang-ru">Гейты качества и шага</span></span><span class="cc"><span class="lang-en">every turn</span><span class="lang-ru">на каждом шаге</span></span></div>
+      <div class="ch"><span class="cn">heartbeat</span><span class="cd"><span class="lang-en">Summaries from background services</span><span class="lang-ru">Сводки фоновых служб</span></span><span class="cc"><span class="lang-en">every few turns</span><span class="lang-ru">раз в несколько шагов</span></span></div>
+      <div class="ch"><span class="cn">watchdog</span><span class="cd"><span class="lang-en">Degradation and stall escalations</span><span class="lang-ru">Эскалации деградации и зависаний</span></span><span class="cc"><span class="lang-en">rare, then loud</span><span class="lang-ru">редко, но громко</span></span></div>
+      <div class="ch"><span class="cn">context-lifecycle</span><span class="cd"><span class="lang-en">Archive and compaction proposals</span><span class="lang-ru">Предложения по архивации и сжатию</span></span><span class="cc"><span class="lang-en">at thresholds</span><span class="lang-ru">на порогах</span></span></div>
+      <div class="ch"><span class="cn">timers</span><span class="cd"><span class="lang-en">Scheduled reminders</span><span class="lang-ru">Запланированные напоминания</span></span><span class="cc"><span class="lang-en">on expiry</span><span class="lang-ru">по истечении</span></span></div>
+      <div class="ch"><span class="cn">telegram</span><span class="cd"><span class="lang-en">Messages from the owner</span><span class="lang-ru">Сообщения от владельца</span></span><span class="cc"><span class="lang-en">while the poller runs</span><span class="lang-ru">пока работает poller</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 08. Calibration ──────────────────────────────────────────────── -->
+<section class="spread" id="calibration">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">08</span> <span class="lang-en">Calibration</span><span class="lang-ru">Калибровка</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Tuned against flattery</span><span class="lang-ru">Настроен против угодливости</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">The enforcement extension is a belief-policy engine with an unglamorous job: notice when the agent is drifting, agreeing too easily, or declaring victory early, and say so.</span><span class="lang-ru">Расширение контроля — это движок убеждений и политик с негламурной работой: замечать, когда агент уплывает, слишком легко соглашается или объявляет победу раньше времени, и говорить об этом.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Structured signals</span><span class="lang-ru">Структурированные сигналы</span></h3>
+        <p><span class="lang-en">Three levels: L1 signals surface through the prompt builder, L2 bundles session-level sub-signals, and L3 marks the critical ones: validation failures and orphan chains. Chosen by policy rather than mood.</span><span class="lang-ru">Три уровня: сигналы L1 всплывают через сборщик промпта, L2 объединяет подсигналы уровня сессии, а L3 отмечает критичные: провалы валидации и осиротевшие цепочки. Выбираются политикой, а не настроением.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Sycophancy detection</span><span class="lang-ru">Обнаружение сикофантии</span></h3>
+        <p><span class="lang-en">Contrast-based checks compare what the agent said with what the evidence supports, and flag agreement that is not grounded.</span><span class="lang-ru">Контрастные проверки сравнивают сказанное агентом с тем, что подтверждают доказательства, и помечают необоснованное согласие.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Topic drift</span><span class="lang-ru">Уход от темы</span></h3>
+        <p><span class="lang-en">Dedicated check and reset tools measure how far the current turn has wandered from the request that opened it.</span><span class="lang-ru">Специальные инструменты проверки и сброса измеряют, насколько текущий шаг отклонился от открывшего его запроса.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Verify before done</span><span class="lang-ru">Проверь перед завершением</span></h3>
+        <p><span class="lang-en">A reasoning-quality detector watches for instability in the agent's own conclusions and nudges verification when confidence outruns evidence.</span><span class="lang-ru">Детектор качества рассуждений следит за нестабильностью собственных выводов агента и подталкивает к верификации, когда уверенность опережает доказательства.</span></p>
+      </div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">On task completion a reflector reviews the turn for principles and procedures worth keeping, so a session leaves behind more than its transcript.</span><span class="lang-ru">По завершении задачи рефлектор просматривает шаг в поисках принципов и процедур, которые стоит сохранить, — сессия оставляет после себя больше, чем транскрипт.</span></p>
+  </div>
+</section>
+
+<!-- ── 09. Memory ───────────────────────────────────────────────────── -->
+<section class="spread" id="memory">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">09</span> <span class="lang-en">Memory</span><span class="lang-ru">Память</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Three shapes of remembering</span><span class="lang-ru">Три формы памяти</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A flat log remembers what happened. Braid keeps three stores with different shapes and search semantics, plus working state that survives compaction.</span><span class="lang-ru">Плоский лог помнит, что произошло. Braid держит три хранилища разных форм с разной семантикой поиска, плюс рабочее состояние, переживающее сжатие.</span></p>
+    <div class="band cols-3 mt" data-reveal style="--d:.12s">
+      <div class="stat">
+        <span class="n k">episodes.jsonl</span>
+        <span class="l"><span class="lang-en">episodic memory</span><span class="lang-ru">эпизодическая память</span></span>
+        <span class="g"><span class="lang-en">What happened, in what context, with what outcome. Case-based recall for the next attempt.</span><span class="lang-ru">Что случилось, в каком контексте, с каким исходом. Поиск по прецедентам для следующей попытки.</span></span>
+      </div>
+      <div class="stat">
+        <span class="n k">semantic.json</span>
+        <span class="l"><span class="lang-en">semantic memory</span><span class="lang-ru">семантическая память</span></span>
+        <span class="g"><span class="lang-en">Facts, insights, patterns, preferences, and errors; tagged, linked, and weighted by importance.</span><span class="lang-ru">Факты, инсайты, паттерны, предпочтения и ошибки; с тегами, связями и весами важности.</span></span>
+      </div>
+      <div class="stat">
+        <span class="n k"><span class="lang-en">heuristics</span><span class="lang-ru">эвристики</span></span>
+        <span class="l"><span class="lang-en">procedural memory</span><span class="lang-ru">процедурная память</span></span>
+        <span class="g"><span class="lang-en">Procedure rules that evolve after a success or a failure. Kept in session and applied as they prove useful.</span><span class="lang-ru">Процедурные правила, эволюционирующие после успеха или неудачи. Живут в сессии и применяются, пока приносят пользу.</span></span>
+      </div>
+    </div>
+    <div class="grid cols-4 mt-s" data-reveal style="--d:.18s">
+      <div class="cell">
+        <h3><span class="lang-en">Scratchpad</span><span class="lang-ru">Scratchpad</span></h3>
+        <p><span class="lang-en">Durable goals, plans, and decisions, resumable after compaction or a restart.</span><span class="lang-ru">Долговечные цели, планы и решения, переживающие сжатие и перезапуск.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Session recall</span><span class="lang-ru">Межсессионный поиск</span></h3>
+        <p><span class="lang-en">Search across past sessions, so yesterday's reasoning is still reachable.</span><span class="lang-ru">Поиск по прошлым сессиям: рассуждения вчерашнего дня остаются доступными.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Context lifecycle</span><span class="lang-ru">Жизненный цикл контекста</span></h3>
+        <p><span class="lang-en">Watches context pressure and proposes archiving or compaction before a limit is hit.</span><span class="lang-ru">Следит за давлением контекста и предлагает архивацию или сжатие до достижения лимита.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Workspace snapshot</span><span class="lang-ru">Снимки workspace</span></h3>
+        <p><span class="lang-en">Capture, diff, and restore files; a return point before risky edits.</span><span class="lang-ru">Захват, diff и восстановление файлов; точка возврата перед рискованными правками.</span></p>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">All three stores are cross-searchable through <span class="mono">memory action=recall_search</span>. Counts are not embedded here: the stores on disk are the only source of truth, and the memory tools read them live.</span><span class="lang-ru">Все три хранилища доступны для кросс-поиска через <span class="mono">memory action=recall_search</span>. Числа сюда не вшиты: единственный источник правды — хранилища на диске, а инструменты памяти читают их напрямую.</span></p>
+  </div>
+</section>
+
+<!-- ── 10. The fleet ────────────────────────────────────────────────── -->
+<section class="spread" id="fleet">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">10</span> <span class="lang-en">The fleet</span><span class="lang-ru">Флот</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">One orchestrator, many hands</span><span class="lang-ru">Один оркестратор, много рук</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Large work does not fit one context. Braid delegates it: the orchestrator plans and decomposes; workers run in isolated terminals and git worktrees; results come back as artifacts, not prose.</span><span class="lang-ru">Большая работа не помещается в один контекст. Braid делегирует её: оркестратор планирует и декомпозирует; воркеры работают в изолированных терминалах и git-ворктри, а результаты возвращаются артефактами, не прозой.</span></p>
+    <div class="flow" data-reveal style="--d:.12s">
+      <div class="step"><span class="sn">01</span><span class="st"><span class="lang-en">plan</span><span class="lang-ru">план</span></span><span class="sd"><span class="lang-en">split the work, name the files</span><span class="lang-ru">разбить работу, назвать файлы</span></span></div>
+      <div class="step"><span class="sn">02</span><span class="st"><span class="lang-en">spawn</span><span class="lang-ru">запуск</span></span><span class="sd"><span class="lang-en">worker pane, own branch</span><span class="lang-ru">панель воркера, своя ветка</span></span></div>
+      <div class="step"><span class="sn">03</span><span class="st"><span class="lang-en">lock</span><span class="lang-ru">блокировка</span></span><span class="sd"><span class="lang-en">file locks stop collisions</span><span class="lang-ru">блокировки файлов исключают коллизии</span></span></div>
+      <div class="step"><span class="sn">04</span><span class="st"><span class="lang-en">execute</span><span class="lang-ru">выполнение</span></span><span class="sd"><span class="lang-en">isolated working directory</span><span class="lang-ru">изолированный рабочий каталог</span></span></div>
+      <div class="step"><span class="sn">05</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">Проверка</span></span><span class="sd"><span class="lang-en">fresh eyes, never the author</span><span class="lang-ru">свежими глазами, не автором</span></span></div>
+      <div class="step"><span class="sn">06</span><span class="st"><span class="lang-en">merge</span><span class="lang-ru">слияние</span></span><span class="sd"><span class="lang-en">only verified work lands</span><span class="lang-ru">сливается только проверенная работа</span></span></div>
+    </div>
+    <div class="grid cols-2 mt" data-reveal style="--d:.18s">
+      <div class="cell">
+        <h3><span class="lang-en">Reports are schema-checked</span><span class="lang-ru">Отчёты проверяются по схеме</span></h3>
+        <p><span class="lang-en">A worker result must name an output file, list gate evidence with exit codes, state its claims, and declare where its change lives. A checker validates all of it before anyone merges.</span><span class="lang-ru">Результат воркера должен назвать выходной файл, перечислить доказательства гейтов с кодами выхода, заявить свои утверждения и указать, где живёт изменение. Чекер валидирует всё это до слияния.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Two roles, one protocol</span><span class="lang-ru">Две роли, один протокол</span></h3>
+        <p><span class="lang-en">The orchestration skill covers both sides of the handoff; independent verification is its own skill, because self-certification is not a check.</span><span class="lang-ru">Навык оркестрации охватывает обе стороны передачи; независимая проверка — отдельный навык, потому что самосертификация не считается проверкой.</span></p>
+      </div>
+    </div>
+    <blockquote class="pull" data-reveal style="--d:.24s">
+      <p><span class="lang-en">This deck is a worker artifact: built in an isolated worktree, its numbers re-derived from the repository, verified before it was called done.</span><span class="lang-ru">Эта презентация — артефакт воркера: собрана в изолированном ворктри, её числа перепроверены по репозиторию, и она верифицирована до того, как её назвали готовой.</span></p>
+      <cite><span class="lang-en">Built the way the fleet builds</span><span class="lang-ru">Собрано так, как собирает флот</span></cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ── 11. Discipline ───────────────────────────────────────────────── -->
+<section class="spread" id="discipline">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">11</span> <span class="lang-en">Discipline</span><span class="lang-ru">Дисциплина</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Done is a claim; evidence is the proof</span><span class="lang-ru">«Готово» — утверждение; доказательство — улики</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Braid's cognitive tools exist to make premature confidence expensive: think before non-trivial moves, hypothesize when a fix fails, verify before done, finalize only with the checks green.</span><span class="lang-ru">Когнитивные инструменты Braid существуют, чтобы преждевременная уверенность стоила дорого: think перед нетривиальными действиями, hypothesize когда исправление не сработало, verify до завершения, finalize только с зелёными проверками.</span></p>
+    <div class="tools" data-reveal style="--d:.12s">
+      <div class="tool"><span class="tn">think</span><span class="td"><span class="lang-en">Structured reasoning before high-stakes or hard-to-reverse decisions.</span><span class="lang-ru">Структурированное рассуждение перед рискованными или трудно обратимыми решениями.</span></span></div>
+      <div class="tool"><span class="tn">hypothesize</span><span class="td"><span class="lang-en">Ranked root-cause candidates when a first fix fails; never a vague "something broke".</span><span class="lang-ru">Ранжированные гипотезы корневых причин, когда первое исправление не сработало; никогда расплывчатое «что-то сломалось».</span></span></div>
+      <div class="tool"><span class="tn">verify / verify_claim</span><span class="td"><span class="lang-en">Checks code, reasoning, and claims against explicit criteria. Retrieved evidence outranks memory.</span><span class="lang-ru">Проверяют код, рассуждения и утверждения по явным критериям. Найденные доказательства весомее памяти.</span></span></div>
+      <div class="tool"><span class="tn">finalize</span><span class="td"><span class="lang-en">The done gate. It blocks on unresolved verifications.</span><span class="lang-ru">Шлюз «готово». Блокируется на нерешённых верификациях.</span></span></div>
+      <div class="tool"><span class="tn">conflict_qa</span><span class="td"><span class="lang-en">Resolves contradictions between sources instead of letting both versions live.</span><span class="lang-ru">Разрешает противоречия между источниками, не давая обеим версиям сосуществовать.</span></span></div>
+    </div>
+    <blockquote class="pull" data-reveal style="--d:.18s">
+      <p><span class="lang-en">A fix lives where the invariant lives: shared layers know mechanisms, never one project's names, paths, or policy.</span><span class="lang-ru">Исправление живёт там, где живёт инвариант: общие слои знают механизмы, но никогда — имена, пути или политику одного проекта.</span></p>
+      <cite><span class="lang-en">Placement discipline, enforced by a scan of the tree</span><span class="lang-ru">Дисциплина размещения, подкреплённая сканированием дерева</span></cite>
+    </blockquote>
+    <p class="body mt" data-reveal style="--d:.24s"><span class="lang-en">The scan looks for provenance leaks, domain literals, and home paths, and every implementation report must state where its change lives. Naming the layer is part of the fix.</span><span class="lang-ru">Сканирование ищет утечки происхождения, доменные литералы и домашние пути, и каждый отчёт о реализации обязан указать, где живёт его изменение. Назвать слой — часть исправления.</span></p>
+  </div>
+</section>
+
+<!-- ── 12. The long loop ────────────────────────────────────────────── -->
+<section class="spread" id="longloop">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">12</span> <span class="lang-en">The long loop</span><span class="lang-ru">Длинный цикл</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">It iterates on itself</span><span class="lang-ru">Он итерирует сам себя</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Beyond the turn, there is a slower loop: measure what got used, reflect on what happened, and turn failures into procedures.</span><span class="lang-ru">За пределами шага есть более медленный цикл: измерять, что было использовано, рефлексировать о случившемся и превращать провалы в процедуры.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Skill adoption</span><span class="lang-ru">Адопция навыков</span></h3>
+        <p><span class="lang-en">skill-usage counts what was suggested, loaded, and read. It is the instrument that keeps the skill library honest about what earns its place.</span><span class="lang-ru">skill-usage считает, что было предложено, загружено и прочитано. Это инструмент, который не даёт библиотеке навыков обманывать себя насчёт того, что оправдывает своё место.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">New skills</span><span class="lang-ru">Новые навыки</span></h3>
+        <p><span class="lang-en">meta-improvement creates and revises skills, runs self-improving experiments, and measures whether they helped.</span><span class="lang-ru">meta-improvement создаёт и пересматривает навыки, запускает самоулучшающиеся эксперименты и измеряет, помогли ли они.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Probes</span><span class="lang-ru">Пробы</span></h3>
+        <p><span class="lang-en">probe-evaluation designs A/B probes with pre-registered rubrics and decision rules, so a null result is informative rather than embarrassing.</span><span class="lang-ru">probe-evaluation проектирует A/B-пробы с заранее зарегистрированными рубриками и правилами решений, чтобы нулевой результат был информативным, а не неловким.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Consolidation</span><span class="lang-ru">Консолидация</span></h3>
+        <p><span class="lang-en">Heuristic evolution, offline consolidation, and Standard Operating Procedure (SOP) extraction run off the back of completed work.</span><span class="lang-ru">Эволюция эвристик, офлайн-консолидация и извлечение стандартных операционных процедур (SOP) работают по итогам завершённой работы.</span></p>
+      </div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">Failures feed this loop passively: signatures are collected, mined into weakness clusters, and whispered back as a summary. An earlier proposer that scored candidate edits was deleted once nothing consumed it: the measurement stayed, the speculation left.</span><span class="lang-ru">Провалы питают этот цикл пассивно: сигнатуры собираются, сводятся в кластеры слабых мест и возвращаются шёпотом в виде сводки. Прежний модуль предложений, оценивавший варианты правок, был удалён, когда его вывод никто не потреблял: измерение осталось, догадки ушли.</span></p>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">Braid is early-stage software. Its API surface tracks pi's extension interface and will move before 1.0; it is not production-hardened.</span><span class="lang-ru">Braid — софт ранней стадии. Его API следует за интерфейсом расширений pi и будет меняться до 1.0; он не рассчитан на продакшен.</span></p>
+  </div>
+</section>
+
+<!-- ── 13. Numbers ──────────────────────────────────────────────────── -->
+<section class="spread" id="numbers">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">13</span> <span class="lang-en">Numbers</span><span class="lang-ru">Числа</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">The counts, with sources</span><span class="lang-ru">Числа с источниками</span></h2>
+    <div class="band cols-4 mt" data-reveal style="--d:.08s">
+      <div class="stat"><span class="n">28</span><span class="l"><span class="lang-en">extension modules</span><span class="lang-ru">модулей расширений</span></span><span class="g">packages/core/src/extensions</span></div>
+      <div class="stat"><span class="n">33</span><span class="l"><span class="lang-en">documented tools</span><span class="lang-ru">документированных инструментов</span></span><span class="g"><span class="lang-en">24 from Braid, 9 native to pi</span><span class="lang-ru">24 от Braid, 9 нативных в pi</span></span></div>
+      <div class="stat"><span class="n">22</span><span class="l"><span class="lang-en">skills</span><span class="lang-ru">навыков</span></span><span class="g">packages/core/skills</span></div>
+      <div class="stat"><span class="n">12</span><span class="l"><span class="lang-en">contrib extensions</span><span class="lang-ru">расширений contrib</span></span><span class="g"><span class="lang-en">browser to system monitor</span><span class="lang-ru">от browser до системного монитора</span></span></div>
+    </div>
+    <div class="band cols-3" data-reveal style="--d:.14s">
+      <div class="stat"><span class="n">5</span><span class="l"><span class="lang-en">npm workspaces</span><span class="lang-ru">npm-воркспейсов</span></span><span class="g">core, skills, contrib, providers, telegram</span></div>
+      <div class="stat"><span class="n">1</span><span class="l"><span class="lang-en">session loop</span><span class="lang-ru">цикл сессии</span></span><span class="g"><span class="lang-en">all of it rides pi</span><span class="lang-ru">всё это держится на pi</span></span></div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.2s"><span class="lang-en">Re-derived from the pi-braid repository at commit 056067ea: package manifests, the core skill and tool catalogs, and the filesystem layout. Nothing here moves with a session.</span><span class="lang-ru">Перепроверено по репозиторию pi-braid на коммите 056067ea: манифесты пакетов, каталоги навыков и инструментов ядра, раскладка файлов. Ничто из этого не зависит от сессии.</span></p>
+  </div>
+</section>
+
+<!-- ── 14. Skills index ─────────────────────────────────────────────── -->
+<section class="spread" id="skills">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">14</span> <span class="lang-en">The library</span><span class="lang-ru">Библиотека</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">22 skills, on demand</span><span class="lang-ru">22 навыка, по запросу</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Skills are Markdown procedures, not capabilities. Each carries a description, a validation verdict, and a freshness date; the agent reads the ones that fit the task, and nothing else.</span><span class="lang-ru">Навыки — это Markdown-процедуры, а не возможности. У каждого есть описание, вердикт валидации и дата свежести; агент читает те, что подходят задаче, и ничего больше.</span></p>
+    <ul class="index" data-reveal style="--d:.12s">
+      <li><span class="sk">agent-testing</span> <span class="gl"><span class="lang-en">test agent behavior programmatically</span><span class="lang-ru">тестировать поведение агента программно</span></span></li>
+      <li><span class="sk">braid-reference</span> <span class="gl"><span class="lang-en">index of Braid's own documentation</span><span class="lang-ru">указатель по документации самого Braid</span></span></li>
+      <li><span class="sk">code-refactoring</span> <span class="gl"><span class="lang-en">move files and rename symbols at scale</span><span class="lang-ru">перемещать файлы и переименовывать символы массово</span></span></li>
+      <li><span class="sk">documentation</span> <span class="gl"><span class="lang-en">generate architecture docs and READMEs</span><span class="lang-ru">генерировать архитектурную документацию и README</span></span></li>
+      <li><span class="sk">dox</span> <span class="gl"><span class="lang-en">maintain the AGENTS.md documentation tree</span><span class="lang-ru">поддерживать дерево документации AGENTS.md</span></span></li>
+      <li><span class="sk">healthcheck</span> <span class="gl"><span class="lang-en">self-diagnose tools, clear stale processes</span><span class="lang-ru">самодиагностика инструментов, чистка зависших процессов</span></span></li>
+      <li><span class="sk">herdr-topology</span> <span class="gl"><span class="lang-en">workspaces, panes, and agent lifecycles</span><span class="lang-ru">воркспейсы, панели и жизненные циклы агентов</span></span></li>
+      <li><span class="sk">meta-cognition</span> <span class="gl"><span class="lang-en">observe, evaluate, adapt, persist</span><span class="lang-ru">наблюдать, оценивать, адаптироваться, сохранять</span></span></li>
+      <li><span class="sk">meta-improvement</span> <span class="gl"><span class="lang-en">create skills and measure their effect</span><span class="lang-ru">создавать навыки и измерять их эффект</span></span></li>
+      <li><span class="sk">misdirection-audit</span> <span class="gl"><span class="lang-en">classify misdirected work, promote gates</span><span class="lang-ru">классифицировать неверно направленную работу, усиливать гейты</span></span></li>
+      <li><span class="sk">pi-reference</span> <span class="gl"><span class="lang-en">pi architecture, configuration, internals</span><span class="lang-ru">архитектура, конфигурация и внутренности pi</span></span></li>
+      <li><span class="sk">placement-discipline</span> <span class="gl"><span class="lang-en">keep domain facts out of shared layers</span><span class="lang-ru">не пускать доменные факты в общие слои</span></span></li>
+      <li><span class="sk">probe-evaluation</span> <span class="gl"><span class="lang-en">score A/B probes so nulls inform</span><span class="lang-ru">оценивать A/B-пробы, чтобы нули информировали</span></span></li>
+      <li><span class="sk">release-pipeline</span> <span class="gl"><span class="lang-en">local npm release: build, pack, verify</span><span class="lang-ru">локальный npm-релиз: сборка, упаковка, проверка</span></span></li>
+      <li><span class="sk">research</span> <span class="gl"><span class="lang-en">find sources, verify facts, review literature</span><span class="lang-ru">искать источники, проверять факты, обозревать литературу</span></span></li>
+      <li><span class="sk">skill-usage</span> <span class="gl"><span class="lang-en">measure which skills actually get used</span><span class="lang-ru">измерять, какие навыки реально используются</span></span></li>
+      <li><span class="sk">software-engineer</span> <span class="gl"><span class="lang-en">analyze, decompose, execute, verify</span><span class="lang-ru">анализировать, декомпозировать, исполнять, верифицировать</span></span></li>
+      <li><span class="sk">subagent-orchestration</span> <span class="gl"><span class="lang-en">spawn, signal, and recover workers</span><span class="lang-ru">запускать, сигналить и восстанавливать воркеров</span></span></li>
+      <li><span class="sk">subagent-verification</span> <span class="gl"><span class="lang-en">verify in an isolated subagent before merge</span><span class="lang-ru">проверять в изолированном субагенте до слияния</span></span></li>
+      <li><span class="sk">tone-quality</span> <span class="gl"><span class="lang-en">density, voice, and calibration diagnostics</span><span class="lang-ru">диагностика плотности, голоса и калибровки</span></span></li>
+      <li><span class="sk">voice-replies</span> <span class="gl"><span class="lang-en">Telegram voice notes via edge-tts and ffmpeg</span><span class="lang-ru">голосовые заметки в Telegram через edge-tts и ffmpeg</span></span></li>
+    </ul>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">Twenty-one are listed; <span class="mono">code-search</span> is a tombstone, its content folded into <span class="mono">code-refactoring</span>. Verdicts run from KEEP to DEPRECATE, and are part of the record, not hidden from it.</span><span class="lang-ru">В списке двадцать один: <span class="mono">code-search</span> — надгробие, его содержимое перенесено в <span class="mono">code-refactoring</span>. Вердикты идут от KEEP до DEPRECATE и остаются частью записи, а не прячутся.</span></p>
+  </div>
+</section>
+
+<!-- ── 15. The channel ──────────────────────────────────────────────── -->
+<section class="spread" id="channel">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">15</span> <span class="lang-en">The channel</span><span class="lang-ru">Канал</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">A message away</span><span class="lang-ru">На расстоянии одного сообщения</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Telegram is the human interface: the agent sends reports and receives instructions from a phone, without a terminal in sight.</span><span class="lang-ru">Telegram — это человеческий интерфейс: агент отправляет отчёты и получает инструкции с телефона, без терминала на горизонте.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Outbound</span><span class="lang-ru">Исходящие</span></h3>
+        <p><span class="lang-en"><span class="mono">telegram_send</span> pushes a concise update or a rich HTML or Markdown report, split to fit the message limit.</span><span class="lang-ru"><span class="mono">telegram_send</span> отправляет краткий апдейт или развёрнутый отчёт в HTML или Markdown, нарезанный под лимит сообщения.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Inbound</span><span class="lang-ru">Входящие</span></h3>
+        <p><span class="lang-en"><span class="mono">telegram_inbox</span> and a background poller ingest replies from whitelisted chats, with deduplication and persisted offsets.</span><span class="lang-ru"><span class="mono">telegram_inbox</span> и фоновый poller принимают ответы из белых списков чатов, с дедупликацией и сохранёнными смещениями.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Voice</span><span class="lang-ru">Голос</span></h3>
+        <p><span class="lang-en">The voice-replies skill synthesizes speech in Russian, English, or Hebrew, converts it to Ogg/Opus, and sends a voice note.</span><span class="lang-ru">Навык voice-replies синтезирует речь на русском, английском или иврите, конвертирует в Ogg/Opus и отправляет голосовое сообщение.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Control</span><span class="lang-ru">Управление</span></h3>
+        <p><span class="lang-en">An inline keyboard pauses or resumes the work; a live-update message tracks progress in place and closes on Done.</span><span class="lang-ru">Inline-клавиатура ставит работу на паузу или возобновляет; живое сообщение отслеживает прогресс на месте и закрывается на Done.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 16. Ops ──────────────────────────────────────────────────────── -->
+<section class="spread" id="ops">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">16</span> <span class="lang-en">Under the floor</span><span class="lang-ru">Под полом</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">It keeps its own lights on</span><span class="lang-ru">Сам держит свои огни горящими</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">The suite also maintains the ground it stands on: liveness, errors, health, and the tunnel underneath.</span><span class="lang-ru">Набор обслуживает и собственную почву: живость, ошибки, здоровье и туннель внизу.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Watchdog</span><span class="lang-ru">Watchdog</span></h3>
+        <p><span class="lang-en">A liveness and stall state machine watches turn progress, provider feedback, and tunnel liveness. When the session stalls, it wakes with a whisper and, optionally, a one-line Telegram signal.</span><span class="lang-ru">Машина состояний живости и зависаний следит за прогрессом шагов, откликом провайдера и живостью туннеля. Когда сессия застревает, она пробуждается шёпотом и, опционально, однострочным сигналом в Telegram.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Recovery</span><span class="lang-ru">Восстановление</span></h3>
+        <p><span class="lang-en">Auto-recovery checks for degradation on each turn and steers the agent to re-plan before errors compound; health maintenance adds checkpoints, degradation detection, and rollback on request.</span><span class="lang-ru">Авто-восстановление проверяет деградацию на каждом шаге и направляет агента к перепланированию, пока ошибки не накопились; health-maintenance добавляет чекпоинты, детекцию деградации и откат по запросу.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Error tracking</span><span class="lang-ru">Отслеживание ошибок</span></h3>
+        <p><span class="lang-en"><span class="mono">error_list</span> and <span class="mono">error_get</span> keep a searchable trail when something breaks mid-session.</span><span class="lang-ru"><span class="mono">error_list</span> и <span class="mono">error_get</span> ведут доступный для поиска след, когда что-то ломается посреди сессии.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Network</span><span class="lang-ru">Сеть</span></h3>
+        <p><span class="lang-en">A contrib network monitor plus the v2raytun-reconnect skill, which restores a dropped macOS tunnel through the app's own deep links.</span><span class="lang-ru">Сетевой монитор из contrib плюс навык v2raytun-reconnect, восстанавливающий упавший macOS-туннель через deep links самого приложения.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 17. In practice ──────────────────────────────────────────────── -->
+<section class="spread" id="built">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">17</span> <span class="lang-en">In practice</span><span class="lang-ru">На практике</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Built by the loop it describes</span><span class="lang-ru">Собрана циклом, который сама описывает</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">This deck is its own test case: one dispatch, an isolated worktree, every figure re-derived from the repository, gates before done. The fleet section describes the machinery; this page is what it produced.</span><span class="lang-ru">Эта презентация — собственный тест-кейс: одно задание, изолированный ворктри, каждая цифра перепроверена по репозиторию, гейты до «готово». Раздел про флот описывает механику; эта страница — то, что она произвела.</span></p>
+    <div class="flow w4" data-reveal style="--d:.12s">
+      <div class="step"><span class="sn">01</span><span class="st"><span class="lang-en">dispatch</span><span class="lang-ru">задание</span></span><span class="sd"><span class="lang-en">scope, branch, gates named</span><span class="lang-ru">скоуп, ветка, названные гейты</span></span></div>
+      <div class="step"><span class="sn">02</span><span class="st"><span class="lang-en">worktree</span><span class="lang-ru">ворктри</span></span><span class="sd"><span class="lang-en">isolated copy, own branch</span><span class="lang-ru">изолированная копия, своя ветка</span></span></div>
+      <div class="step"><span class="sn">03</span><span class="st"><span class="lang-en">re-derive</span><span class="lang-ru">перепроверка</span></span><span class="sd"><span class="lang-en">manifests, catalogs, files</span><span class="lang-ru">манифесты, каталоги, файлы</span></span></div>
+      <div class="step"><span class="sn">04</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">проверка</span></span><span class="sd"><span class="lang-en">gates green before done</span><span class="lang-ru">зелёные гейты до «готово»</span></span></div>
+    </div>
+    <div class="rows mt" data-reveal style="--d:.18s">
+      <div class="row">
+        <span class="name">pi</span>
+        <span class="ver">1.1.0</span>
+        <span class="desc"><span class="lang-en">Installed harness; its docs, changelog, and native tool list read at this version.</span><span class="lang-ru">Установленная среда; её документация, чейнджлог и список нативных инструментов прочитаны на этой версии.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">braid</span>
+        <span class="ver">0.3.2-main.23</span>
+        <span class="desc"><span class="lang-en">The suite's core version, from <span class="mono">packages/core/package.json</span>.</span><span class="lang-ru">Версия ядра набора, из <span class="mono">packages/core/package.json</span>.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">pi-braid</span>
+        <span class="ver">056067ea</span>
+        <span class="desc"><span class="lang-en">The commit every figure in this deck was re-derived from.</span><span class="lang-ru">Коммит, по которому перепроверена каждая цифра в этой презентации.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">node</span>
+        <span class="ver">&ge; 22.19</span>
+        <span class="desc"><span class="lang-en">Engine floor declared in the root <span class="mono">package.json</span>.</span><span class="lang-ru">Порог движка из корневого <span class="mono">package.json</span>.</span></span>
+      </div>
+    </div>
+    <div class="transcript mt" data-reveal style="--d:.24s">
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">no live data: zero runtime fetch sites, no generated counts file</span><span class="lang-ru">нет живых данных: ни одного вызова fetch во время выполнения, никакого сгенерированного файла счётчиков</span></span></div>
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">bilingual parity: English and Russian span counts equal</span><span class="lang-ru">двуязычный паритет: число английских и русских элементов span совпадает</span></span></div>
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">render probes at 1280×760, 768×1024, 390×844, both languages, scrolled before the shot</span><span class="lang-ru">рендер-пробы на 1280×760, 768×1024, 390×844, оба языка, с прокруткой перед снимком</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 18. Install ──────────────────────────────────────────────────── -->
+<section class="spread" id="install">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">18</span> <span class="lang-en">Install</span><span class="lang-ru">Установка</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Five minutes, two steps</span><span class="lang-ru">Пять минут, два шага</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi has to exist first; then Braid is a clone, a build, a settings entry, and one provider login.</span><span class="lang-ru">Сначала должен существовать pi; затем Braid — это клон, сборка, запись в настройках и один вход в провайдер.</span></p>
+    <pre class="shell" data-reveal style="--d:.12s"><span class="c"><span class="lang-en"># pi, the harness</span><span class="lang-ru"># pi, среда</span></span>
+<span class="p">$</span> <span class="k">npm install -g --ignore-scripts @earendil-works/pi-coding-agent</span>
+
+<span class="c"><span class="lang-en"># braid, the suite</span><span class="lang-ru"># braid, набор</span></span>
+<span class="p">$</span> <span class="k">git clone https://github.com/kifirkin/pi-braid.git ~/pi-braid</span>
+<span class="p">$</span> <span class="k">cd ~/pi-braid &amp;&amp; npm install &amp;&amp; npm run build</span>
+
+<span class="c"><span class="lang-en"># first run: connect a provider</span><span class="lang-ru"># первый запуск: подключите провайдера</span></span>
+<span class="p">$</span> <span class="k">pi</span>   <span class="c"><span class="lang-en"># then /login inside the session</span><span class="lang-ru"># затем /login внутри сессии</span></span></pre>
+    <div class="files">
+      <div data-reveal style="--d:.18s">
+        <p class="small"><span class="lang-en">Register core and skills in <span class="mono">~/.pi/agent/settings.json</span>. The root package.json declares no pi resources, so point at the workspaces:</span><span class="lang-ru">Зарегистрируйте core и skills в <span class="mono">~/.pi/agent/settings.json</span>. Корневой package.json не объявляет pi-ресурсы, поэтому указывайте на воркспейсы:</span></p>
+        <pre class="shell" style="margin-top:1rem">{
+  "packages": [
+    "file:~/pi-braid/packages/core",
+    "file:~/pi-braid/packages/skills"
+  ]
+}</pre>
+      </div>
+      <div data-reveal style="--d:.22s">
+        <p class="small"><span class="lang-en">Then start pi. Braid loads with the session, and the system prompt lists the bundled skills. Add contrib, providers, or telegram the same way when they are wanted.</span><span class="lang-ru">Затем запустите pi. Braid загружается вместе с сессией, а системный промпт перечисляет встроенные навыки. contrib, providers или telegram добавляются так же, когда понадобятся.</span></p>
+        <p class="small mt-s"><span class="lang-en">Braid targets Node.js 22.19 or newer. Expect changes: this is pre-1.0 software.</span><span class="lang-ru">Braid требует Node.js 22.19 или новее. Ждите изменений: это софт до 1.0.</span></p>
+      </div>
+    </div>
+    <div class="links" data-reveal style="--d:.26s">
+      <a href="https://github.com/kifirkin/pi-braid">github.com/kifirkin/pi-braid</a>
+      <a href="https://github.com/earendil-works/pi">github.com/earendil-works/pi</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 19. End ──────────────────────────────────────────────────────── -->
+<section class="spread" id="end">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">19</span> <span class="lang-en">End</span><span class="lang-ru">Конец</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Everything here was read, not remembered</span><span class="lang-ru">Всё здесь прочитано, а не вспомнено</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Each number in this deck was re-derived from the pi-braid repository, pinned at commit 056067ea: versions from package manifests, tools from the catalog, skills from the pack. When the numbers move, the same commands move them.</span><span class="lang-ru">Каждое число в этой презентации перепроверено по репозиторию pi-braid, привязанному к коммиту 056067ea: версии — из манифестов пакетов, инструменты — из каталога, навыки — из пакета. Когда числа меняются, те же команды меняют и их.</span></p>
+    <p class="body mt" data-reveal style="--d:.12s"><span class="lang-en">Braid is early-stage software: expect the API surface to move before 1.0. What is already settled is the discipline around it. Claims get evidence, changes get a home, and done is something you prove.</span><span class="lang-ru">Braid — софт ранней стадии: ждите изменений API до 1.0. Уже устоялась дисциплина вокруг него. Утверждения получают доказательства, изменения — дом, а «готово» — то, что нужно доказать.</span></p>
+    <p class="small mt" data-reveal style="--d:.18s"><span class="lang-en">Navigate with the arrow keys, Page Up and Page Down, or Home and End. π &amp; Braid.</span><span class="lang-ru">Навигация: стрелки, Page Up и Page Down, Home и End. π &amp; Braid.</span></p>
+  </div>
+</section>
+
+</main>
+<script>
+(function () {
+  var d = document.documentElement;
+  var stills = /[?&]stills=1/.test(location.search);
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (stills || reduce) d.classList.add('no-motion');
+
+  var sections = [].slice.call(document.querySelectorAll('main > section'));
+  var counter = document.getElementById('counter');
+  var bar = document.getElementById('bar');
+  var totop = document.getElementById('totop');
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var cur = -1;
+
+  function activeIndex() {
+    var y = window.scrollY + window.innerHeight * 0.42;
+    var best = 0;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= y) best = i;
+    }
+    return best;
+  }
+
+  function onScroll() {
+    var max = d.scrollHeight - window.innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+    if (totop) totop.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
+    var i = activeIndex();
+    if (i !== cur) {
+      cur = i;
+      if (counter) counter.textContent = pad(i + 1) + ' / ' + pad(sections.length);
+    }
+  }
+
+  var raf = false;
+  window.addEventListener('scroll', function () {
+    if (!raf) { raf = true; requestAnimationFrame(function () { raf = false; onScroll(); }); }
+  }, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  function go(dir) {
+    var i = activeIndex() + dir;
+    if (i < 0) i = 0;
+    if (i > sections.length - 1) i = sections.length - 1;
+    sections[i].scrollIntoView({ behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+    if (e.target && e.target.closest && e.target.closest('button, a, input, textarea, select')) return;
+    var k = e.key;
+    if (k === 'ArrowDown' || k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Spacebar') {
+      e.preventDefault(); go(1);
+    } else if (k === 'ArrowUp' || k === 'ArrowLeft' || k === 'PageUp') {
+      e.preventDefault(); go(-1);
+    } else if (k === 'Home') {
+      e.preventDefault(); window.scrollTo({ top: 0, behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth' });
+    } else if (k === 'End') {
+      e.preventDefault(); sections[sections.length - 1].scrollIntoView({ behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth', block: 'start' });
+    }
+  });
+
+  if (totop) totop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth' });
+  });
+
+  /* ─── Language toggle ──────────────────────────────────────────────────── */
+  /* Toggles <html> between show-lang-en / show-lang-ru and swaps the fixed
+     button label. Default state: English, matching the v3 deck. */
+  window.toggleLang = function () {
+    var html = document.documentElement;
+    var btn = document.getElementById('langToggle');
+    if (html.classList.contains('show-lang-ru')) {
+      html.classList.remove('show-lang-ru');
+      html.classList.add('show-lang-en');
+      btn.textContent = 'RU';
+    } else {
+      html.classList.remove('show-lang-en');
+      html.classList.add('show-lang-ru');
+      btn.textContent = 'EN';
+    }
+  };
+
+  /* No live data on this page: every figure is a build-time literal re-derived
+     from the pi-braid repository. Nothing is fetched at runtime. */
+})();
+</script>
+</body>
+</html>
