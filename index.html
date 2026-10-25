@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:,">
+<title>Braid, a metacognitive extension suite for pi</title>
+<meta name="description" content="A presentation about Braid, the metacognitive extension suite for the pi coding agent. Every claim names the file in the repository that decides it.">
+<script>document.documentElement.className += " js";</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Tokens ──────────────────────────────────────────────────────────── */
+:root{
+  --paper:#FAF9F6;
+  --paper-2:#F3F1EA;
+  --ink:#191713;
+  --ink-2:#4E4A42;
+  --ink-3:#706A5F;
+  --rule:#E3DFD5;
+  --accent:#C2410C;
+  --braid:#0E6E7C;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --gut:clamp(20px,4.6vw,72px);
+}
+
+/* ── Reset ───────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body,h1,h2,h3,p,ul,ol,li,dl,dd,figure,blockquote,pre{margin:0;padding:0}
+ul,ol{list-style:none}
+img,svg{display:block;max-width:100%}
+main section *{min-width:0}
+pre{max-width:100%}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+::selection{background:rgba(194,65,12,.16)}
+
+html{scroll-behavior:smooth}
+html.no-motion{scroll-behavior:auto}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--sans);
+  font-size:clamp(16px,.55vw + 14.6px,17.5px);
+  line-height:1.62;
+  font-weight:400;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+/* ── Structure ───────────────────────────────────────────────────────── */
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:var(--gut)}
+main{position:relative}
+section.spread{
+  border-top:1px solid var(--rule);
+  padding-block:clamp(52px,7.5vh,104px);
+  display:grid;
+  align-content:start;
+}
+section.spread:first-of-type{border-top:0}
+@media (min-width:980px){
+  section.spread{min-height:100vh;min-height:100svh;align-content:center}
+}
+@media (min-width:1000px) and (prefers-reduced-motion: no-preference){
+  html:not(.no-motion){scroll-snap-type:y proximity}
+  section.spread{scroll-snap-align:start}
+}
+
+/* ── Type ────────────────────────────────────────────────────────────── */
+.eyebrow{
+  font-family:var(--mono);
+  font-size:.75rem;
+  font-weight:500;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+  color:var(--ink-3);
+  display:flex;align-items:baseline;gap:.9em;
+  margin-bottom:1.5rem;
+}
+.eyebrow .num{color:var(--accent);padding-right:.25em}
+.eyebrow::after{content:"";flex:1;height:1px;background:var(--rule)}
+h1.display{
+  font-family:var(--serif);
+  font-weight:340;
+  font-size:clamp(4rem,13vw,8.4rem);
+  line-height:.94;
+  letter-spacing:-.028em;
+  font-optical-sizing:auto;
+  text-wrap:balance;
+}
+h2.title{
+  font-family:var(--serif);
+  font-weight:360;
+  font-size:clamp(2rem,4.4vw,3.35rem);
+  line-height:1.06;
+  letter-spacing:-.018em;
+  font-optical-sizing:auto;
+  max-width:22ch;
+  text-wrap:balance;
+}
+h3{font-size:1.02rem;font-weight:600;letter-spacing:-.005em;line-height:1.3}
+.lede{
+  font-family:var(--serif);
+  font-weight:380;
+  font-size:clamp(1.16rem,1.5vw,1.36rem);
+  line-height:1.5;
+  letter-spacing:-.006em;
+  color:var(--ink-2);
+  max-width:58ch;
+  margin-top:1.05rem;
+  text-wrap:pretty;
+}
+p + p{margin-top:.9em}
+.body{color:var(--ink-2);max-width:68ch}
+.body strong{color:var(--ink);font-weight:500}
+.small{font-size:.8125rem;line-height:1.55;color:var(--ink-3)}
+.mono{font-family:var(--mono);font-size:.8125rem;letter-spacing:.01em}
+.mt{margin-top:clamp(1.6rem,3.2vw,2.7rem)}
+.mt-s{margin-top:1.15rem}
+
+/* ── Hero ────────────────────────────────────────────────────────────── */
+.hero{position:relative}
+.standfirst{
+  font-size:clamp(1.2rem,1.7vw,1.5rem);
+  line-height:1.5;
+  color:var(--ink-2);
+  max-width:54ch;
+  margin-top:1.6rem;
+  text-wrap:pretty;
+}
+.braid{
+  margin-top:clamp(2.2rem,5vh,3.6rem);width:100%;height:auto;
+  overflow:visible;
+}
+.braid path{fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke}
+.braid .s1 path{stroke:var(--ink);opacity:.86}
+.braid .s2 path{stroke:var(--accent);opacity:.92}
+.braid .s3 path{stroke:var(--ink-3);opacity:.5}
+.meta{
+  display:flex;flex-wrap:wrap;
+  gap:.4rem 0;
+  margin-top:clamp(1.8rem,4vh,2.8rem);
+  border-top:1px solid var(--rule);
+  padding-top:1rem;
+  font-family:var(--mono);font-size:.8125rem;color:var(--ink-3);
+}
+.meta span{padding-right:1.4rem;margin-right:1.4rem;border-right:1px solid var(--rule);white-space:nowrap}
+.meta span:last-child{border-right:0}
+.meta b{color:var(--ink);font-weight:500}
+.scroll-hint{
+  margin-top:clamp(2rem,5vh,3.2rem);
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.scroll-hint::after{content:" ↓";color:var(--accent)}
+
+/* ── Hairline grids ──────────────────────────────────────────────────── */
+.grid{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cell{background:var(--paper);padding:1.2rem 1.35rem 1.35rem}
+.cell h3 + p{margin-top:.55rem}
+.cell p{color:var(--ink-2);font-size:.9375rem;line-height:1.58;text-wrap:pretty}
+.cell .mono-tag{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);display:block;margin-bottom:.7rem;
+}
+.cols-2{grid-template-columns:repeat(2,1fr)}
+.cols-3{grid-template-columns:repeat(3,1fr)}
+.cols-4{grid-template-columns:repeat(4,1fr)}
+
+/* ── Ledger rows (workspaces) ────────────────────────────────────────── */
+.rows{border-top:1px solid var(--rule)}
+.row{
+  display:grid;grid-template-columns:minmax(8.5rem,13rem) minmax(10rem,16rem) 1fr;
+  gap:1.2rem 2rem;align-items:baseline;
+  padding:1.15rem 0;border-bottom:1px solid var(--rule);
+}
+.row .name{font-family:var(--mono);font-size:.875rem;font-weight:500}
+.row .ver{font-family:var(--mono);font-size:.8125rem;color:var(--ink-3)}
+.row .desc{color:var(--ink-2);font-size:.9375rem;text-wrap:pretty}
+/* Two-column variant: a claim class on the left, its source path on the right. */
+@media (min-width:721px){
+  .rows.src .row{grid-template-columns:minmax(8rem,11rem) 1fr;padding:.9rem 0}
+}
+
+/* ── Stats band ──────────────────────────────────────────────────────── */
+.band{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:2.6rem}
+.band.cols-4{grid-template-columns:repeat(4,1fr)}
+.band + .band{margin-top:1.1rem}
+.stat{background:var(--paper);padding:1.5rem 1.4rem 1.7rem}
+.stat .n{
+  font-family:var(--serif);font-weight:380;font-optical-sizing:auto;
+  font-size:clamp(2.4rem,4.4vw,3.6rem);line-height:1;letter-spacing:-.03em;
+  display:block;
+}
+.stat .l{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--ink-3);margin-top:.8rem;display:block;
+}
+.stat .g{font-size:.875rem;color:var(--ink-2);margin-top:.5rem;display:block;line-height:1.5}
+/* Store-name heads on the memory slide: long identifiers need a smaller face. */
+.band .stat .n.k{font-size:clamp(1.45rem,2.2vw,1.85rem);letter-spacing:-.01em}
+
+/* ── Flow (pipeline) ─────────────────────────────────────────────────── */
+.flow{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+  margin-top:2.1rem;
+}
+.flow .step{padding:1rem .85rem 1.1rem;border-left:1px solid var(--rule)}
+.flow .step:first-child{border-left:0}
+.flow .sn{font-family:var(--mono);font-size:.75rem;color:var(--accent);display:block;margin-bottom:.5rem}
+.flow .st{font-weight:600;font-size:.875rem;display:block}
+.flow .sd{font-size:.8125rem;color:var(--ink-3);display:block;margin-top:.35rem;line-height:1.45}
+.flow.w4{grid-template-columns:repeat(4,1fr)}
+.flow.w7{grid-template-columns:repeat(7,1fr)}
+
+/* ── Transcript ──────────────────────────────────────────────────────── */
+.transcript{
+  background:var(--paper-2);
+  border:1px solid var(--rule);
+  border-left:3px solid var(--ink);
+  padding:1.1rem 1.3rem;
+  font-family:var(--mono);font-size:.8125rem;line-height:1.75;
+  color:var(--ink-2);overflow-x:auto;
+}
+.transcript .tag{color:var(--accent)}
+.transcript .dim{color:var(--ink-3)}
+
+/* ── Channels table ──────────────────────────────────────────────────── */
+.channels{margin-top:2rem;border-top:1px solid var(--rule)}
+.channels .ch{
+  display:grid;grid-template-columns:minmax(8rem,11rem) minmax(7rem,10rem) 1fr;
+  gap:.4rem 1.6rem;padding:.75rem 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
+}
+.channels .cn{font-family:var(--mono);font-size:.8125rem;color:var(--ink)}
+.channels .cd{color:var(--ink-2);font-size:.9375rem}
+.channels .cc{font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
+
+/* ── Quote ───────────────────────────────────────────────────────────── */
+.pull{
+  margin-top:clamp(1.8rem,3.6vw,2.7rem);
+  border-left:2px solid var(--accent);
+  padding:.2rem 0 .2rem 1.6rem;
+  max-width:64ch;
+}
+.pull p{
+  font-family:var(--serif);font-weight:360;font-style:italic;
+  font-size:clamp(1.25rem,2.2vw,1.7rem);line-height:1.4;letter-spacing:-.01em;
+  color:var(--ink);
+}
+.pull cite{
+  display:block;margin-top:.8rem;font-family:var(--mono);font-style:normal;
+  font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);
+}
+
+/* ── Tool rows ───────────────────────────────────────────────────────── */
+.tools{margin-top:1.9rem;border-top:1px solid var(--rule)}
+.tool{
+  display:grid;grid-template-columns:minmax(11rem,17rem) 1fr;
+  gap:.9rem 2rem;padding:.8rem 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
+}
+.tool .tn{font-family:var(--mono);font-size:.8125rem;color:var(--braid)}
+.tool .td{color:var(--ink-2);font-size:.9375rem;text-wrap:pretty}
+.tool .tn .ny{
+  font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-right:.85em;
+}
+.tool .tn .ny.yes{color:var(--braid)}
+
+/* ── Compare block (what Braid adds) ─────────────────────────────────── */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:2.1rem}
+.cmp .col{background:var(--paper);padding:1.25rem 1.35rem 1.4rem}
+.cmp h3{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;
+  font-weight:500;color:var(--ink-3);margin-bottom:.9rem;
+}
+.cmp .col.with h3{color:var(--braid)}
+.cmp li{padding:.55rem 0;border-top:1px solid var(--rule);font-size:.9375rem;line-height:1.5;color:var(--ink-2)}
+.cmp li:first-child{border-top:0}
+.cmp .mark{font-family:var(--mono);font-size:.75rem;margin-right:.6em;color:var(--ink-3)}
+.cmp .col.with .mark{color:var(--braid)}
+
+/* ── Index (skills) ──────────────────────────────────────────────────── */
+.index{margin-top:2rem;columns:3;column-gap:2.4rem}
+.index li{
+  break-inside:avoid;
+  padding:.36rem 0;border-top:1px solid var(--rule);
+  font-size:.8125rem;line-height:1.45;
+}
+.tax{margin-top:2rem;border-top:1px solid var(--rule)}
+.tax .t{
+  display:grid;grid-template-columns:minmax(6.5rem,8.5rem) 1fr;
+  gap:.3rem 1.8rem;padding:.85rem 0;border-bottom:1px solid var(--rule);
+  align-items:baseline;
+}
+.tax .tl{
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--accent);
+}
+.tax .tn{font-family:var(--mono);font-size:.8125rem;line-height:1.6;color:var(--ink)}
+.index .sk{font-family:var(--mono);font-size:.8125rem;color:var(--ink)}
+.index .gl{color:var(--ink-3);display:block}
+
+/* ── Install blocks ──────────────────────────────────────────────────── */
+pre.shell{
+  background:var(--paper-2);border:1px solid var(--rule);border-left:3px solid var(--accent);
+  padding:1rem 1.2rem;font-family:var(--mono);font-size:.8125rem;line-height:1.5;
+  overflow-x:auto;color:var(--ink-2);margin-top:2.2rem;
+}
+pre.shell .c{color:var(--ink-3)}
+pre.shell .p{color:var(--accent)}
+pre.shell .k{color:var(--ink)}
+.files{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:1.4rem}
+.links{margin-top:2.1rem;border-top:1px solid var(--rule);padding-top:1rem;display:flex;flex-wrap:wrap;gap:.8rem 2.4rem}
+.links a{
+  font-family:var(--mono);font-size:.8125rem;text-decoration:none;
+  border-bottom:1px solid var(--rule);padding-bottom:.15rem;
+}
+.links a:hover{border-bottom-color:var(--accent);color:var(--accent)}
+
+/* ── Fixed chrome ────────────────────────────────────────────────────── */
+.progress{position:fixed;inset:0 0 auto;height:3px;z-index:50;background:transparent}
+.progress i{
+  display:block;height:100%;background:var(--accent);
+  transform:scaleX(0);transform-origin:0 50%;
+}
+.counter{
+  position:fixed;right:clamp(14px,3vw,28px);bottom:clamp(12px,3vh,22px);z-index:40;
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;color:var(--ink-3);
+  background:var(--paper);border:1px solid var(--rule);padding:.3rem .6rem;
+}
+.totop{
+  position:fixed;left:clamp(14px,3vw,28px);bottom:clamp(12px,3vh,22px);z-index:40;
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;color:var(--ink-3);
+  border:1px solid var(--rule);background:var(--paper);padding:.3rem .6rem;
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.totop.show{opacity:1;pointer-events:auto}
+.totop:hover{color:var(--accent)}
+.skip{
+  position:absolute;left:-9999px;top:0;background:var(--paper);color:var(--ink);
+  padding:.6rem 1rem;z-index:60;font-family:var(--mono);font-size:.8125rem;
+}
+.skip:focus{left:12px;top:12px}
+
+/* ── Language toggle ─────────────────────────────────────────────────────── */
+.lang-btn{
+  position:fixed;top:clamp(12px,2.5vh,20px);right:clamp(14px,3vw,28px);z-index:45;
+  font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;color:var(--ink-3);
+  background:var(--paper);border:1px solid var(--rule);padding:.3rem .6rem;
+  transition:color .15s,border-color .15s;
+}
+.lang-btn:hover{color:var(--accent);border-color:var(--accent)}
+/* Default: English visible, Russian hidden; the <html> classes flip the side. */
+.lang-ru{display:none}
+html.show-lang-ru .lang-en{display:none}
+html.show-lang-ru .lang-ru{display:inline}
+html.show-lang-en .lang-ru{display:none}
+
+/* ── Reveal ──────────────────────────────────────────────────────────── */
+html.js [data-reveal]{
+  opacity:0;transform:translateY(16px);
+  transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1);
+  transition-delay:var(--d,0s);
+}
+html.js [data-reveal].in{opacity:1;transform:none}
+html.js [data-reveal="fade"]{transform:none}
+html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;transition:none !important}
+
+/* ── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width:1279px){
+  /* Below the widest desktop the left gutter runs 46px to 59px, narrower than
+     the labelled button: 62px in English, 78px in Russian. The label therefore
+     sits on the first characters of a wrapped line. The button keeps its action
+     and loses its label; the label stays in the document, visually hidden, and
+     the accessible name carries both languages so it survives either toggle. */
+  .totop{left:12px;padding:.3rem .45rem}
+  .totop::before{content:"↑"}
+  .totop .lang-en,.totop .lang-ru{
+    position:absolute;width:1px;height:1px;overflow:hidden;
+    clip-path:inset(50%);white-space:nowrap;
+  }
+  /* The counter cannot follow the button out of the way: its own text is 57px
+     before padding, and the clear gutter on its side is 48px to 66px, so no
+     offset fits it inside the viewport without covering a line end. Hidden, as
+     it already is below the screen-per-spread breakpoint, where the snap and
+     the bar carry position. */
+  .counter{display:none}
+}
+@media (max-width:980px){
+  /* Below the screen-per-spread breakpoint the page scrolls freely and content
+     passes under the fixed chrome, so position is shown by the bar alone. */
+  .counter,.totop{display:none}
+  .cols-4{grid-template-columns:1fr 1fr}
+  /* Two columns from the point where six- and seven-step cells stop fitting a
+     word: at tablet width a six-column flow leaves each cell ~88px, narrower
+     than a Russian word in body size, and the cell text runs past its box. */
+  .flow,.flow.w4,.flow.w7{grid-template-columns:1fr 1fr}
+  .flow .step{border-top:1px solid var(--rule)}
+  .flow .step:nth-child(-n+2){border-top:0}
+  .flow .step:nth-child(2n+1){border-left:0}
+  .band.cols-4{grid-template-columns:1fr 1fr}
+  .index{columns:2}
+}
+@media (max-width:720px){
+  .cols-2,.cols-3,.cols-4{grid-template-columns:1fr}
+  .band.cols-4{grid-template-columns:1fr 1fr}
+  .row{grid-template-columns:1fr;gap:.3rem;padding:1rem 0}
+  .row .ver{margin-bottom:.2rem}
+  .tool{grid-template-columns:1fr;gap:.25rem;padding:.85rem 0}
+  .channels .ch{grid-template-columns:1fr;gap:.15rem}
+  .files{grid-template-columns:1fr}
+  .cmp{grid-template-columns:1fr}
+  pre.shell,.transcript{white-space:pre-wrap;overflow-wrap:anywhere}
+  .eyebrow::after{display:none}
+  .totop,.counter{display:none}
+  .index{columns:1}
+  .tax .t{grid-template-columns:1fr;gap:.15rem}
+  .meta span{padding-right:.9rem;margin-right:.9rem}
+  h2.title{max-width:none}
+}
+@media (max-width:420px){
+  .band.cols-4{grid-template-columns:1fr}
+  .flow{grid-template-columns:1fr}
+  .flow.w4,.flow.w7{grid-template-columns:1fr}
+  .flow .step{border-left:0}
+  .flow .step:nth-child(n+2){border-top:1px solid var(--rule)}
+  .meta{flex-direction:column;gap:.35rem}
+  .meta span{border-right:0;padding-right:0;margin-right:0}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto}
+  .braid path{animation:none;stroke-dashoffset:0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#pi"><span class="lang-en">Skip to content</span><span class="lang-ru">К содержанию</span></a>
+<div class="progress" aria-hidden="true"><i id="bar"></i></div>
+<div class="counter" id="counter" aria-hidden="true">01 / 20</div>
+<button class="totop" id="totop" type="button" aria-label="Back to top / Вверх"><span class="lang-en">↑ Top</span><span class="lang-ru">↑ Вверх</span></button>
+<button class="lang-btn" id="langToggle" onclick="toggleLang()" title="Switch language">RU</button>
+
+<main>
+
+<!-- ── 01. Hero ─────────────────────────────────────────────────────── -->
+<section class="spread hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">π</span> <span class="lang-en">A presentation about an agent, made by that agent</span><span class="lang-ru">Презентация об агенте, сделанная самим агентом</span></p>
+    <h1 class="display" data-reveal style="--d:.06s">Braid</h1>
+    <p class="standfirst" data-reveal style="--d:.12s"><span class="lang-en">A metacognitive extension suite for the pi coding agent. It rides pi's session loop and adds enforcement, memory, reasoning, and self-improvement, then verifies its own work before calling anything done.</span><span class="lang-ru">Набор метакогнитивных расширений для кодинг-агента pi. Он работает поверх цикла сессий pi и добавляет контроль, память, рассуждения и самоулучшение, а затем проверяет собственную работу, прежде чем объявить её готовой.</span></p>
+    <svg class="braid" viewBox="0 0 720 120" aria-hidden="true" data-reveal style="--d:.2s">
+      <g class="s1">
+        <path pathLength="1" d="M0,60.0L6,65.2L12,70.4L18,75.2L24,79.7L30,83.6L36,87.0L42,89.7L48,91.6L54,92.7L60,93.0L66,92.4L72,91.0L78,88.9L84,86.0L90,82.4L96,78.2L102,73.6L108,68.7L114,63.5L120,58.2L126,53.0L132,48.3"/>
+        <path pathLength="1" d="M144,39.2L150,35.4L156,32.2L162,29.7L168,28.0L174,27.1L180,27.1L186,27.9L192,29.5L198,31.9L204,35.0L210,38.7L210,39.2"/>
+        <path pathLength="1" d="M222,48.3L228,53.3L234,58.5L240,63.8L246,69.0L252,73.9L258,78.5L264,82.6L270,86.1L276,89.0L282,91.1L288,92.5L294,93.0L300,92.7L306,91.5L312,89.5L318,86.8L324,83.4L330,79.4L336,75.0L342,70.1L348,65.0L354,59.7L360,54.5L366,49.4L368,48.3"/>
+        <path pathLength="1" d="M380,39.2L386,35.4L392,32.2L398,29.7L404,28.0L410,27.1L416,27.1L422,27.9L428,29.5L434,31.9L440,35.0L446,38.7L446,39.2"/>
+        <path pathLength="1" d="M458,48.3L464,53.3L470,58.5L476,63.8L482,69.0L488,73.9L494,78.5L500,82.6L506,86.1L512,89.0L518,91.1L524,92.5L530,93.0L536,92.7L542,91.5L548,89.5L554,86.8L560,83.4L566,79.4L572,75.0L578,70.1L584,65.0L590,59.7L596,54.5L602,49.4L604,48.3"/>
+        <path pathLength="1" d="M616,39.2L622,35.4L628,32.2L634,29.7L640,28.0L646,27.1L652,27.1L658,27.9L664,29.5L670,31.9L676,35.0L682,38.7L682,39.2"/>
+        <path pathLength="1" d="M694,48.3L700,53.3L706,58.5L712,63.8L718,69.0L720,70.4"/>
+      </g>
+      <g class="s2">
+        <path pathLength="1" d="M0,88.6L6,85.6L12,82.0L14,80.8"/>
+        <path pathLength="1" d="M26,71.7L32,66.7L38,61.5L44,56.2L50,51.0L53,48.3"/>
+        <path pathLength="1" d="M65,39.2L71,35.4L77,32.2L83,29.7L89,28.0L95,27.1L101,27.1L107,27.9L113,29.5L119,31.9L125,35.0L131,38.7L137,43.0L143,47.7L149,52.7L155,58.0L161,63.2L167,68.4L173,73.4L179,78.0L185,82.2L191,85.8L197,88.7L203,90.9L209,92.4L215,93.0L221,92.7L227,91.7L233,89.8L239,87.2L245,83.8L250,80.8"/>
+        <path pathLength="1" d="M262,71.7L268,66.7L274,61.5L280,56.2L286,51.0L289,48.3"/>
+        <path pathLength="1" d="M301,39.2L307,35.4L313,32.2L319,29.7L325,28.0L331,27.1L337,27.1L343,27.9L349,29.5L355,31.9L361,35.0L367,38.7L373,43.0L379,47.7L385,52.7L391,58.0L397,63.2L403,68.4L409,73.4L415,78.0L421,82.2L427,85.8L433,88.7L439,90.9L445,92.4L451,93.0L457,92.7L463,91.7L469,89.8L475,87.2L481,83.8L486,80.8"/>
+        <path pathLength="1" d="M498,71.7L504,66.7L510,61.5L516,56.2L522,51.0L525,48.3"/>
+        <path pathLength="1" d="M537,39.2L543,35.4L549,32.2L555,29.7L561,28.0L567,27.1L573,27.1L579,27.9L585,29.5L591,31.9L597,35.0L603,38.7L609,43.0L615,47.7L621,52.7L627,58.0L633,63.2L639,68.4L645,73.4L651,78.0L657,82.2L663,85.8L669,88.7L675,90.9L681,92.4L687,93.0L693,92.7L699,91.7L705,89.8L711,87.2L717,83.8L720,82.0"/>
+      </g>
+      <g class="s3">
+        <path pathLength="1" d="M0,31.4L6,29.2L12,27.7L18,27.0L24,27.2L30,28.2L36,30.1L42,32.7L48,36.0L54,39.9L60,44.3L66,49.1L72,54.2L78,59.4L84,64.7L90,69.8L92,71.7"/>
+        <path pathLength="1" d="M104,80.8L110,84.6L116,87.8L122,90.3L128,92.0L134,92.9L140,92.9L146,92.1L152,90.5L158,88.1L164,85.0L170,81.3L171,80.8"/>
+        <path pathLength="1" d="M183,71.7L189,66.7L195,61.5L201,56.2L207,51.0L213,46.1L219,41.5L225,37.4L231,33.9L237,31.0L243,28.9L249,27.5L255,27.0L261,27.3L267,28.5L273,30.5L279,33.2L285,36.6L291,40.6L297,45.0L303,49.9L309,55.0L315,60.3L321,65.5L327,70.6L328,71.7"/>
+        <path pathLength="1" d="M340,80.8L346,84.6L352,87.8L358,90.3L364,92.0L370,92.9L376,92.9L382,92.1L388,90.5L394,88.1L400,85.0L406,81.3L407,80.8"/>
+        <path pathLength="1" d="M419,71.7L425,66.7L431,61.5L437,56.2L443,51.0L449,46.1L455,41.5L461,37.4L467,33.9L473,31.0L479,28.9L485,27.5L491,27.0L497,27.3L503,28.5L509,30.5L515,33.2L521,36.6L527,40.6L533,45.0L539,49.9L545,55.0L551,60.3L557,65.5L563,70.6L564,71.7"/>
+        <path pathLength="1" d="M576,80.8L582,84.6L588,87.8L594,90.3L600,92.0L606,92.9L612,92.9L618,92.1L624,90.5L630,88.1L636,85.0L642,81.3L643,80.8"/>
+        <path pathLength="1" d="M655,71.7L661,66.7L667,61.5L673,56.2L679,51.0L685,46.1L691,41.5L697,37.4L703,33.9L709,31.0L715,28.9L720,27.7"/>
+      </g>
+    </svg>
+    <p class="meta" data-reveal style="--d:.26s">
+      <span>pi + braid</span>
+      <span><span class="lang-en">one session loop</span><span class="lang-ru">один цикл сессии</span></span>
+      <span><span class="lang-en">three memory stores</span><span class="lang-ru">три хранилища памяти</span></span>
+      <span><span class="lang-en">every claim points at a file</span><span class="lang-ru">каждое утверждение указывает на файл</span></span>
+    </p>
+    <p class="scroll-hint" data-reveal style="--d:.32s"><span class="lang-en">Scroll</span><span class="lang-ru">Прокрутите</span></p>
+  </div>
+</section>
+
+<!-- ── 02. The harness ──────────────────────────────────────────────── -->
+<section class="spread" id="pi">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">02</span> <span class="lang-en">The harness</span><span class="lang-ru">Среда</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">A small core, an open surface</span><span class="lang-ru">Малое ядро, открытая поверхность</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi is a minimal terminal coding agent: a session loop and a handful of built-in tools, designed so that everything else arrives as an extension. Braid is one of those extensions, and a large one.</span><span class="lang-ru">pi — минимальный терминальный кодинг-агент: цикл сессии и несколько встроенных инструментов, устроенный так, что всё остальное приходит расширениями. Braid — одно из таких расширений, и немаленькое.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">A small native set</span><span class="lang-ru">Небольшой нативный набор</span></h3>
+        <p><span class="lang-en">read, write, edit, and bash sit at the center; grep, find, ls, and PowerShell round out the working set. tool_search returns deferred tools to the active list when they are needed.</span><span class="lang-ru">read, write, edit и bash — в центре; grep, find, ls и PowerShell дополняют рабочий набор. tool_search возвращает отложенные инструменты в активный список, когда они нужны.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Sessions are trees</span><span class="lang-ru">Сессии — это деревья</span></h3>
+        <p><span class="lang-en">Every turn is a node in a JSON Lines (JSONL) session file. Branch, fork, resume, and compact in place, without losing the trail that led there.</span><span class="lang-ru">Каждый шаг — узел в файле сессии JSON Lines (JSONL). Ветвление, форки, возобновление и сжатие на месте — тропа, которая привела сюда, не теряется.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Four ways in, one loop</span><span class="lang-ru">Четыре входа, один цикл</span></h3>
+        <p><span class="lang-en">An interactive terminal user interface (TUI), a one-shot <span class="mono">--print</span>, machine-readable JSON, or Remote Procedure Call (RPC) over standard input and output. A Software Development Kit (SDK) embeds the same loop in your own programs.</span><span class="lang-ru">Интерактивный терминальный интерфейс (TUI), одноразовый <span class="mono">--print</span>, машиночитаемый JSON или RPC (Remote Procedure Call) поверх стандартного ввода-вывода. SDK (Software Development Kit) встраивает тот же цикл в ваши программы.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Extensible by design</span><span class="lang-ru">Расширяемость по замыслу</span></h3>
+        <p><span class="lang-en">Extensions are TypeScript modules, skills are Markdown procedures, and prompts and themes are plain files. Bundles ship as pi packages.</span><span class="lang-ru">Расширения — TypeScript-модули, навыки — Markdown-процедуры, промпты и темы — простые файлы. Собираются в pi-пакеты.</span></p>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">Tool inventory, pi's native ones included: <span class="mono">packages/core/TOOLS.md</span>.</span><span class="lang-ru">Каталог инструментов, включая нативные: <span class="mono">packages/core/TOOLS.md</span>.</span></p>
+  </div>
+</section>
+
+<!-- ── 03. Philosophy ──────────────────────────────────────────────── -->
+<section class="spread" id="philosophy">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">03</span> <span class="lang-en">Philosophy</span><span class="lang-ru">Философия</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">The shape of “No”</span><span class="lang-ru">Форма слова «нет»</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi's core says no on purpose: each no is a door an extension can walk through, and the answer is allowed to move. One of the doors below has already opened.</span><span class="lang-ru">Ядро pi говорит «нет» намеренно: каждое «нет» — дверь, в которую может войти расширение, и ответу позволено меняться. Одна из дверей ниже уже открылась.</span></p>
+    <div class="tools" data-reveal style="--d:.12s">
+      <div class="tool"><span class="tn"><span class="ny yes"><span class="lang-en">yes</span><span class="lang-ru">да</span></span>MCP</span><span class="td"><span class="lang-en">The no became a yes: pi ships the Model Context Protocol (MCP) as a built-in extension. Servers come from <span class="mono">mcp.json</span>, register with <span class="mono">pi mcp add</span>, and their tools are named <span class="mono">mcp__server__tool</span>.</span><span class="lang-ru">«Нет» стало «да»: MCP (Model Context Protocol) теперь встроенное расширение pi. Серверы берутся из <span class="mono">mcp.json</span>, добавляются через <span class="mono">pi mcp add</span>, а их инструменты называются <span class="mono">mcp__server__tool</span>.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Sub-agents</span><span class="td"><span class="lang-en">No built-in sub-agents; the right way depends on the stack. Braid's answer is a worker pool: panes, own branches, file locks.</span><span class="lang-ru">Встроенных субагентов нет; правильный способ зависит от стека. Ответ Braid — пул воркеров: панели, свои ветки, блокировки файлов.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Permission popups</span><span class="td"><span class="lang-en">The agent does not ask before every tool call; isolation beats interruption. Run it in a container, or wire your own confirmation where it matters.</span><span class="lang-ru">Агент не спрашивает разрешения перед каждым вызовом; изоляция лучше прерывания. Запускайте в контейнере или встройте своё подтверждение там, где это важно.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Plan mode</span><span class="td"><span class="lang-en">A plan is a file or a skill, not a mode. The scratchpad keeps plans where the work happens.</span><span class="lang-ru">План — это файл или навык, а не режим. Scratchpad держит планы там, где идёт работа.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>TODO tools</span><span class="td"><span class="lang-en">The core ships none; a file does the job better and does not pull the model off the work.</span><span class="lang-ru">В ядре их нет: файл справляется лучше и не отвлекает модель от работы.</span></span></div>
+      <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Background bash</span><span class="td"><span class="lang-en">A watched terminal beats a background job: tmux, full observability, direct interaction.</span><span class="lang-ru">Наблюдаемый терминал лучше фонового процесса: tmux, полная наблюдаемость, прямое взаимодействие.</span></span></div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">The positions kept from the deck's earlier generations, checked against today's pi: one flipped, the rest hold.</span><span class="lang-ru">Позиции из прежних поколений презентации, сверенные с сегодняшним pi: одна перевернулась, остальные в силе.</span></p>
+  </div>
+</section>
+
+<!-- ── 04. The suite ────────────────────────────────────────────────── -->
+<section class="spread" id="suite">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">04</span> <span class="lang-en">The suite</span><span class="lang-ru">Набор</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">A core and its satellites</span><span class="lang-ru">Ядро и его спутники</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Braid is a monorepo of pi packages. The core carries the metacognitive layer; the satellites are optional: a skill library, extra tools, providers, a human channel.</span><span class="lang-ru">Braid — монорепозиторий pi-пакетов. Ядро несёт метакогнитивный слой; спутники опциональны: библиотека навыков, дополнительные инструменты, провайдеры, человеческий канал.</span></p>
+    <div class="rows mt" data-reveal style="--d:.12s">
+      <div class="row">
+        <span class="name">core</span>
+        <span class="ver">pi-braid</span>
+        <span class="desc"><span class="lang-en">Enforcement, three-store memory, reasoning, self-improvement, context lifecycle.</span><span class="lang-ru">Контроль, три хранилища памяти, рассуждения, самоулучшение, жизненный цикл контекста.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">skills</span>
+        <span class="ver">pi-braid-skills</span>
+        <span class="desc"><span class="lang-en">Optional pack: Markdown procedures read on demand. The core ships a library of its own.</span><span class="lang-ru">Опциональный пакет: Markdown-процедуры по запросу. Своя библиотека есть и в ядре.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">contrib</span>
+        <span class="ver">pi-braid-contrib</span>
+        <span class="desc"><span class="lang-en">Optional pack: browser automation, codebase and diff tools, health checks, monitors, a REPL.</span><span class="lang-ru">Опциональный набор: автоматизация браузера, инструменты кодовой базы и диффов, проверки здоровья, мониторы, REPL.</span></span>
+      </div>
+      <div class="row">
+        <span class="name">providers</span>
+        <span class="ver">pi-braid-providers</span>
+        <span class="desc"><span class="lang-en">Venice models through the a0 gateway, with a ring of application programming interface (API) keys.</span><span class="lang-ru">Модели Venice через шлюз a0, с кольцом ключей программного интерфейса (API).</span></span>
+      </div>
+      <div class="row">
+        <span class="name">telegram</span>
+        <span class="ver">pi-braid-telegram</span>
+        <span class="desc"><span class="lang-en">A bidirectional Telegram channel: send, poll, media in, voice replies, pause control.</span><span class="lang-ru">Двусторонний канал Telegram: отправка, приём, медиа, голос, пауза.</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 05. What Braid adds ──────────────────────────────────────────── -->
+<section class="spread" id="adds">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">05</span> <span class="lang-en">The difference</span><span class="lang-ru">Разница</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">What Braid adds</span><span class="lang-ru">Что добавляет Braid</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Bare pi is a good agent with a short memory and no second opinion. Each workspace in the suite closes one of those gaps.</span><span class="lang-ru">Голый pi — хороший агент с короткой памятью и без второго мнения. Каждый воркспейс набора закрывает один из этих пробелов.</span></p>
+    <div class="cmp" data-reveal style="--d:.12s">
+      <div class="col without">
+        <h3><span class="lang-en">Without Braid</span><span class="lang-ru">Без Braid</span></h3>
+        <ul>
+          <li><span class="mark">—</span><span class="lang-en">Forgets past sessions</span><span class="lang-ru">Забывает прошлые сессии</span></li>
+          <li><span class="mark">—</span><span class="lang-en">Takes your word at face value</span><span class="lang-ru">Верит на слово</span></li>
+          <li><span class="mark">—</span><span class="lang-en">A flat tool list: read, write, edit, bash</span><span class="lang-ru">Плоский список инструментов: read, write, edit, bash</span></li>
+          <li><span class="mark">—</span><span class="lang-en">No self-improvement loop</span><span class="lang-ru">Нет цикла самоулучшения</span></li>
+          <li><span class="mark">—</span><span class="lang-en">Starts fresh every session</span><span class="lang-ru">Начинает с нуля каждую сессию</span></li>
+        </ul>
+      </div>
+      <div class="col with">
+        <h3><span class="lang-en">With Braid</span><span class="lang-ru">С Braid</span></h3>
+        <ul>
+          <li><span class="mark">+</span><span class="lang-en">Three memory stores and cross-session recall</span><span class="lang-ru">Три хранилища памяти и межсессионный поиск</span></li>
+          <li><span class="mark">+</span><span class="lang-en">verify, verify_claim, hypothesize: checks before trust</span><span class="lang-ru">verify, verify_claim, hypothesize: проверки прежде доверия</span></li>
+          <li><span class="mark">+</span><span class="lang-en">Cognitive tools: think, scratchpad, memory_store</span><span class="lang-ru">Когнитивные инструменты: think, scratchpad, memory_store</span></li>
+          <li><span class="mark">+</span><span class="lang-en">A worker pool: workers in worktrees, verified before merge</span><span class="lang-ru">Пул воркеров: воркеры в ворктри, проверка до слияния</span></li>
+          <li><span class="mark">+</span><span class="lang-en">Working state that survives compaction</span><span class="lang-ru">Рабочее состояние, переживающее сжатие</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">None of this is pi's job: the harness stays small and the suite carries the metacognition. That division is the point, and it has a price: a longer system prompt, more moving parts to keep working, and an API that will move before it settles.</span><span class="lang-ru">Ничто из этого не входит в задачи pi: среда остаётся маленькой, а метакогницию берёт на себя набор. В этом разделении и смысл, и у него есть цена: более длинный системный промпт, больше деталей, которые надо держать в рабочем состоянии, и API, который будет меняться, прежде чем устоится.</span></p>
+  </div>
+</section>
+
+<!-- ── 06. Architecture ─────────────────────────────────────────────── -->
+<section class="spread" id="architecture">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">06</span> <span class="lang-en">Architecture</span><span class="lang-ru">Архитектура</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">It plugs into the loop; it does not replace it</span><span class="lang-ru">Встраивается в цикл, а не заменяет его</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Extensions register tools, listen for session events, and shape the system prompt. Nothing is forked and nothing is monkey-patched: the suite is a set of modules loaded into a session.</span><span class="lang-ru">Расширения регистрируют инструменты, слушают события сессии и формируют системный промпт. Ничего не форкается и не патчится в обход: весь набор — это модули, загружаемые в сессию.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Tools</span><span class="lang-ru">Инструменты</span></span>
+        <h3><span class="lang-en">One catalog, one file</span><span class="lang-ru">Один каталог, один файл</span></h3>
+        <p><span class="lang-en">Braid registers its tools alongside pi's native ones. The full catalog lives in a single file, TOOLS.md, with each tool's enablement tier written next to it.</span><span class="lang-ru">Braid регистрирует свои инструменты рядом с нативными у pi. Полный каталог живёт в одном файле TOOLS.md, а рядом с каждым инструментом указан уровень его включения.</span></p>
+      </div>
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Prompt</span><span class="lang-ru">Промпт</span></span>
+        <h3><span class="lang-en">One guideline per tool</span><span class="lang-ru">Одна директива на инструмент</span></h3>
+        <p><span class="lang-en">Each enabled tool contributes a one-line guideline to the system prompt. A lockstep test keeps those lines exactly equal to the catalog; change one side alone and the build fails.</span><span class="lang-ru">Каждый включённый инструмент добавляет в системный промпт одну строку-директиву. Lockstep-тест удерживает эти строки в точном соответствии с каталогом: изменишь одну сторону — сборка падает.</span></p>
+      </div>
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Loading</span><span class="lang-ru">Загрузка</span></span>
+        <h3><span class="lang-en">Three enablement tiers</span><span class="lang-ru">Три уровня включения</span></h3>
+        <p><span class="lang-en">Every module is always-on, default-on, or opt-in. Always-on modules cannot be disabled; opt-in ones stay dark until a setting asks for them. The manifest, not the docs, is the list.</span><span class="lang-ru">Каждый модуль — always-on, default-on или opt-in. Always-on модули нельзя отключить; opt-in остаются тёмными, пока настройка их не включит. Список задаёт манифест, а не документация.</span></p>
+      </div>
+      <div class="cell">
+        <span class="mono-tag"><span class="lang-en">Steering</span><span class="lang-ru">Управление</span></span>
+        <h3><span class="lang-en">Whispers, not rewrites</span><span class="lang-ru">Шёпот, а не перезапись</span></h3>
+        <p><span class="lang-en">Feedback arrives as short injected messages that steer the next turn, never as a rewrite of the prompt under a running session.</span><span class="lang-ru">Обратная связь приходит короткими инъекциями для следующего шага, а не переписыванием промпта под работающей сессией.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 07. Whispers ─────────────────────────────────────────────────── -->
+<section class="spread" id="whispers">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">07</span> <span class="lang-en">Injection</span><span class="lang-ru">Инъекция</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Whispers at the edge of a turn</span><span class="lang-ru">Шёпот на границе шага</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A whisper is a short message injected into a live session. The agent sees it on its next turn; the terminal shows it; the transcript keeps it. Delivery is by class: “live” reaches the running loop, “park” is held for the end-of-turn flush, and only a genuinely critical whisper starts a new turn.</span><span class="lang-ru">Шёпот — короткое сообщение, инжектируемое в живую сессию. Агент видит его на следующем шаге; терминал показывает; транскрипт сохраняет. Доставка — по классу: «live» доходит до работающего цикла, «park» откладывается до конца шага, и только по-настоящему критичный шёпот может начать новый шаг.</span></p>
+    <p class="small mt" data-reveal style="--d:.1s"><span class="lang-en">The turn a whisper enters has a shape:</span><span class="lang-ru">Шаг, в который входит шёпот, имеет форму:</span></p>
+    <div class="flow w7" data-reveal style="--d:.12s">
+      <div class="step"><span class="sn">01</span><span class="st"><span class="lang-en">user</span><span class="lang-ru">пользователь</span></span><span class="sd"><span class="lang-en">your message</span><span class="lang-ru">ваше сообщение</span></span></div>
+      <div class="step"><span class="sn">02</span><span class="st"><span class="lang-en">prompt</span><span class="lang-ru">промпт</span></span><span class="sd"><span class="lang-en">assembled with signals</span><span class="lang-ru">собирается с сигналами</span></span></div>
+      <div class="step"><span class="sn">03</span><span class="st"><span class="lang-en">recall</span><span class="lang-ru">вспомнить</span></span><span class="sd"><span class="lang-en">memory lookups</span><span class="lang-ru">поиск в памяти</span></span></div>
+      <div class="step"><span class="sn">04</span><span class="st"><span class="lang-en">think</span><span class="lang-ru">подумать</span></span><span class="sd"><span class="lang-en">scratchpad, reasoning</span><span class="lang-ru">scratchpad, рассуждение</span></span></div>
+      <div class="step"><span class="sn">05</span><span class="st"><span class="lang-en">act</span><span class="lang-ru">действовать</span></span><span class="sd"><span class="lang-en">read · write · bash</span><span class="lang-ru">read · write · bash</span></span></div>
+      <div class="step"><span class="sn">06</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">проверить</span></span><span class="sd"><span class="lang-en">checks before done</span><span class="lang-ru">проверки перед завершением</span></span></div>
+      <div class="step"><span class="sn">07</span><span class="st"><span class="lang-en">respond</span><span class="lang-ru">ответ</span></span><span class="sd"><span class="lang-en">the turn ends, the reflector reads it</span><span class="lang-ru">шаг завершается, рефлектор читает его</span></span></div>
+    </div>
+    <div class="transcript mt" data-reveal style="--d:.16s">
+      <div><span class="tag">[braid-whisper - context-lifecycle]</span> <span class="dim"><span class="lang-en">Context at N tokens. Consider archiving a range before compaction.</span><span class="lang-ru">Контекст на N токенов. Стоит заархивировать диапазон до сжатия.</span></span></div>
+      <div><span class="tag">[braid-whisper - watchdog]</span> <span class="dim"><span class="lang-en">No tool activity for N turns. Checking liveness.</span><span class="lang-ru">Нет активности инструментов N шагов. Проверяю живость.</span></span></div>
+      <div><span class="tag">[braid-whisper - timer]</span> <span class="dim"><span class="lang-en">Reminder: check the worker pane, then continue.</span><span class="lang-ru">Напоминание: проверьте панель воркера и продолжайте.</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 08. Signals ──────────────────────────────────────────────────── -->
+<section class="spread" id="signals">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">08</span> <span class="lang-en">Signals</span><span class="lang-ru">Сигналы</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Who gets to interrupt</span><span class="lang-ru">Кто имеет право прервать</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A whisper earns attention only if it is rare and attributed. Each family speaks on its own cadence, and every line says who is talking.</span><span class="lang-ru">Шёпот заслуживает внимания, только если он редок и подписан. У каждого семейства своя частота, и в каждой строке сказано, кто говорит.</span></p>
+    <div class="channels" data-reveal style="--d:.12s">
+      <div class="ch"><span class="cn">enforcement</span><span class="cc"><span class="lang-en">every turn</span><span class="lang-ru">на каждом шаге</span></span><span class="cd"><span class="lang-en">Quality and turn gates</span><span class="lang-ru">Гейты качества и шага</span></span></div>
+      <div class="ch"><span class="cn">heartbeat</span><span class="cc"><span class="lang-en">every few turns</span><span class="lang-ru">раз в несколько шагов</span></span><span class="cd"><span class="lang-en">Summaries from background services</span><span class="lang-ru">Сводки фоновых служб</span></span></div>
+      <div class="ch"><span class="cn">watchdog</span><span class="cc"><span class="lang-en">rare, then loud</span><span class="lang-ru">редко, но громко</span></span><span class="cd"><span class="lang-en">Degradation and stall escalations</span><span class="lang-ru">Эскалации деградации и зависаний</span></span></div>
+      <div class="ch"><span class="cn">context-lifecycle</span><span class="cc"><span class="lang-en">at thresholds</span><span class="lang-ru">на порогах</span></span><span class="cd"><span class="lang-en">Archive and compaction proposals</span><span class="lang-ru">Предложения по архивации и сжатию</span></span></div>
+      <div class="ch"><span class="cn">timers</span><span class="cc"><span class="lang-en">on expiry</span><span class="lang-ru">по истечении</span></span><span class="cd"><span class="lang-en">Scheduled reminders</span><span class="lang-ru">Запланированные напоминания</span></span></div>
+      <div class="ch"><span class="cn">telegram</span><span class="cc"><span class="lang-en">while the poller runs</span><span class="lang-ru">пока работает poller</span></span><span class="cd"><span class="lang-en">Messages from the owner</span><span class="lang-ru">Сообщения от владельца</span></span></div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">Delivery class is the control. An advisory whisper rides the running turn or parks until it ends; only a genuinely critical one may start a new turn. Without that split, observation feeds itself: compaction invites a turn, a turn spends context, context invites compaction.</span><span class="lang-ru">Класс доставки и есть управление. Совещательный шёпот едет в текущем шаге или ждёт его конца; начать новый шаг может только по-настоящему критичный. Без этого разделения наблюдение кормит само себя: сжатие вызывает шаг, шаг тратит контекст, контекст вызывает сжатие.</span></p>
+  </div>
+</section>
+
+<!-- ── 09. Calibration ──────────────────────────────────────────────── -->
+<section class="spread" id="calibration">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">09</span> <span class="lang-en">Calibration</span><span class="lang-ru">Калибровка</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Tuned against flattery</span><span class="lang-ru">Настроен против угодливости</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">The enforcement extension is a belief-policy engine with an unglamorous job: notice when the agent is drifting, agreeing too easily, or declaring victory early, and say so.</span><span class="lang-ru">Расширение контроля — это движок убеждений и политик с негламурной работой: замечать, когда агент уплывает, слишком легко соглашается или объявляет победу раньше времени, и говорить об этом.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Structured signals</span><span class="lang-ru">Структурированные сигналы</span></h3>
+        <p><span class="lang-en">Three levels: L1 signals surface through the prompt builder, L2 bundles session-level sub-signals, and L3 marks the critical ones: validation failures and orphan chains. Chosen by policy rather than mood.</span><span class="lang-ru">Три уровня: сигналы L1 всплывают через сборщик промпта, L2 объединяет подсигналы уровня сессии, а L3 отмечает критичные: провалы валидации и осиротевшие цепочки. Выбираются политикой, а не настроением.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Sycophancy detection</span><span class="lang-ru">Обнаружение сикофантии</span></h3>
+        <p><span class="lang-en">The classifier scores validation before correction after the reply is sent; the whisper steers the next turn, not the last one.</span><span class="lang-ru">Классификатор оценивает одобрение прежде исправления уже после отправки ответа; шёпот правит следующий шаг, а не прошлый.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Topic drift</span><span class="lang-ru">Уход от темы</span></h3>
+        <p><span class="lang-en">Dedicated check and reset tools measure how far the current turn has wandered from the request that opened it.</span><span class="lang-ru">Специальные инструменты проверки и сброса измеряют, насколько текущий шаг отклонился от открывшего его запроса.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Verify before done</span><span class="lang-ru">Проверь перед завершением</span></h3>
+        <p><span class="lang-en">A reasoning-quality detector watches for instability in the agent's own conclusions and nudges verification when confidence outruns evidence.</span><span class="lang-ru">Детектор качества рассуждений следит за нестабильностью собственных выводов агента и подталкивает к верификации, когда уверенность опережает доказательства.</span></p>
+      </div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">When a task completes, a reflector reads the turn for principles and procedures worth keeping, so a session leaves more behind than its transcript.</span><span class="lang-ru">По завершении задачи рефлектор читает шаг в поисках принципов и процедур, которые стоит сохранить: сессия оставляет больше, чем транскрипт.</span></p>
+  </div>
+</section>
+
+<!-- ── 09. Memory ───────────────────────────────────────────────────── -->
+<section class="spread" id="memory">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">10</span> <span class="lang-en">Memory</span><span class="lang-ru">Память</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Three shapes of remembering</span><span class="lang-ru">Три формы памяти</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A flat log remembers what happened. Braid keeps three stores with different shapes and search semantics, plus working state that survives compaction.</span><span class="lang-ru">Плоский лог помнит, что произошло. Braid держит три хранилища разных форм с разной семантикой поиска, плюс рабочее состояние, переживающее сжатие.</span></p>
+    <div class="band cols-3 mt" data-reveal style="--d:.12s">
+      <div class="stat">
+        <span class="n k">episodes.jsonl</span>
+        <span class="l"><span class="lang-en">episodic memory</span><span class="lang-ru">эпизодическая память</span></span>
+        <span class="g"><span class="lang-en">What happened, in what context, with what outcome. Case-based recall for the next attempt.</span><span class="lang-ru">Что случилось, в каком контексте, с каким исходом. Поиск по прецедентам для следующей попытки.</span></span>
+      </div>
+      <div class="stat">
+        <span class="n k">semantic.json</span>
+        <span class="l"><span class="lang-en">semantic memory</span><span class="lang-ru">семантическая память</span></span>
+        <span class="g"><span class="lang-en">Facts, insights, patterns, preferences, and errors; tagged, linked, and weighted by importance.</span><span class="lang-ru">Факты, инсайты, паттерны, предпочтения и ошибки; с тегами, связями и весами важности.</span></span>
+      </div>
+      <div class="stat">
+        <span class="n k"><span class="lang-en">heuristics</span><span class="lang-ru">эвристики</span></span>
+        <span class="l"><span class="lang-en">procedural memory</span><span class="lang-ru">процедурная память</span></span>
+        <span class="g"><span class="lang-en">Procedure rules that evolve after a success or a failure. Kept in session and applied as they prove useful.</span><span class="lang-ru">Процедурные правила, эволюционирующие после успеха или неудачи. Живут в сессии и применяются, пока приносят пользу.</span></span>
+      </div>
+    </div>
+    <div class="grid cols-4 mt-s" data-reveal style="--d:.18s">
+      <div class="cell">
+        <h3><span class="lang-en">Scratchpad</span><span class="lang-ru">Scratchpad</span></h3>
+        <p><span class="lang-en">Durable goals, plans, and decisions, resumable after compaction or a restart.</span><span class="lang-ru">Долговечные цели, планы и решения, переживающие сжатие и перезапуск.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Session recall</span><span class="lang-ru">Межсессионный поиск</span></h3>
+        <p><span class="lang-en">Search across past sessions, so yesterday's reasoning is still reachable.</span><span class="lang-ru">Поиск по прошлым сессиям: рассуждения вчерашнего дня остаются доступными.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Context lifecycle</span><span class="lang-ru">Жизненный цикл контекста</span></h3>
+        <p><span class="lang-en">Watches context pressure and proposes archiving or compaction before a limit is hit.</span><span class="lang-ru">Следит за давлением контекста и предлагает архивацию или сжатие до достижения лимита.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Workspace snapshot</span><span class="lang-ru">Снимки workspace</span></h3>
+        <p><span class="lang-en">Capture, diff, and restore files; a return point before risky edits.</span><span class="lang-ru">Захват, diff и восстановление файлов; точка возврата перед рискованными правками.</span></p>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">All three stores are cross-searchable through <span class="mono">memory action=recall_search</span>; the stores on disk are the only source of truth, and the tools read them directly.</span><span class="lang-ru">Все три хранилища доступны для кросс-поиска через <span class="mono">memory action=recall_search</span>; единственный источник правды — хранилища на диске, и инструменты читают их напрямую.</span></p>
+  </div>
+</section>
+
+<!-- ── 10. The worker pool ──────────────────────────────────────────── -->
+<section class="spread" id="pool">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">11</span> <span class="lang-en">The worker pool</span><span class="lang-ru">Пул воркеров</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">One orchestrator, many hands</span><span class="lang-ru">Один оркестратор, много рук</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Large work does not fit one context. Braid delegates it: the orchestrator plans and decomposes, workers run in their own terminal panes and git worktrees, and results come back as artifacts, not prose.</span><span class="lang-ru">Большая работа не помещается в один контекст. Braid делегирует её: оркестратор планирует и декомпозирует, воркеры работают в терминальных панелях и git-ворктри, а результаты возвращаются артефактами, не прозой.</span></p>
+    <div class="flow" data-reveal style="--d:.12s">
+      <div class="step"><span class="sn">01</span><span class="st"><span class="lang-en">plan</span><span class="lang-ru">план</span></span><span class="sd"><span class="lang-en">split the work, name the files</span><span class="lang-ru">разбить работу, назвать файлы</span></span></div>
+      <div class="step"><span class="sn">02</span><span class="st"><span class="lang-en">spawn</span><span class="lang-ru">запуск</span></span><span class="sd"><span class="lang-en">worker pane, own branch</span><span class="lang-ru">панель воркера, своя ветка</span></span></div>
+      <div class="step"><span class="sn">03</span><span class="st"><span class="lang-en">lock</span><span class="lang-ru">блокировка</span></span><span class="sd"><span class="lang-en">file locks stop collisions</span><span class="lang-ru">блокировки файлов исключают коллизии</span></span></div>
+      <div class="step"><span class="sn">04</span><span class="st"><span class="lang-en">execute</span><span class="lang-ru">выполнение</span></span><span class="sd"><span class="lang-en">isolated working directory</span><span class="lang-ru">изолированный рабочий каталог</span></span></div>
+      <div class="step"><span class="sn">05</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">Проверка</span></span><span class="sd"><span class="lang-en">fresh eyes, never the author</span><span class="lang-ru">свежими глазами, не автором</span></span></div>
+      <div class="step"><span class="sn">06</span><span class="st"><span class="lang-en">merge</span><span class="lang-ru">слияние</span></span><span class="sd"><span class="lang-en">verified only; a checker reads it</span><span class="lang-ru">только проверенное; чекер читает первым</span></span></div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">A worker must name its output file and its gate exit codes; a close whose file count sits below the tree refuses the merge.</span><span class="lang-ru">Воркер обязан назвать выходной файл и коды выхода гейтов; если в закрытии файлов меньше, чем в дереве, слияния нет.</span></p>
+    <blockquote class="pull" data-reveal style="--d:.24s">
+      <p><span class="lang-en">This deck is a worker artifact: built in an isolated worktree, every claim traced to a file, verified before it was called done.</span><span class="lang-ru">Эта презентация — артефакт воркера: собрана в изолированном ворктри, каждое утверждение прослежено до файла, и она проверена до того, как её назвали готовой.</span></p>
+      <cite><span class="lang-en">Built the way the worker pool builds</span><span class="lang-ru">Собрано так, как собирает пул воркеров</span></cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ── 11. Discipline ───────────────────────────────────────────────── -->
+<section class="spread" id="discipline">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">12</span> <span class="lang-en">Discipline</span><span class="lang-ru">Дисциплина</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Done is a claim; evidence is the proof</span><span class="lang-ru">«Готово» — утверждение; доказательство — улики</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Braid's cognitive tools make premature confidence expensive: think before a non-trivial move, hypothesize when a fix fails, verify before done, finalize only with the checks green.</span><span class="lang-ru">Когнитивные инструменты Braid делают преждевременную уверенность дорогой: think перед нетривиальным действием, hypothesize когда исправление не сработало, verify до завершения, finalize только с зелёными проверками.</span></p>
+    <div class="tools" data-reveal style="--d:.12s">
+      <div class="tool"><span class="tn">think</span><span class="td"><span class="lang-en">Structured reasoning before high-stakes or hard-to-reverse decisions.</span><span class="lang-ru">Структурированное рассуждение перед рискованными или трудно обратимыми решениями.</span></span></div>
+      <div class="tool"><span class="tn">hypothesize</span><span class="td"><span class="lang-en">Ranked root-cause candidates when a first fix fails, never "something broke".</span><span class="lang-ru">Ранжированные гипотезы корневых причин, когда первое исправление не сработало, а не «что-то сломалось».</span></span></div>
+      <div class="tool"><span class="tn">verify / verify_claim</span><span class="td"><span class="lang-en">Check code, reasoning, and claims against explicit criteria; retrieved evidence outranks memory.</span><span class="lang-ru">Проверяют код, рассуждения и утверждения по явным критериям; найденные доказательства весомее памяти.</span></span></div>
+      <div class="tool"><span class="tn">finalize</span><span class="td"><span class="lang-en">The done gate. It blocks on unresolved verifications.</span><span class="lang-ru">Шлюз «готово». Блокируется на нерешённых верификациях.</span></span></div>
+    </div>
+    <blockquote class="pull" data-reveal style="--d:.18s">
+      <p><span class="lang-en">A fix lives where the invariant lives: shared layers know mechanisms, never one project's names, paths, or policy.</span><span class="lang-ru">Исправление живёт там, где живёт инвариант: общие слои знают механизмы, но никогда — имена, пути или политику одного проекта.</span></p>
+      <cite><span class="lang-en">Placement discipline, enforced by a tree scan</span><span class="lang-ru">Дисциплина размещения, подкреплённая сканированием дерева</span></cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- ── 12. The long loop ────────────────────────────────────────────── -->
+<section class="spread" id="longloop">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">13</span> <span class="lang-en">The long loop</span><span class="lang-ru">Длинный цикл</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">It iterates on itself</span><span class="lang-ru">Он итерирует сам себя</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Beyond the turn, there is a slower loop: measure what got used, reflect on what happened, and turn failures into procedures.</span><span class="lang-ru">За пределами шага есть более медленный цикл: измерять, что было использовано, рефлексировать о случившемся и превращать провалы в процедуры.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Skill adoption</span><span class="lang-ru">Адопция навыков</span></h3>
+        <p><span class="lang-en">skill-usage counts what was suggested, loaded, claimed, and actually read. It is the instrument that keeps the skill library honest about what earns its place.</span><span class="lang-ru">skill-usage считает, что было предложено, загружено, заявлено использованным и действительно прочитано. Это инструмент, который не даёт библиотеке навыков обманывать себя насчёт того, что оправдывает своё место.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">New skills</span><span class="lang-ru">Новые навыки</span></h3>
+        <p><span class="lang-en">meta-improvement creates and revises skills, runs self-improving experiments, and measures whether they helped.</span><span class="lang-ru">meta-improvement создаёт и пересматривает навыки, запускает самоулучшающиеся эксперименты и измеряет, помогли ли они.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Probes</span><span class="lang-ru">Пробы</span></h3>
+        <p><span class="lang-en">probe-evaluation designs A/B probes with pre-registered rubrics and decision rules, so a null result is informative rather than embarrassing.</span><span class="lang-ru">probe-evaluation проектирует A/B-пробы с заранее зарегистрированными рубриками и правилами решений, чтобы нулевой результат был информативным, а не неловким.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Consolidation</span><span class="lang-ru">Консолидация</span></h3>
+        <p><span class="lang-en">Heuristic evolution, offline consolidation, and Standard Operating Procedure (SOP) extraction run off the back of completed work.</span><span class="lang-ru">Эволюция эвристик, офлайн-консолидация и извлечение стандартных операционных процедур (SOP) работают по итогам завершённой работы.</span></p>
+      </div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">Failures feed this loop passively: the evolver collects failure signatures, mines them into weakness clusters, and whispers back a summary with the actionable ones counted. It reports; the agent decides what to change.</span><span class="lang-ru">Провалы питают этот цикл пассивно: evolver собирает сигнатуры провалов, сводит их в кластеры слабых мест и возвращает шёпотом сводку с числом действенных. Он сообщает; что менять — решает агент.</span></p>
+
+  </div>
+</section>
+
+<!-- ── 13. Sources ──────────────────────────────────────────────────── -->
+<section class="spread" id="sources">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">14</span> <span class="lang-en">Sources</span><span class="lang-ru">Источники</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">The deck points; the repository answers</span><span class="lang-ru">Презентация указывает, репозиторий отвечает</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">No count, version, or date appears on these pages, because each of those is a line a reader would have to edit later. Every class of claim has one file that decides it, and the file is always current.</span><span class="lang-ru">Ни одного числа, версии или даты на этих страницах нет: каждое такое значение — строка, которую читателю придётся править. У каждого класса утверждений есть один файл, который решает, и этот файл всегда актуален.</span></p>
+    <div class="rows src mt" data-reveal style="--d:.12s">
+      <div class="row"><span class="name">tools</span><span class="desc"><span class="mono">packages/core/TOOLS.md</span> <span class="lang-en">Every tool, its tier, and the line it adds to the prompt.</span><span class="lang-ru">Каждый инструмент, его уровень и строка, которую он добавляет в промпт.</span></span></div>
+      <div class="row"><span class="name">modules</span><span class="desc"><span class="mono">packages/core/src/extensions/manifest.ts</span> <span class="lang-en">Which extensions exist, and each one's tier.</span><span class="lang-ru">Какие расширения есть и у каждого — его уровень.</span></span></div>
+      <div class="row"><span class="name">skills</span><span class="desc"><span class="mono">packages/core/skills/</span> <span class="lang-en">One directory per procedure; description and verdict in the front matter.</span><span class="lang-ru">Один каталог на процедуру; описание и вердикт во фронтматтере.</span></span></div>
+      <div class="row"><span class="name">lockstep</span><span class="desc"><span class="mono">packages/core/test/runtime/core/test-tool-pipelines.mjs</span> <span class="lang-en">The test that keeps catalog and injected guidelines identical.</span><span class="lang-ru">Тест, держащий каталог и директивы один в один.</span></span></div>
+      <div class="row"><span class="name">packages</span><span class="desc"><span class="mono">packages/*/package.json</span> <span class="lang-en">Workspace list, declared versions, engine floor.</span><span class="lang-ru">Воркспейсы, объявленные версии, порог движка.</span></span></div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.2s"><span class="lang-en">A page that carries a figure needs an editor every time the repository moves. A page that carries the path only needs a reader.</span><span class="lang-ru">Странице с цифрой нужен редактор каждый раз, когда двигается репозиторий. Странице с путём нужен только читатель.</span></p>
+  </div>
+</section>
+
+<!-- ── 14. Skills index ─────────────────────────────────────────────── -->
+<section class="spread" id="skills">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">15</span> <span class="lang-en">The library</span><span class="lang-ru">Библиотека</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Procedures, read on demand</span><span class="lang-ru">Процедуры, которые читают по запросу</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Skills are Markdown procedures, not capabilities. They are grouped here by the job they do, not by the package they ship in, because that is how the agent finds them: by description, for the task in front of it.</span><span class="lang-ru">Навыки — это Markdown-процедуры, а не возможности. Здесь они собраны по работе, которую делают, а не по пакету, в котором лежат: именно так агент их и находит — по описанию, под задачу.</span></p>
+    <div class="tax" data-reveal style="--d:.12s">
+      <div class="t"><span class="tl"><span class="lang-en">Reason</span><span class="lang-ru">Рассуждение</span></span><span class="tn">meta-cognition, meta-improvement, research, probe-evaluation, skill-usage</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Build</span><span class="lang-ru">Сборка</span></span><span class="tn">software-engineer, code-refactoring, documentation, dox, agent-testing, subagent-orchestration</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Verify</span><span class="lang-ru">Проверка</span></span><span class="tn">subagent-verification, misdirection-audit, placement-discipline</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Operate</span><span class="lang-ru">Эксплуатация</span></span><span class="tn">healthcheck, herdr-topology, release-pipeline</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Speak</span><span class="lang-ru">Речь</span></span><span class="tn">voice-replies, tone-quality</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Reference</span><span class="lang-ru">Справка</span></span><span class="tn">braid-reference, pi-reference</span></div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">The tombstone is left out: <span class="mono">code-search</span> is merged into <span class="mono">code-refactoring</span>. Each skill carries a verdict (KEEP, IMPROVE, UNVALIDATED, MOVE), and the record keeps the ones that did not pass.</span><span class="lang-ru">Надгробие не показано: <span class="mono">code-search</span> слит в <span class="mono">code-refactoring</span>. У каждого навыка есть вердикт (KEEP, IMPROVE, UNVALIDATED, MOVE), и запись хранит и те, что не прошли.</span></p>
+  </div>
+</section>
+
+<!-- ── 15. The channel ──────────────────────────────────────────────── -->
+<section class="spread" id="channel">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">16</span> <span class="lang-en">The channel</span><span class="lang-ru">Канал</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">A message away</span><span class="lang-ru">На расстоянии одного сообщения</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Telegram is the human interface: the agent sends reports and receives instructions from a phone, without a terminal in sight.</span><span class="lang-ru">Telegram — это человеческий интерфейс: агент отправляет отчёты и получает инструкции с телефона, без терминала на горизонте.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Outbound</span><span class="lang-ru">Исходящие</span></h3>
+        <p><span class="lang-en"><span class="mono">telegram_send</span> pushes a concise update or a rich HTML or Markdown report, split to fit the message limit.</span><span class="lang-ru"><span class="mono">telegram_send</span> отправляет краткий апдейт или развёрнутый отчёт в HTML или Markdown, нарезанный под лимит сообщения.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Inbound</span><span class="lang-ru">Входящие</span></h3>
+        <p><span class="lang-en"><span class="mono">telegram_inbox</span> and a background poller ingest replies from whitelisted chats, with deduplication and persisted offsets.</span><span class="lang-ru"><span class="mono">telegram_inbox</span> и фоновый poller принимают ответы из белых списков чатов, с дедупликацией и сохранёнными смещениями.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Voice</span><span class="lang-ru">Голос</span></h3>
+        <p><span class="lang-en">The voice-replies skill synthesizes speech in Russian, English, or Hebrew, converts it to Ogg/Opus, and sends a voice note.</span><span class="lang-ru">Навык voice-replies синтезирует речь на русском, английском или иврите, конвертирует в Ogg/Opus и отправляет голосовое сообщение.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Control</span><span class="lang-ru">Управление</span></h3>
+        <p><span class="lang-en">An inline keyboard pauses or resumes the work; a live-update message tracks progress in place and closes on Done.</span><span class="lang-ru">Inline-клавиатура ставит работу на паузу или возобновляет; живое сообщение отслеживает прогресс на месте и закрывается на Done.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 16. Ops ──────────────────────────────────────────────────────── -->
+<section class="spread" id="ops">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">17</span> <span class="lang-en">Under the floor</span><span class="lang-ru">Под полом</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">It keeps its own lights on</span><span class="lang-ru">Сам держит свои огни горящими</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">The suite also maintains the ground it stands on: liveness, errors, health, and the tunnel underneath.</span><span class="lang-ru">Набор обслуживает и собственную почву: живость, ошибки, здоровье и туннель внизу.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">Watchdog</span><span class="lang-ru">Watchdog</span></h3>
+        <p><span class="lang-en">A liveness and stall state machine watches turn progress, provider feedback, and tunnel liveness. When the session stalls, it wakes with a whisper and, optionally, a one-line Telegram signal.</span><span class="lang-ru">Машина состояний живости и зависаний следит за прогрессом шагов, откликом провайдера и живостью туннеля. Когда сессия застревает, она пробуждается шёпотом и, опционально, однострочным сигналом в Telegram.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Recovery</span><span class="lang-ru">Восстановление</span></h3>
+        <p><span class="lang-en">Auto-recovery checks for degradation on each turn and steers the agent to re-plan before errors compound; health maintenance adds checkpoints, degradation detection, and rollback on request.</span><span class="lang-ru">Авто-восстановление проверяет деградацию на каждом шаге и направляет агента к перепланированию, пока ошибки не накопились; health-maintenance добавляет чекпоинты, детекцию деградации и откат по запросу.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Error tracking</span><span class="lang-ru">Отслеживание ошибок</span></h3>
+        <p><span class="lang-en">The <span class="mono">error</span> tool (list, get, stats, clear) keeps a searchable trail when something breaks mid-session.</span><span class="lang-ru">Инструмент <span class="mono">error</span> (list, get, stats, clear) ведёт доступный для поиска след, когда что-то ломается посреди сессии.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Network</span><span class="lang-ru">Сеть</span></h3>
+        <p><span class="lang-en">A contrib network monitor (<span class="mono">packages/contrib/network-monitor/</span>) probes the macOS tunnel beneath the session and restores it through the client's own mechanism, without root.</span><span class="lang-ru">Сетевой монитор из contrib (<span class="mono">packages/contrib/network-monitor/</span>) проверяет macOS-туннель под сессией и восстанавливает его через собственный механизм клиента, без root.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 17. In practice ──────────────────────────────────────────────── -->
+<section class="spread" id="built">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">18</span> <span class="lang-en">In practice</span><span class="lang-ru">На практике</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Built by the loop it describes</span><span class="lang-ru">Собрана циклом, который сама описывает</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">This deck is its own test case: one dispatch, an isolated worktree, every claim traced to a file, gates before done. The worker pool page describes the machinery; this is what it produced.</span><span class="lang-ru">Эта презентация — собственный тест-кейс: одно задание, изолированный ворктри, каждое утверждение прослежено до файла, гейты до «готово». Раздел про пул воркеров описывает механику; это — то, что она произвела.</span></p>
+    <div class="flow w4" data-reveal style="--d:.12s">
+      <div class="step"><span class="sn">01</span><span class="st"><span class="lang-en">dispatch</span><span class="lang-ru">задание</span></span><span class="sd"><span class="lang-en">scope, branch, gates named</span><span class="lang-ru">скоуп, ветка, названные гейты</span></span></div>
+      <div class="step"><span class="sn">02</span><span class="st"><span class="lang-en">worktree</span><span class="lang-ru">ворктри</span></span><span class="sd"><span class="lang-en">isolated copy, own branch</span><span class="lang-ru">изолированная копия, своя ветка</span></span></div>
+      <div class="step"><span class="sn">03</span><span class="st"><span class="lang-en">trace</span><span class="lang-ru">сверка</span></span><span class="sd"><span class="lang-en">every claim back to a file</span><span class="lang-ru">каждое утверждение до файла</span></span></div>
+      <div class="step"><span class="sn">04</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">проверка</span></span><span class="sd"><span class="lang-en">gates green before done</span><span class="lang-ru">зелёные гейты до «готово»</span></span></div>
+    </div>
+    <div class="transcript mt" data-reveal style="--d:.24s">
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">no live data: zero runtime fetch sites, no generated counts file</span><span class="lang-ru">нет живых данных: ни одного вызова fetch во время выполнения, никакого сгенерированного файла со счётчиками</span></span></div>
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">bilingual parity: English and Russian span counts equal</span><span class="lang-ru">двуязычный паритет: число английских и русских элементов span совпадает</span></span></div>
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">render probes at three widths (desktop, tablet, phone), both languages, scrolled before the shot</span><span class="lang-ru">рендер-пробы на трёх ширинах (десктоп, планшет, телефон), оба языка, с прокруткой перед снимком</span></span></div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">Inputs: the harness's own docs and changelog, the repository at its current head, the root manifest, and this file.</span><span class="lang-ru">Входы: документация и чейнджлог самой среды, репозиторий на текущем head, корневой манифест и этот файл.</span></p>
+  </div>
+</section>
+
+<!-- ── 18. Install ──────────────────────────────────────────────────── -->
+<section class="spread" id="install">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">19</span> <span class="lang-en">Install</span><span class="lang-ru">Установка</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">A command, not a build</span><span class="lang-ru">Команда, а не сборка</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi has to exist first; then Braid is one package install, recorded in pi's own settings. A checkout is for working on Braid, not for using it.</span><span class="lang-ru">Сначала — pi. Затем Braid — это одна установка пакета, и pi записывает её в свои настройки. Клон — чтобы работать над Braid, а не пользоваться им.</span></p>
+    <pre class="shell" data-reveal style="--d:.12s"><span class="c"><span class="lang-en"># pi, the harness</span><span class="lang-ru"># pi, среда</span></span>
+<span class="p">$</span> <span class="k">npm install -g --ignore-scripts @earendil-works/pi-coding-agent</span>
+
+<span class="c"><span class="lang-en"># braid, then the add-ons you want</span><span class="lang-ru"># braid, затем нужные надстройки</span></span>
+<span class="p">$</span> <span class="k">pi install npm:pi-braid</span>
+<span class="p">$</span> <span class="k">pi install npm:pi-braid-skills</span>
+
+<span class="c"><span class="lang-en"># first run: connect a provider</span><span class="lang-ru"># первый запуск: подключите провайдера</span></span>
+<span class="p">$</span> <span class="k">pi</span>   <span class="c"><span class="lang-en"># then /login inside the session</span><span class="lang-ru"># затем /login внутри сессии</span></span></pre>
+    <div class="files">
+      <div data-reveal style="--d:.18s">
+        <p class="small"><span class="lang-en">From a checkout: register core and skills in <span class="mono">~/.pi/agent/settings.json</span>; the root manifest declares no pi resources, so point at the workspaces:</span><span class="lang-ru">Из клона: зарегистрируйте core и skills в <span class="mono">~/.pi/agent/settings.json</span>; корневой манифест не объявляет pi-ресурсы, указывайте на воркспейсы:</span></p>
+        <pre class="shell" style="margin-top:1rem">{
+  "packages": [
+    "file:~/pi-braid/packages/core",
+    "file:~/pi-braid/packages/skills"
+  ]
+}</pre>
+      </div>
+      <div data-reveal style="--d:.22s">
+        <p class="small"><span class="lang-en">Then start pi. Braid loads with the session, and the prompt lists the bundled skills. Add contrib, providers, or telegram the same way.</span><span class="lang-ru">Затем запустите pi. Braid загружается вместе с сессией, а промпт перечисляет встроенные навыки. contrib, providers или telegram добавляются так же.</span></p>
+        <p class="small mt-s"><span class="lang-en">The engine floor is the <span class="mono">engines</span> field in the root package.json. The README carries the status: early-stage software.</span><span class="lang-ru">Порог движка — поле <span class="mono">engines</span> в корневом package.json. Статус записан в README: софт ранней стадии.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 19. End ──────────────────────────────────────────────────────── -->
+<section class="spread" id="end">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">20</span> <span class="lang-en">End</span><span class="lang-ru">Конец</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Everything here was read, not remembered</span><span class="lang-ru">Всё здесь прочитано, а не вспомнено</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Every claim here came out of the pi-braid repository rather than out of a session: tools from the catalog, modules from the manifest, skills from their own directories. When the repository moves, these pages stay true, because they carry paths instead of figures.</span><span class="lang-ru">Каждое утверждение здесь взято из репозитория pi-braid, а не из сессии: инструменты — из каталога, модули — из манифеста, навыки — из их каталогов. Когда репозиторий двигается, эти страницы остаются верными, потому что несут пути, а не цифры.</span></p>
+    <p class="body mt" data-reveal style="--d:.12s"><span class="lang-en">Braid is early-stage software, as its README says: expect the API surface to move. What is already settled is the discipline around it. Claims get evidence, changes get a home, and done is something you prove.</span><span class="lang-ru">Braid — софт ранней стадии, как и написано в его README: ждите изменений API. Уже устоялась дисциплина вокруг него. Утверждения получают доказательства, изменения — дом, а «готово» — то, что нужно доказать.</span></p>
+    <div class="links" data-reveal style="--d:.18s">
+      <a href="https://github.com/kifirkin/pi-braid">github.com/kifirkin/pi-braid</a>
+      <a href="https://github.com/earendil-works/pi">github.com/earendil-works/pi</a>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">This page is not a manual: the manual is the repository. Navigate with the arrow keys, Page Up and Page Down, or Home and End. π &amp; Braid.</span><span class="lang-ru">Эта страница — не руководство: руководство — это репозиторий. Навигация: стрелки, Page Up и Page Down, Home и End. π &amp; Braid.</span></p>
+  </div>
+</section>
+
+</main>
+<script>
+(function () {
+  var d = document.documentElement;
+  var stills = /[?&]stills=1/.test(location.search);
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (stills || reduce) d.classList.add('no-motion');
+
+  var sections = [].slice.call(document.querySelectorAll('main > section'));
+  var counter = document.getElementById('counter');
+  var bar = document.getElementById('bar');
+  var totop = document.getElementById('totop');
+  var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+  var cur = -1;
+
+  function activeIndex() {
+    var y = window.scrollY + window.innerHeight * 0.42;
+    var best = 0;
+    for (var i = 0; i < sections.length; i++) {
+      if (sections[i].offsetTop <= y) best = i;
+    }
+    return best;
+  }
+
+  function onScroll() {
+    var max = d.scrollHeight - window.innerHeight;
+    if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, window.scrollY / max) : 0) + ')';
+    if (totop) totop.classList.toggle('show', window.scrollY > window.innerHeight * 0.6);
+    var i = activeIndex();
+    if (i !== cur) {
+      cur = i;
+      if (counter) counter.textContent = pad(i + 1) + ' / ' + pad(sections.length);
+    }
+  }
+
+  var raf = false;
+  window.addEventListener('scroll', function () {
+    if (!raf) { raf = true; requestAnimationFrame(function () { raf = false; onScroll(); }); }
+  }, { passive: true });
+  window.addEventListener('resize', onScroll);
+  onScroll();
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.08 });
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { io.observe(el); });
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { el.classList.add('in'); });
+  }
+
+  function go(dir) {
+    var i = activeIndex() + dir;
+    if (i < 0) i = 0;
+    if (i > sections.length - 1) i = sections.length - 1;
+    sections[i].scrollIntoView({ behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth', block: 'start' });
+  }
+
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+    if (e.target && e.target.closest && e.target.closest('button, a, input, textarea, select')) return;
+    var k = e.key;
+    if (k === 'ArrowDown' || k === 'ArrowRight' || k === 'PageDown' || k === ' ' || k === 'Spacebar') {
+      e.preventDefault(); go(1);
+    } else if (k === 'ArrowUp' || k === 'ArrowLeft' || k === 'PageUp') {
+      e.preventDefault(); go(-1);
+    } else if (k === 'Home') {
+      e.preventDefault(); window.scrollTo({ top: 0, behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth' });
+    } else if (k === 'End') {
+      e.preventDefault(); sections[sections.length - 1].scrollIntoView({ behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth', block: 'start' });
+    }
+  });
+
+  if (totop) totop.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: d.classList.contains('no-motion') ? 'auto' : 'smooth' });
+  });
+
+  /* ─── Language toggle ──────────────────────────────────────────────────── */
+  /* Toggles <html> between show-lang-en / show-lang-ru and swaps the fixed
+     button label. Default state: English, matching the v3 deck. */
+  window.toggleLang = function () {
+    var html = document.documentElement;
+    var btn = document.getElementById('langToggle');
+    if (html.classList.contains('show-lang-ru')) {
+      html.classList.remove('show-lang-ru');
+      html.classList.add('show-lang-en');
+      btn.textContent = 'RU';
+    } else {
+      html.classList.remove('show-lang-en');
+      html.classList.add('show-lang-ru');
+      btn.textContent = 'EN';
+    }
+  };
+
+  /* No live data on this page: every claim names a file in the pi-braid
+     repository instead of repeating a count or a version. Nothing is fetched
+     at runtime. */
+})();
+</script>
+</body>
+</html>
