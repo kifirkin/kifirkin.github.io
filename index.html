@@ -6,7 +6,7 @@
 <meta name="color-scheme" content="light">
 <link rel="icon" href="data:,">
 <title>Braid, a metacognitive extension suite for pi</title>
-<meta name="description" content="A presentation about Braid, the metacognitive extension suite for the pi coding agent. Every claim names the file in the repository that decides it.">
+<meta name="description" content="A presentation about Braid, the metacognitive extension suite for the pi coding agent. Every claim names the file in the repository that decides it, and a script beside this page re-reads the names a machine can settle.">
 <script>document.documentElement.className += " js";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -568,7 +568,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       <div class="row">
         <span class="name">providers</span>
         <span class="ver">pi-braid-providers</span>
-        <span class="desc"><span class="lang-en">Venice models through the a0 gateway, with a ring of application programming interface (API) keys.</span><span class="lang-ru">Модели Venice через шлюз a0, с кольцом ключей программного интерфейса (API).</span></span>
+        <span class="desc"><span class="lang-en">Venice models through the agent-zero gateway, renamed from a0, with a ring of application programming interface (API) keys.</span><span class="lang-ru">Модели Venice через шлюз agent-zero (прежде a0), с кольцом ключей программного интерфейса (API).</span></span>
       </div>
       <div class="row">
         <span class="name">telegram</span>
@@ -701,7 +701,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       </div>
       <div class="cell">
         <h3><span class="lang-en">Topic drift</span><span class="lang-ru">Уход от темы</span></h3>
-        <p><span class="lang-en">Dedicated check and reset tools measure how far the current turn has wandered from the request that opened it.</span><span class="lang-ru">Специальные инструменты проверки и сброса измеряют, насколько текущий шаг отклонился от открывшего его запроса.</span></p>
+        <p><span class="lang-en">One tool, <span class="mono">topic_drift</span>, with <span class="mono">action=check</span> and <span class="mono">action=reset</span>, measures how far the output has wandered from the request that opened it.</span><span class="lang-ru">Один инструмент, <span class="mono">topic_drift</span>, с <span class="mono">action=check</span> и <span class="mono">action=reset</span> измеряет, насколько вывод отклонился от открывшего его запроса.</span></p>
       </div>
       <div class="cell">
         <h3><span class="lang-en">Verify before done</span><span class="lang-ru">Проверь перед завершением</span></h3>
@@ -753,7 +753,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
         <p><span class="lang-en">Capture, diff, and restore files; a return point before risky edits.</span><span class="lang-ru">Захват, diff и восстановление файлов; точка возврата перед рискованными правками.</span></p>
       </div>
     </div>
-    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">All three stores are cross-searchable through <span class="mono">memory action=recall_search</span>; the stores on disk are the only source of truth, and the tools read them directly.</span><span class="lang-ru">Все три хранилища доступны для кросс-поиска через <span class="mono">memory action=recall_search</span>; единственный источник правды — хранилища на диске, и инструменты читают их напрямую.</span></p>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en"><span class="mono">recall_search</span> reads the semantic store; the same <span class="mono">memory</span> tool reaches the other two through <span class="mono">episodes_search</span> and <span class="mono">heuristics_list</span>, and the stores on disk are its only source of truth.</span><span class="lang-ru"><span class="mono">recall_search</span> читает семантическое хранилище; тот же инструмент <span class="mono">memory</span> открывает два других через <span class="mono">episodes_search</span> и <span class="mono">heuristics_list</span>, а хранилища на диске — его единственный источник правды.</span></p>
   </div>
 </section>
 
@@ -811,7 +811,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       </div>
       <div class="cell">
         <h3><span class="lang-en">New skills</span><span class="lang-ru">Новые навыки</span></h3>
-        <p><span class="lang-en">meta-improvement creates and revises skills, runs self-improving experiments, and measures whether they helped.</span><span class="lang-ru">meta-improvement создаёт и пересматривает навыки, запускает самоулучшающиеся эксперименты и измеряет, помогли ли они.</span></p>
+        <p><span class="lang-en">meta-improvement runs self-improving experiments and measures whether a change helped; skill-authoring writes and revises the SKILL.md itself.</span><span class="lang-ru">meta-improvement запускает самоулучшающиеся эксперименты и измеряет, помогла ли правка; skill-authoring пишет и пересматривает сам SKILL.md.</span></p>
       </div>
       <div class="cell">
         <h3><span class="lang-en">Probes</span><span class="lang-ru">Пробы</span></h3>
@@ -849,12 +849,12 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">15</span> <span class="lang-en">The library</span><span class="lang-ru">Библиотека</span></p>
     <h2 class="title" data-reveal><span class="lang-en">Procedures, read on demand</span><span class="lang-ru">Процедуры, которые читают по запросу</span></h2>
-    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Skills are Markdown procedures, not capabilities. They are grouped here by the job they do, not by the package they ship in, because that is how the agent finds them: by description, for the task in front of it.</span><span class="lang-ru">Навыки — это Markdown-процедуры, а не возможности. Здесь они собраны по работе, которую делают, а не по пакету, в котором лежат: именно так агент их и находит — по описанию, под задачу.</span></p>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Skills are Markdown procedures, not capabilities. They are grouped here by the job they do, not by the package they ship in, because that is how the agent finds them: by description, for the task in front of it. The index below is a selection, not a census: it lists core procedures, and the satellite pack's procedures live in their own directory.</span><span class="lang-ru">Навыки — это Markdown-процедуры, а не возможности. Здесь они собраны по работе, которую делают, а не по пакету, в котором лежат: именно так агент их и находит — по описанию, под задачу. Индекс ниже — выборка, а не перепись: в нём процедуры ядра, а процедуры спутникового пакета лежат в своём каталоге.</span></p>
     <div class="tax" data-reveal style="--d:.12s">
       <div class="t"><span class="tl"><span class="lang-en">Reason</span><span class="lang-ru">Рассуждение</span></span><span class="tn">meta-cognition, meta-improvement, research, probe-evaluation, skill-usage</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Build</span><span class="lang-ru">Сборка</span></span><span class="tn">software-engineer, code-refactoring, documentation, dox, agent-testing, subagent-orchestration</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Verify</span><span class="lang-ru">Проверка</span></span><span class="tn">subagent-verification, misdirection-audit, placement-discipline</span></div>
-      <div class="t"><span class="tl"><span class="lang-en">Operate</span><span class="lang-ru">Эксплуатация</span></span><span class="tn">healthcheck, herdr-topology, release-pipeline</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Operate</span><span class="lang-ru">Эксплуатация</span></span><span class="tn">healthcheck, pane-topology, release-pipeline</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Speak</span><span class="lang-ru">Речь</span></span><span class="tn">voice-replies, tone-quality</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Reference</span><span class="lang-ru">Справка</span></span><span class="tn">braid-reference, pi-reference</span></div>
     </div>
@@ -931,7 +931,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
     <div class="transcript mt" data-reveal style="--d:.24s">
       <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">no live data: zero runtime fetch sites, no generated counts file</span><span class="lang-ru">нет живых данных: ни одного вызова fetch во время выполнения, никакого сгенерированного файла со счётчиками</span></span></div>
       <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">bilingual parity: English and Russian span counts equal</span><span class="lang-ru">двуязычный паритет: число английских и русских элементов span совпадает</span></span></div>
-      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">render probes at three widths (desktop, tablet, phone), both languages, scrolled before the shot</span><span class="lang-ru">рендер-пробы на трёх ширинах (десктоп, планшет, телефон), оба языка, с прокруткой перед снимком</span></span></div>
+      <div><span class="tag">[gate]</span> <span class="dim"><span class="lang-en">render probes at six viewports (four desktop widths, tablet, phone), both languages, scrolled before the shot</span><span class="lang-ru">рендер-пробы на шести вьюпортах (четыре ширины десктопа, планшет, телефон), оба языка, с прокруткой перед снимком</span></span></div>
     </div>
     <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">Inputs: the harness's own docs and changelog, the repository at its current head, the root manifest, and this file.</span><span class="lang-ru">Входы: документация и чейнджлог самой среды, репозиторий на текущем head, корневой манифест и этот файл.</span></p>
   </div>
@@ -957,8 +957,8 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
         <p class="small"><span class="lang-en">From a checkout: register core and skills in <span class="mono">~/.pi/agent/settings.json</span>; the root manifest declares no pi resources, so point at the workspaces:</span><span class="lang-ru">Из клона: зарегистрируйте core и skills в <span class="mono">~/.pi/agent/settings.json</span>; корневой манифест не объявляет pi-ресурсы, указывайте на воркспейсы:</span></p>
         <pre class="shell" style="margin-top:1rem">{
   "packages": [
-    "file:~/pi-braid/packages/core",
-    "file:~/pi-braid/packages/skills"
+    "~/pi-braid/packages/core",
+    "~/pi-braid/packages/skills"
   ]
 }</pre>
       </div>
@@ -975,7 +975,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">20</span> <span class="lang-en">End</span><span class="lang-ru">Конец</span></p>
     <h2 class="title" data-reveal><span class="lang-en">Everything here was read, not remembered</span><span class="lang-ru">Всё здесь прочитано, а не вспомнено</span></h2>
-    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Every claim here came out of the pi-braid repository rather than out of a session: tools from the catalog, modules from the manifest, skills from their own directories. When the repository moves, these pages stay true, because they carry paths instead of figures.</span><span class="lang-ru">Каждое утверждение здесь взято из репозитория pi-braid, а не из сессии: инструменты — из каталога, модули — из манифеста, навыки — из их каталогов. Когда репозиторий двигается, эти страницы остаются верными, потому что несут пути, а не цифры.</span></p>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Every claim here came out of the pi-braid repository rather than out of a session: tools from the catalog, modules from the manifest, skills from their own directories. Every claim names the file that decides it. A name can move as well as a number, so a script beside this page reads the repository and names whatever has moved.</span><span class="lang-ru">Каждое утверждение здесь взято из репозитория pi-braid, а не из сессии: инструменты — из каталога, модули — из манифеста, навыки — из их каталогов. Каждое утверждение называет решающий его файл. Имя может сдвинуться, как и число, поэтому скрипт рядом со страницей читает репозиторий и называет то, что сдвинулось.</span></p>
     <p class="body mt" data-reveal style="--d:.12s"><span class="lang-en">Braid is early-stage software, as its README says: expect the API surface to move. What is already settled is the discipline around it. Claims get evidence, changes get a home, and done is something you prove.</span><span class="lang-ru">Braid — софт ранней стадии, как и написано в его README: ждите изменений API. Уже устоялась дисциплина вокруг него. Утверждения получают доказательства, изменения — дом, а «готово» — то, что нужно доказать.</span></p>
     <div class="links" data-reveal style="--d:.18s">
       <a href="https://github.com/kifirkin/pi-braid">github.com/kifirkin/pi-braid</a>

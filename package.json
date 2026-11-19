@@ -1,0 +1,8 @@
+{
+  "name": "braid-deck",
+  "private": true,
+  "description": "The braid deck, and the check that reads its claims back from the repository they name.",
+  "scripts": {
+    "check": "node check-facts.mjs"
+  }
+}
