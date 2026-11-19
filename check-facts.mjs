@@ -108,6 +108,15 @@ const listedSkills = () =>
     row[1].split(",").map((name) => name.trim()).filter(Boolean),
   );
 
+// A section's own slice, for the rows whose claim is local: a class name used
+// elsewhere on the page would otherwise answer for text the row never read.
+const sectionHtml = (id) => {
+  const open = html.indexOf(`<section class="spread" id="${id}">`);
+  if (open < 0) return "";
+  const close = html.indexOf("</section>", open);
+  return close < 0 ? html.slice(open) : html.slice(open, close);
+};
+
 // Languages are held to one count by the page's own contract: a correction in
 // one language only leaves the other lying. This is not a claim about the
 // repository, so it is reported as a document invariant beside the rows.
@@ -241,9 +250,9 @@ const ROWS = [
     },
   },
   {
-    // The page used to imply its index was the whole library. It prints 21 names
-    // where the two packs hold 34, so the sentence must call itself a selection,
-    // and the census is what decides whether that is still the true word.
+    // The page used to imply its index was the whole library, so the sentence
+    // must call itself a selection, and the census is what decides whether that
+    // is still the true word.
     id: "skill-census",
     claim: "the index calls itself a selection, and the two packs hold more procedures than it lists",
     anchor: "The index below is a selection",
@@ -329,6 +338,476 @@ const ROWS = [
       if (!ctx.html.includes("планшет") || !ctx.html.includes("телефон")) missing.push("the Russian line does not name планшет and телефон");
       if (missing.length) return moved(`the render gate measured ${count} viewports, ${desktop} of them desktop (${found.from})`, missing.join("; "));
       return ok(`${count} viewports, ${desktop} desktop, from ${found.from}`);
+    },
+  },
+  {
+    // The page prints three setting keys that decide what may enter the window,
+    // and the rule that keeps the promise honest: a body is replaced only after
+    // its flush is verified. Both halves are read, because a renamed key is as
+    // stale as a rule that quietly stopped holding.
+    id: "context-caps",
+    claim: "the caps cells name the settings that decide them, and the stub follows a verified flush",
+    anchor: "rules what one tool result may cost the window",
+    section: "context",
+    check(ctx) {
+      const settings = join(ctx.source, "packages/core/src/lib/config/braid-settings.ts");
+      const capture = join(ctx.source, "packages/core/src/extensions/memory/context-manager/handlers/toolresult-capture-cap.ts");
+      const settingsSrc = readText(settings);
+      const captureSrc = readText(capture);
+      if (settingsSrc === null || captureSrc === null) return unchecked(`cannot read ${relativeTo(ctx.source, settings)} or ${relativeTo(ctx.source, capture)}`);
+      const keys = ["braid.context.toolResultSizeCap", "braid.context.staleToolResultOffload", "braid.context.contextEmergencyOffload"];
+      const missing = [];
+      for (const key of keys) {
+        if (!settingsSrc.includes(key)) missing.push(`${key} is not read in ${relativeTo(ctx.source, settings)}`);
+        if (!ctx.html.includes(key)) missing.push(`the page does not name ${key}`);
+      }
+      // The rule is stated in prose, so the read strips the comment markers and
+      // the line wrapping a source file breaks it with rather than requiring one
+      // physical line.
+      const captureProse = captureSrc.replace(/\/\/\s*/g, " ").replace(/\s+/g, " ");
+      if (!/never stub without a verified flush/i.test(captureProse)) missing.push(`${relativeTo(ctx.source, capture)} no longer states the verified-flush rule`);
+      if (!/stub that names the file/.test(ctx.html)) missing.push("the English cell does not say the stub names the file");
+      if (!/заглушкой с именем файла/.test(ctx.html)) missing.push("the Russian cell does not say the stub names the file");
+      if (missing.length) return moved(`cap keys ${keys.join(", ")} in ${relativeTo(ctx.source, settings)}, a capture cap that stubs only after a verified flush`, missing.join("; "));
+      return ok(`${keys.length} cap keys read, and the verified-flush rule still holds`);
+    },
+  },
+  {
+    // A shell-free call bounds what it hands back. The page names the parameter
+    // that does it and what a shortened stream reports; the tool is read for
+    // those names, because a rename there leaves the sentence describing nothing.
+    id: "run-output-cap",
+    claim: "the run sentence names the tool's byte cap and what a truncated stream reports",
+    anchor: "bounded at",
+    section: "context",
+    check(ctx) {
+      const file = join(ctx.source, "packages/core/src/extensions/core/run-tool/index.ts");
+      const src = readText(file);
+      if (src === null) return unchecked(`cannot read ${file}`);
+      const missing = [];
+      for (const name of ["argv", "max_output_bytes", "dropped_bytes"]) {
+        if (!src.includes(name)) missing.push(`${relativeTo(ctx.source, file)} no longer declares ${name}`);
+      }
+      if (!ctx.html.includes("max_output_bytes")) missing.push("the page does not name max_output_bytes");
+      if (!/keeps its head and its tail/.test(ctx.html)) missing.push("the English cell does not say a truncated stream keeps its head and tail");
+      if (!/сохраняет начало и конец/.test(ctx.html)) missing.push("the Russian cell does not say a truncated stream keeps its head and tail");
+      if (missing.length) return moved(`${relativeTo(ctx.source, file)}: argv, max_output_bytes, dropped_bytes`, missing.join("; "));
+      return ok("argv, max_output_bytes and dropped_bytes, all three printed");
+    },
+  },
+  {
+    // The report's token classes are its whole arithmetic, and the page states the
+    // attribution rule as the reason to trust a total. Both are read where they
+    // are written: a dropped class or a changed rule makes the sentence wrong.
+    id: "session-cost",
+    claim: "the cost cell names the script, its token classes and the attribution rule the script applies",
+    anchor: "splits its tokens by class",
+    section: "context",
+    check(ctx) {
+      const file = join(ctx.source, "packages/core/scripts/session-cost-report.mjs");
+      const src = readText(file);
+      if (src === null) return unchecked(`cannot read ${file}`);
+      const section = sectionHtml("context");
+      const classes = ["input", "cacheRead", "cacheWrite", "output"];
+      const missing = [];
+      if (!section.includes("packages/core/scripts/session-cost-report.mjs")) missing.push("the page does not name the script");
+      for (const field of classes) {
+        if (!src.includes(field)) missing.push(`${relativeTo(ctx.source, file)} no longer records ${field}`);
+        if (!section.includes(field)) missing.push(`the page does not print the class ${field}`);
+      }
+      if (!/proportional to the number of characters/.test(src)) missing.push(`${relativeTo(ctx.source, file)} no longer states its proportional attribution rule`);
+      if (!/in proportion to the characters/.test(ctx.html)) missing.push("the English cell does not state the proportional rule");
+      if (!/пропорционально их символам/.test(ctx.html)) missing.push("the Russian cell does not state the proportional rule");
+      if (missing.length) return moved(`${relativeTo(ctx.source, file)}: classes ${classes.join("/")}, proportional attribution`, missing.join("; "));
+      return ok(`classes ${classes.join("/")}, and the proportional rule stated in both languages`);
+    },
+  },
+  {
+    // The compression sentence lists the accepted modes by name, so the enum is the
+    // deciding file in both directions: a mode added there is missing from the page,
+    // and a mode the page prints that the tool does not accept is a door that does
+    // not open. The near-ceiling refusal is read beside it.
+    id: "compress-modes",
+    claim: "the compression sentence names the modes the tool accepts, and no others",
+    anchor: "takes <span class=\"mono\">action=compact</span>",
+    section: "context",
+    check(ctx) {
+      const file = join(ctx.source, "packages/core/src/extensions/memory/context-manager/handlers/tools/context-compress.ts");
+      const src = readText(file);
+      if (src === null) return unchecked(`cannot read ${file}`);
+      const block = src.match(/enum:\s*\[([^\]]+)\]/);
+      if (!block) return unchecked(`no action enum in ${relativeTo(ctx.source, file)}`);
+      const modes = [...block[1].matchAll(/"([a-z_]+)"/g)].map((m) => m[1]);
+      const section = sectionHtml("context");
+      const missing = [];
+      for (const mode of modes) if (!section.includes(`action=${mode}`)) missing.push(`the page does not name action=${mode}`);
+      for (const mode of new Set([...section.matchAll(/action=([a-z_]+)/g)].map((m) => m[1]))) {
+        if (!modes.includes(mode)) missing.push(`the page prints action=${mode}, which the tool does not accept`);
+      }
+      if (!/suggestion:\s*\{\s*tool:\s*"context_compress",\s*action:\s*"slide"\s*\}/.test(src)) missing.push(`${relativeTo(ctx.source, file)} no longer offers the deterministic mode at the ceiling`);
+      if (!/refuses a model-driven compaction/.test(ctx.html)) missing.push("the English paragraph does not state the refusal");
+      if (!/отказывает в сжатии моделью/.test(ctx.html)) missing.push("the Russian paragraph does not state the refusal");
+      if (missing.length) return moved(`${relativeTo(ctx.source, file)}: ${modes.join(", ")}, and a slide suggestion at the ceiling`, missing.join("; "));
+      return ok(`${modes.map((m) => `action=${m}`).join(", ")}, and the ceiling refusal`);
+    },
+  },
+  {
+    // The page promises one envelope per turn. That is a fixed detail of the tick
+    // rather than a count, so it is read where the merge is written.
+    id: "lifecycle-envelope",
+    claim: "the lifecycle line states the per-turn merge, and the tick still merges",
+    anchor: "one whisper envelope",
+    section: "context",
+    check(ctx) {
+      const file = join(ctx.source, "packages/core/src/extensions/memory/context-lifecycle/index.ts");
+      const src = readText(file);
+      if (src === null) return unchecked(`cannot read ${file}`);
+      const missing = [];
+      if (!src.includes("merged_proposals")) missing.push(`${relativeTo(ctx.source, file)} no longer merges a tick's proposals`);
+      if (!/one whisper envelope/.test(ctx.html)) missing.push("the English line does not say one envelope");
+      if (!/в одном конверте шёпота/.test(ctx.html)) missing.push("the Russian line does not say one envelope");
+      if (missing.length) return moved(`merged_proposals in ${relativeTo(ctx.source, file)}`, missing.join("; "));
+      return ok("merged_proposals present, and the page says one envelope per turn");
+    },
+  },
+  {
+    // The registry's vocabularies are named on the page and rendered from one
+    // table, so each role string is read from that table. The two devices the
+    // paragraph promises beside them - an exactly-once admission and a population
+    // read before a merge - are read where they are implemented.
+    id: "orchestrator-vocabularies",
+    claim: "the worker paragraph names the lifecycle vocabularies and the devices that refuse a bad close",
+    anchor: "keeps its vocabularies apart",
+    section: "pool",
+    check(ctx) {
+      const lib = join(ctx.source, "packages/core/src/lib/orchestrator/workers.ts");
+      const tool = join(ctx.source, "packages/core/src/extensions/orchestrator/index.ts");
+      const libSrc = readText(lib);
+      const toolSrc = readText(tool);
+      if (libSrc === null || toolSrc === null) return unchecked(`cannot read ${relativeTo(ctx.source, lib)} or ${relativeTo(ctx.source, tool)}`);
+      const block = libSrc.match(/export const WORKER_STATUS_LAYERS[\s\S]*?\n\];/);
+      if (!block) return unchecked(`no WORKER_STATUS_LAYERS table in ${relativeTo(ctx.source, lib)}`);
+      const roles = [...block[0].matchAll(/role:\s*"([a-z ]+)"/g)].map((m) => m[1]);
+      if (roles.length === 0) return unchecked(`WORKER_STATUS_LAYERS declares no role row in ${relativeTo(ctx.source, lib)}`);
+      const missing = [];
+      for (const role of roles) if (!ctx.html.includes(role)) missing.push(`the page does not name the vocabulary "${role}"`);
+      if (!/exactly-once/.test(toolSrc)) missing.push(`${relativeTo(ctx.source, tool)} no longer states exactly-once admission`);
+      if (!ctx.html.includes("exactly-once")) missing.push("the page does not say an admission is exactly-once");
+      if (!/compared against the census/.test(toolSrc)) missing.push(`${relativeTo(ctx.source, tool)} no longer documents the census read`);
+      if (!/census of the revision it names/.test(ctx.html)) missing.push("the page does not say the file row is read against the revision's census");
+      if (missing.length) return moved(`vocabularies ${roles.join(", ")} from ${relativeTo(ctx.source, lib)}`, missing.join("; "));
+      return ok(`${roles.join(", ")} named; exactly-once and the census read intact`);
+    },
+  },
+  {
+    // The adoption cell names the counters, so the interface that returns them is
+    // the deciding file. The durable file's name and the tool that serves it are
+    // read too: a counter is only evidence if both still exist.
+    id: "skill-counters",
+    claim: "the adoption cell names the counter surface, its durable file and the counters it returns",
+    anchor: "durable per-skill record",
+    section: "longloop",
+    check(ctx) {
+      const auto = join(ctx.source, "packages/core/src/extensions/core/skills-tool/auto-inject.ts");
+      const tool = join(ctx.source, "packages/core/src/extensions/core/skills-tool/index.ts");
+      const paths = join(ctx.source, "packages/core/src/lib/config/braid-paths.ts");
+      const autoSrc = readText(auto);
+      const toolSrc = readText(tool);
+      const pathsSrc = readText(paths);
+      if (autoSrc === null || toolSrc === null || pathsSrc === null) return unchecked(`cannot read ${relativeTo(ctx.source, auto)}, ${relativeTo(ctx.source, tool)} or ${relativeTo(ctx.source, paths)}`);
+      const iface = autoSrc.match(/export interface DurableSkillStats \{([\s\S]*?)\n\}/);
+      if (!iface) return unchecked(`no DurableSkillStats interface in ${relativeTo(ctx.source, auto)}`);
+      const declared = new Set([...iface[1].matchAll(/^\s*([a-z][A-Za-z]*):/gm)].map((m) => m[1]));
+      const counters = ["suggested", "loaded", "claimed", "actual", "reloads"];
+      const missing = [];
+      for (const counter of counters) {
+        if (!declared.has(counter)) missing.push(`DurableSkillStats no longer declares ${counter}`);
+        if (!ctx.html.includes(counter)) missing.push(`the page does not name the counter ${counter}`);
+      }
+      if (!toolSrc.includes("skill_stats")) missing.push(`${relativeTo(ctx.source, tool)} no longer registers skill_stats`);
+      if (!pathsSrc.includes("skills-usage.json")) missing.push(`${relativeTo(ctx.source, paths)} no longer names skills-usage.json`);
+      for (const name of ["skill_stats", "skills-usage.json"]) if (!ctx.html.includes(name)) missing.push(`the page does not name ${name}`);
+      if (missing.length) return moved(`skill_stats, skills-usage.json, counters ${counters.join("/")}`, missing.join("; "));
+      return ok(`skill_stats, skills-usage.json and the counters ${counters.join("/")}`);
+    },
+  },
+  {
+    // The verdict list is a closed vocabulary the packs actually use. Printing a
+    // value no directory carries sends a reader looking for nothing; leaving one
+    // out hides a bucket that exists. The tombstone sentence is read from the
+    // tombstone, because a merged skill that stops naming its successor is how a
+    // reader ends up nowhere.
+    id: "skill-verdicts",
+    claim: "the verdict list is the set the two packs use, and the merged one still names its successor",
+    anchor: "carries a verdict in its front matter",
+    section: "skills",
+    check(ctx) {
+      const roots = [join(ctx.source, "packages/core/skills"), join(ctx.source, "packages/skills/skills")];
+      const used = new Set();
+      for (const root of roots) {
+        if (!existsSync(root)) return unchecked(`cannot read ${relativeTo(ctx.source, root)}`);
+        for (const entry of readdirSync(root, { withFileTypes: true })) {
+          if (!entry.isDirectory()) continue;
+          const src = readText(join(root, entry.name, "SKILL.md"));
+          const match = src && src.match(/^verdict:\s*([A-Z]+)\s*$/m);
+          if (match) used.add(match[1]);
+        }
+      }
+      if (used.size === 0) return unchecked("no SKILL.md in either pack states a verdict");
+      const en = ctx.html.match(/verdict in its front matter \(([^)]+)\)/);
+      const ru = ctx.html.match(/вердикт во фронтматтере \(([^)]+)\)/);
+      if (!en) return moved(`verdicts in use: ${[...used].sort().join(", ")}`, "the English sentence prints no verdict list");
+      const printed = en[1].split(",").map((value) => value.trim());
+      const missing = [];
+      for (const value of used) if (!printed.includes(value)) missing.push(`${value} is used by a skill and not printed`);
+      for (const value of printed) if (!used.has(value)) missing.push(`${value} is printed and no skill carries it`);
+      if (!ru) missing.push("the Russian sentence prints no verdict list");
+      else for (const value of printed) if (!ru[1].includes(value)) missing.push(`the Russian list omits ${value}`);
+      const tomb = readText(join(ctx.source, "packages/core/skills/code-search/SKILL.md"));
+      if (tomb === null) missing.push("packages/core/skills/code-search/SKILL.md is gone, so the tombstone sentence is stale");
+      else {
+        if (!/^status:\s*merged\s*$/m.test(tomb)) missing.push("code-search no longer declares status: merged");
+        if (!/^successor:\s*code-refactoring\s*$/m.test(tomb)) missing.push("code-search no longer names code-refactoring as its successor");
+      }
+      for (const name of ["code-search", "code-refactoring"]) if (!ctx.html.includes(name)) missing.push(`the page does not name ${name}`);
+      if (missing.length) return moved(`verdicts in use: ${[...used].sort().join(", ")}`, missing.join("; "));
+      return ok(`${[...used].sort().join(", ")} printed in both languages; code-search merged into code-refactoring`);
+    },
+  },
+  {
+    // The catalog read is described by what it answers and what it prices. The
+    // tool's own description carries the price fields, so the row reads it and
+    // requires the page to print the fields it claims.
+    id: "list-skills-reach",
+    claim: "the library note names the catalog read and the price it returns",
+    anchor: "answers the whole catalog with each skill's reach",
+    section: "skills",
+    check(ctx) {
+      const file = join(ctx.source, "packages/core/src/extensions/core/skills-tool/index.ts");
+      const src = readText(file);
+      if (src === null) return unchecked(`cannot read ${file}`);
+      const missing = [];
+      if (!src.includes('name: "list_skills"')) missing.push(`${relativeTo(ctx.source, file)} no longer defines list_skills`);
+      const priced = ["reachable", "lines", "bytes", "estTokens", "sectionCount"];
+      for (const field of priced) if (!src.includes(field)) missing.push(`the tool no longer prices ${field}`);
+      for (const field of ["list_skills", "reach", "lines", "bytes", "estTokens"]) {
+        if (!ctx.html.includes(field)) missing.push(`the page does not name ${field}`);
+      }
+      if (!/section map/.test(ctx.html)) missing.push("the English note does not name the section map");
+      if (!/картой разделов/.test(ctx.html)) missing.push("the Russian note does not name the section map");
+      if (missing.length) return moved(`list_skills pricing ${priced.join(", ")} in ${relativeTo(ctx.source, file)}`, missing.join("; "));
+      return ok(`list_skills, priced by ${priced.join(", ")}`);
+    },
+  },
+  {
+    // A suggestion is decided by a model call, and the page says so. The ranker is
+    // the deciding file: its caps, its counters and the call site are read, because
+    // a page that promises a model decision would be describing a path that a
+    // silent fallback to phrase matching would quietly replace.
+    id: "suggestion-ranker",
+    claim: "the delivery sentence names the utility model, and the ranker is still the path a suggestion takes",
+    anchor: "A delivery is a decision, not a phrase match",
+    section: "longloop",
+    check(ctx) {
+      const ranker = join(ctx.source, "packages/core/src/extensions/core/skills-tool/ranker.ts");
+      const auto = join(ctx.source, "packages/core/src/extensions/core/skills-tool/auto-inject.ts");
+      const rankerSrc = readText(ranker);
+      const autoSrc = readText(auto);
+      if (rankerSrc === null || autoSrc === null) return unchecked(`cannot read ${relativeTo(ctx.source, ranker)} or ${relativeTo(ctx.source, auto)}`);
+      const missing = [];
+      for (const name of ["RANKER_PROMPT_CHARS", "RANKER_MIN_PROMPT_CHARS", "RANKER_LIMIT"]) {
+        if (!rankerSrc.includes(name)) missing.push(`${relativeTo(ctx.source, ranker)} no longer declares ${name}`);
+      }
+      for (const counter of ["ranked", "rankedCached", "rankedFailed", "lastFailure"]) {
+        if (!rankerSrc.includes(counter)) missing.push(`${relativeTo(ctx.source, ranker)} no longer counts ${counter}`);
+      }
+      if (!/import \{ rankSkills \} from "\.\/ranker\.js"/.test(autoSrc)) missing.push(`${relativeTo(ctx.source, auto)} no longer imports the ranker`);
+      if (!/await rankSkills\(/.test(autoSrc)) missing.push(`${relativeTo(ctx.source, auto)} no longer asks the ranker`);
+      const section = sectionHtml("longloop");
+      if (!/utility model/.test(section)) missing.push("the English cell does not name the utility model");
+      if (!/utility-модели/.test(section)) missing.push("the Russian cell does not name the utility model");
+      if (!/ranker/.test(section)) missing.push("the cell does not name the ranker's counters");
+      if (!/goes silent/.test(section) || !/молчит/.test(section)) missing.push("the cell does not say a run without a model is silent");
+      if (missing.length) return moved(`${relativeTo(ctx.source, ranker)}: rankSkills, its caps and its counters`, missing.join("; "));
+      return ok("rankSkills at the call site, its caps and counters; the page says a model decides");
+    },
+  },
+  {
+    // The control cell makes three promises about the channel. Each is a file or a
+    // call in the telegram package: the placement record, the chat-keyed tracker,
+    // and the identity line every outbound body carries.
+    id: "telegram-control",
+    claim: "the control cell names the record a restart edits, the chat key and the sender line",
+    anchor: "The message that carries it is a record on disk",
+    section: "channel",
+    check(ctx) {
+      const paths = join(ctx.source, "packages/telegram/src/lib/state-paths.ts");
+      const live = join(ctx.source, "packages/telegram/src/lib/notify/live-update.ts");
+      const identity = join(ctx.source, "packages/telegram/src/lib/identity.ts");
+      const outbound = join(ctx.source, "packages/telegram/src/lib/notify/outbound.ts");
+      const sources = [paths, live, identity, outbound].map((file) => [file, readText(file)]);
+      const unreadable = sources.filter(([, text]) => text === null).map(([file]) => relativeTo(ctx.source, file));
+      if (unreadable.length) return unchecked(`cannot read ${unreadable.join(", ")}`);
+      const [pathsSrc, liveSrc, identitySrc, outboundSrc] = sources.map(([, text]) => text);
+      const missing = [];
+      if (!pathsSrc.includes("control-message.json")) missing.push(`${relativeTo(ctx.source, paths)} no longer names control-message.json`);
+      if (!/keyed by CHAT/.test(liveSrc)) missing.push(`${relativeTo(ctx.source, live)} no longer keys the tracked message by chat`);
+      if (!/holders/.test(liveSrc)) missing.push(`${relativeTo(ctx.source, live)} no longer refcounts the holders`);
+      if (!identitySrc.includes("renderIdentityLine")) missing.push(`${relativeTo(ctx.source, identity)} no longer renders the identity line`);
+      if (!outboundSrc.includes("attachIdentity")) missing.push(`${relativeTo(ctx.source, outbound)} no longer attaches the identity line`);
+      if (!/record on disk/.test(ctx.html)) missing.push("the English cell does not say the control is a record on disk");
+      if (!/запись на диске/.test(ctx.html)) missing.push("the Russian cell does not say the control is a record on disk");
+      if (!/keyed by chat/.test(ctx.html)) missing.push("the English cell does not say the progress message is keyed by chat");
+      if (!/привязано к чату/.test(ctx.html)) missing.push("the Russian cell does not say the progress message is keyed by chat");
+      if (!/naming the process that sent it/.test(ctx.html)) missing.push("the English cell does not say the sender is named");
+      if (!/именем процесса, который его отправил/.test(ctx.html)) missing.push("the Russian cell does not say the sender is named");
+      if (missing.length) return moved(`control-message.json, a chat-keyed tracker and attachIdentity in packages/telegram/src/lib`, missing.join("; "));
+      return ok("placement record, chat-keyed tracker and identity line, all intact");
+    },
+  },
+  {
+    // The suite table names packages. A name that no workspace declares is a
+    // package a reader cannot install, and a workspace the page never names is a
+    // part of the suite the page forgot.
+    id: "package-names",
+    claim: "every package the page names is a workspace the root manifest declares, and every workspace is named",
+    anchor: "A core and its satellites",
+    section: "suite",
+    check(ctx) {
+      const root = readText(join(ctx.source, "package.json"));
+      if (root === null) return unchecked(`cannot read ${relativeTo(ctx.source, join(ctx.source, "package.json"))}`);
+      let manifest;
+      try {
+        manifest = JSON.parse(root);
+      } catch (error) {
+        return unchecked(`the root package.json does not parse: ${error.message}`);
+      }
+      const dirs = Array.isArray(manifest.workspaces) ? manifest.workspaces : [];
+      if (dirs.length === 0) return unchecked("the root manifest declares no workspaces");
+      const names = new Set();
+      for (const dir of dirs) {
+        const text = readText(join(ctx.source, dir, "package.json"));
+        if (text === null) return unchecked(`cannot read ${dir}/package.json`);
+        try {
+          names.add(JSON.parse(text).name);
+        } catch (error) {
+          return unchecked(`${dir}/package.json does not parse: ${error.message}`);
+        }
+      }
+      const printed = new Set([...ctx.html.matchAll(/\bpi-braid(?:-[a-z]+)?\b/g)].map((match) => match[0]));
+      const missing = [];
+      for (const name of printed) if (!names.has(name) && name !== manifest.name) missing.push(`the page names ${name}, which no workspace declares`);
+      for (const name of names) if (!printed.has(name)) missing.push(`the workspace ${name} is not named on the page`);
+      if (missing.length) return moved(`${relativeTo(ctx.source, join(ctx.source, "package.json"))}: ${[...names].sort().join(", ")}`, missing.join("; "));
+      return ok(`${names.size} workspace names, all printed and all accounted for`);
+    },
+  },
+  {
+    // The page says CI runs the same chain the desk runs, and that a check living
+    // outside the chain fails the build. The workflow and the gate that polices it
+    // are read together: either alone would pass while the claim was false.
+    id: "release-chain",
+    claim: "the chain cell names the script CI runs, and the workflow runs no check of its own",
+    anchor: "is the gate: lint, types",
+    section: "release",
+    check(ctx) {
+      const ci = join(ctx.source, ".github/workflows/ci.yml");
+      const chain = join(ctx.source, "packages/core/scripts/check-ci-chain.mjs");
+      const ciSrc = readText(ci);
+      const chainSrc = readText(chain);
+      if (ciSrc === null || chainSrc === null) return unchecked(`cannot read ${relativeTo(ctx.source, ci)} or ${relativeTo(ctx.source, chain)}`);
+      const runs = [...ciSrc.matchAll(/^\s*(?:-\s+)?run:\s*(.+)$/gm)].map((match) => match[1].trim());
+      const missing = [];
+      if (!runs.includes("npm run ci:check")) missing.push(`${relativeTo(ctx.source, ci)} no longer runs "npm run ci:check"`);
+      for (const line of runs) {
+        if (line === "npm run ci:check" || line.startsWith("npm ci") || line.startsWith("sudo apt-get install")) continue;
+        missing.push(`${relativeTo(ctx.source, ci)} runs a command outside the chain: ${line}`);
+      }
+      if (!/ci:check/.test(chainSrc)) missing.push(`${relativeTo(ctx.source, chain)} no longer polices the chain`);
+      if (!ctx.html.includes("npm run ci:check")) missing.push("the page does not name npm run ci:check");
+      if (!/added to the workflow instead of the chain fails the build/.test(ctx.html)) missing.push("the English cell does not state the workflow-only check rule");
+      if (!/добавленная в воркфлоу вместо цепочки, роняет сборку/.test(ctx.html)) missing.push("the Russian cell does not state the workflow-only check rule");
+      if (missing.length) return moved(`${relativeTo(ctx.source, ci)} runs npm run ci:check; ${relativeTo(ctx.source, chain)} refuses a re-listed check`, missing.join("; "));
+      return ok(`the workflow runs the chain only, and the chain gate reads it`);
+    },
+  },
+  {
+    // Trusted publishing is a property of the workflow, not a policy statement:
+    // the permission block and the tag rule are the parts of it a reader can see.
+    id: "release-oidc",
+    claim: "the publish note names the credential exchange and the tag rule",
+    anchor: "mints its credential from the run itself",
+    section: "release",
+    check(ctx) {
+      const file = join(ctx.source, ".github/workflows/publish.yml");
+      const src = readText(file);
+      if (src === null) return unchecked(`cannot read ${file}`);
+      const missing = [];
+      if (!/id-token:\s*write/.test(src)) missing.push(`${relativeTo(ctx.source, file)} no longer requests the OIDC identity`);
+      if (!/OIDC|trusted publishing/i.test(src)) missing.push(`${relativeTo(ctx.source, file)} no longer describes trusted publishing`);
+      if (!/\$\{GITHUB_REF_NAME\}" != "v\$\{core\}/.test(src)) missing.push(`${relativeTo(ctx.source, file)} no longer refuses a tag that does not name the core version`);
+      if (!/OIDC/.test(ctx.html)) missing.push("the page does not name OIDC");
+      if (!/refuses a tag that does not/.test(ctx.html)) missing.push("the English cell does not state the tag rule");
+      if (!/отказывает тегу, который её не называет/.test(ctx.html)) missing.push("the Russian cell does not state the tag rule");
+      if (missing.length) return moved(`${relativeTo(ctx.source, file)}: id-token: write, trusted publishing, the tag check`, missing.join("; "));
+      return ok("OIDC permission, trusted publishing and the tag check, all present");
+    },
+  },
+  {
+    // The ledger is a file whose shape is the promise: a commit and a per-file
+    // digest for each published version. The page says what the ledger buys, so
+    // the row reads the ledger's own entries and the script that compares them.
+    id: "release-ledger",
+    claim: "the ledger cell states what the file holds, and the file holds it",
+    anchor: "release-ledger.json</span> holds",
+    section: "release",
+    check(ctx) {
+      const file = join(ctx.source, "release-ledger.json");
+      const text = readText(file);
+      if (text === null) return unchecked(`cannot read ${file}`);
+      let ledger;
+      try {
+        ledger = JSON.parse(text);
+      } catch (error) {
+        return moved("a ledger that parses as JSON", `it does not parse: ${error.message}`);
+      }
+      const entries = ledger && typeof ledger.entries === "object" && ledger.entries !== null ? Object.entries(ledger.entries) : [];
+      if (entries.length === 0) return moved("ledger entries keyed by name@version", "the ledger holds no entry");
+      const missing = [];
+      const [key, entry] = entries[0];
+      if (!/^[0-9a-f]{40}$/.test(entry.released_from || "")) missing.push(`the entry ${key} carries no commit`);
+      const files = entry.files && typeof entry.files === "object" ? Object.entries(entry.files) : [];
+      if (files.length === 0) missing.push(`the entry ${key} carries no per-file digest`);
+      else if (!files.every(([, digest]) => /^[0-9a-f]{64}$/.test(digest))) missing.push(`an entry under ${key} carries a digest that is not a sha256`);
+      const content = readText(join(ctx.source, "packages/core/scripts/check-release-content.mjs"));
+      if (content === null) missing.push("packages/core/scripts/check-release-content.mjs is gone");
+      const publish = readText(join(ctx.source, ".github/workflows/publish.yml"));
+      if (publish === null) missing.push(".github/workflows/publish.yml is gone");
+      else if (!publish.includes("--require-recorded")) missing.push("the publish workflow no longer requires a recorded version");
+      if (!ctx.html.includes("release-ledger.json")) missing.push("the page does not name release-ledger.json");
+      if (!/registry's own answer/.test(ctx.html)) missing.push("the English cell does not state the read-back");
+      if (!/ответ самого реестра/.test(ctx.html)) missing.push("the Russian cell does not state the read-back");
+      if (missing.length) return moved(`${relativeTo(ctx.source, file)}: ${entries.length} entries, each with a commit and a per-file digest`, missing.join("; "));
+      return ok(`${entries.length} entries with a commit and per-file digests; publish reads a version back`);
+    },
+  },
+  {
+    // The sources table is the page's index of deciding files. A path that does
+    // not exist sends a reader to a file that never answered, which is the failure
+    // the table exists to prevent.
+    id: "sources-exist",
+    claim: "every file the sources table names exists in the checkout",
+    anchor: "The deck points; the repository answers",
+    section: "sources",
+    check(ctx) {
+      const section = sectionHtml("sources");
+      if (!section) return unchecked("the page has no sources section");
+      const printed = [...new Set([...section.matchAll(/<span class="mono">([^<]+)<\/span>/g)].map((match) => match[1].trim()))];
+      const paths = printed.filter((entry) => !entry.includes("*") && !entry.includes(" "));
+      if (paths.length === 0) return unchecked("the sources table prints no path");
+      const missing = paths.filter((entry) => !existsSync(join(ctx.source, entry)));
+      if (missing.length) return moved(`paths under ${ctx.source}`, `named but absent: ${missing.join(", ")}`);
+      return ok(`${paths.length} paths, all present`);
     },
   },
   {

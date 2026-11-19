@@ -446,13 +446,13 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
 <body>
 <a class="skip" href="#pi"><span class="lang-en">Skip to content</span><span class="lang-ru">К содержанию</span></a>
 <div class="progress" aria-hidden="true"><i id="bar"></i></div>
-<div class="counter" id="counter" aria-hidden="true">01 / 20</div>
+<div class="counter" id="counter" aria-hidden="true"></div>
 <button class="totop" id="totop" type="button" aria-label="Back to top / Вверх"><span class="lang-en">↑ Top</span><span class="lang-ru">↑ Вверх</span></button>
 <button class="lang-btn" id="langToggle" onclick="toggleLang()" title="Switch language">RU</button>
 
 <main>
 
-<!-- ── 01. Hero ─────────────────────────────────────────────────────── -->
+<!-- ── Hero ────────── -->
 <section class="spread hero" id="top">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">π</span> <span class="lang-en">A presentation about an agent, made by that agent</span><span class="lang-ru">Презентация об агенте, сделанная самим агентом</span></p>
@@ -490,14 +490,14 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
     <p class="meta" data-reveal style="--d:.26s">
       <span>pi + braid</span>
       <span><span class="lang-en">one session loop</span><span class="lang-ru">один цикл сессии</span></span>
-      <span><span class="lang-en">three memory stores</span><span class="lang-ru">три хранилища памяти</span></span>
+      <span><span class="lang-en">memory that outlives the session</span><span class="lang-ru">память, переживающая сессию</span></span>
       <span><span class="lang-en">every claim points at a file</span><span class="lang-ru">каждое утверждение указывает на файл</span></span>
     </p>
     <p class="scroll-hint" data-reveal style="--d:.32s"><span class="lang-en">Scroll</span><span class="lang-ru">Прокрутите</span></p>
   </div>
 </section>
 
-<!-- ── 02. The harness ──────────────────────────────────────────────── -->
+<!-- ── The harness ────────── -->
 <section class="spread" id="pi">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">02</span> <span class="lang-en">The harness</span><span class="lang-ru">Среда</span></p>
@@ -513,7 +513,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
         <p><span class="lang-en">Every turn is a node in a JSON Lines (JSONL) session file. Branch, fork, resume, and compact in place, without losing the trail that led there.</span><span class="lang-ru">Каждый шаг — узел в файле сессии JSON Lines (JSONL). Ветвление, форки, возобновление и сжатие на месте — тропа, которая привела сюда, не теряется.</span></p>
       </div>
       <div class="cell">
-        <h3><span class="lang-en">Four ways in, one loop</span><span class="lang-ru">Четыре входа, один цикл</span></h3>
+        <h3><span class="lang-en">Several ways in, one loop</span><span class="lang-ru">Несколько входов, один цикл</span></h3>
         <p><span class="lang-en">An interactive terminal user interface (TUI), a one-shot <span class="mono">--print</span>, machine-readable JSON, or Remote Procedure Call (RPC) over standard input and output. A Software Development Kit (SDK) embeds the same loop in your own programs.</span><span class="lang-ru">Интерактивный терминальный интерфейс (TUI), одноразовый <span class="mono">--print</span>, машиночитаемый JSON или RPC (Remote Procedure Call) поверх стандартного ввода-вывода. SDK (Software Development Kit) встраивает тот же цикл в ваши программы.</span></p>
       </div>
       <div class="cell">
@@ -525,7 +525,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 03. Philosophy ──────────────────────────────────────────────── -->
+<!-- ── Philosophy ────────── -->
 <section class="spread" id="philosophy">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">03</span> <span class="lang-en">Philosophy</span><span class="lang-ru">Философия</span></p>
@@ -539,11 +539,11 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>TODO tools</span><span class="td"><span class="lang-en">The core ships none; a file does the job better and does not pull the model off the work.</span><span class="lang-ru">В ядре их нет: файл справляется лучше и не отвлекает модель от работы.</span></span></div>
       <div class="tool"><span class="tn"><span class="ny"><span class="lang-en">no</span><span class="lang-ru">нет</span></span>Background bash</span><span class="td"><span class="lang-en">A watched terminal beats a background job: tmux, full observability, direct interaction.</span><span class="lang-ru">Наблюдаемый терминал лучше фонового процесса: tmux, полная наблюдаемость, прямое взаимодействие.</span></span></div>
     </div>
-    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">The positions kept from the deck's earlier generations, checked against today's pi: one flipped, the rest hold.</span><span class="lang-ru">Позиции из прежних поколений презентации, сверенные с сегодняшним pi: одна перевернулась, остальные в силе.</span></p>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">The positions kept from the deck's earlier generations, checked against today's pi: the MCP position has flipped, the rest still hold.</span><span class="lang-ru">Позиции из прежних поколений презентации, сверенные с сегодняшним pi: позиция MCP перевернулась, остальные в силе.</span></p>
   </div>
 </section>
 
-<!-- ── 04. The suite ────────────────────────────────────────────────── -->
+<!-- ── The suite ────────── -->
 <section class="spread" id="suite">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">04</span> <span class="lang-en">The suite</span><span class="lang-ru">Набор</span></p>
@@ -553,7 +553,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       <div class="row">
         <span class="name">core</span>
         <span class="ver">pi-braid</span>
-        <span class="desc"><span class="lang-en">Enforcement, three-store memory, reasoning, self-improvement, context lifecycle.</span><span class="lang-ru">Контроль, три хранилища памяти, рассуждения, самоулучшение, жизненный цикл контекста.</span></span>
+        <span class="desc"><span class="lang-en">Enforcement, memory in several stores, reasoning, self-improvement, context lifecycle.</span><span class="lang-ru">Контроль, память из нескольких хранилищ, рассуждения, самоулучшение, жизненный цикл контекста.</span></span>
       </div>
       <div class="row">
         <span class="name">skills</span>
@@ -579,7 +579,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 05. What Braid adds ──────────────────────────────────────────── -->
+<!-- ── What Braid adds ────────── -->
 <section class="spread" id="adds">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">05</span> <span class="lang-en">The difference</span><span class="lang-ru">Разница</span></p>
@@ -599,7 +599,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       <div class="col with">
         <h3><span class="lang-en">With Braid</span><span class="lang-ru">С Braid</span></h3>
         <ul>
-          <li><span class="mark">+</span><span class="lang-en">Three memory stores and cross-session recall</span><span class="lang-ru">Три хранилища памяти и межсессионный поиск</span></li>
+          <li><span class="mark">+</span><span class="lang-en">Memory stores of different shapes, and recall across sessions</span><span class="lang-ru">Хранилища памяти разных форм и поиск по прошлым сессиям</span></li>
           <li><span class="mark">+</span><span class="lang-en">verify, verify_claim, hypothesize: checks before trust</span><span class="lang-ru">verify, verify_claim, hypothesize: проверки прежде доверия</span></li>
           <li><span class="mark">+</span><span class="lang-en">Cognitive tools: think, scratchpad, memory_store</span><span class="lang-ru">Когнитивные инструменты: think, scratchpad, memory_store</span></li>
           <li><span class="mark">+</span><span class="lang-en">A worker pool: workers in worktrees, verified before merge</span><span class="lang-ru">Пул воркеров: воркеры в ворктри, проверка до слияния</span></li>
@@ -611,7 +611,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 06. Architecture ─────────────────────────────────────────────── -->
+<!-- ── Architecture ────────── -->
 <section class="spread" id="architecture">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">06</span> <span class="lang-en">Architecture</span><span class="lang-ru">Архитектура</span></p>
@@ -630,7 +630,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       </div>
       <div class="cell">
         <span class="mono-tag"><span class="lang-en">Loading</span><span class="lang-ru">Загрузка</span></span>
-        <h3><span class="lang-en">Three enablement tiers</span><span class="lang-ru">Три уровня включения</span></h3>
+        <h3><span class="lang-en">Tiered enablement</span><span class="lang-ru">Уровни включения</span></h3>
         <p><span class="lang-en">Every module is always-on, default-on, or opt-in. Always-on modules cannot be disabled; opt-in ones stay dark until a setting asks for them. The manifest, not the docs, is the list.</span><span class="lang-ru">Каждый модуль — always-on, default-on или opt-in. Always-on модули нельзя отключить; opt-in остаются тёмными, пока настройка их не включит. Список задаёт манифест, а не документация.</span></p>
       </div>
       <div class="cell">
@@ -642,7 +642,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 07. Whispers ─────────────────────────────────────────────────── -->
+<!-- ── Whispers ────────── -->
 <section class="spread" id="whispers">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">07</span> <span class="lang-en">Injection</span><span class="lang-ru">Инъекция</span></p>
@@ -666,7 +666,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 08. Signals ──────────────────────────────────────────────────── -->
+<!-- ── Signals ────────── -->
 <section class="spread" id="signals">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">08</span> <span class="lang-en">Signals</span><span class="lang-ru">Сигналы</span></p>
@@ -684,7 +684,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 09. Calibration ──────────────────────────────────────────────── -->
+<!-- ── Calibration ────────── -->
 <section class="spread" id="calibration">
   <div class="wrap">
     <p class="eyebrow" data-reveal><span class="num">09</span> <span class="lang-en">Calibration</span><span class="lang-ru">Калибровка</span></p>
@@ -693,7 +693,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
     <div class="grid cols-2 mt" data-reveal style="--d:.12s">
       <div class="cell">
         <h3><span class="lang-en">Structured signals</span><span class="lang-ru">Структурированные сигналы</span></h3>
-        <p><span class="lang-en">Three levels: L1 signals surface through the prompt builder, L2 bundles session-level sub-signals, and L3 marks the critical ones: validation failures and orphan chains. Chosen by policy rather than mood.</span><span class="lang-ru">Три уровня: сигналы L1 всплывают через сборщик промпта, L2 объединяет подсигналы уровня сессии, а L3 отмечает критичные: провалы валидации и осиротевшие цепочки. Выбираются политикой, а не настроением.</span></p>
+        <p><span class="lang-en">Signals carry their level: L1 surfaces through the prompt builder, L2 bundles session-level sub-signals, and L3 marks the critical ones: validation failures and orphan chains. Chosen by policy rather than mood.</span><span class="lang-ru">Сигналы несут свой уровень: L1 всплывает через сборщик промпта, L2 объединяет подсигналы уровня сессии, а L3 отмечает критичные: провалы валидации и осиротевшие цепочки. Выбираются политикой, а не настроением.</span></p>
       </div>
       <div class="cell">
         <h3><span class="lang-en">Sycophancy detection</span><span class="lang-ru">Обнаружение сикофантии</span></h3>
@@ -712,12 +712,41 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 09. Memory ───────────────────────────────────────────────────── -->
+<!-- ── Context economy ────────── -->
+<section class="spread" id="context">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">10</span> <span class="lang-en">Context economy</span><span class="lang-ru">Экономика контекста</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">What a token buys</span><span class="lang-ru">Что покупает токен</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">The window is the budget. Braid measures what enters it, caps what a tool may return, can move what has gone stale to disk, and can price a finished session by token class and by tool.</span><span class="lang-ru">Окно — это бюджет. Braid измеряет, что в него входит, ограничивает объём ответа инструмента, может вынести устаревшее на диск и посчитать прошедшую сессию по классам токенов и по инструментам.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">A cap on every result</span><span class="lang-ru">Потолок для каждого ответа</span></h3>
+        <p><span class="lang-en"><span class="mono">braid.context.toolResultSizeCap</span> rules what one tool result may cost the window. A result over the cap is flushed losslessly to disk and replaced by a stub that names the file, so the content is one read away and the window is not paying for it. The same accounting reaches a shell-free <span class="mono">run</span> call: each stream is bounded at <span class="mono">max_output_bytes</span>, keeps its head and its tail, states the bytes it dropped, and leaves the full text in a file the result names.</span><span class="lang-ru"><span class="mono">braid.context.toolResultSizeCap</span> решает, сколько один ответ инструмента может стоить окну. Ответ сверх потолка без потерь сбрасывается на диск и заменяется заглушкой с именем файла: содержимое в одном read, а окно за него не платит. Тот же учёт доходит и до вызова <span class="mono">run</span> без шелла: каждый поток ограничен <span class="mono">max_output_bytes</span>, сохраняет начало и конец, называет выброшенные байты, а полный текст оставляет в файле, который называет результат.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Stale results leave</span><span class="lang-ru">Устаревшее уходит</span></h3>
+        <p><span class="lang-en"><span class="mono">braid.context.staleToolResultOffload</span> does the same by age and size, and it stays off until a setting asks for it. A flush is verified before the body is replaced, so a result whose write failed stays in the window rather than vanishing.</span><span class="lang-ru"><span class="mono">braid.context.staleToolResultOffload</span> делает то же по возрасту и размеру и остаётся выключенной, пока настройка её не попросит. Сброс сначала проверяется и только потом тело заменяется: результат, который не удалось записать, остаётся в окне, а не исчезает.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">An emergency path</span><span class="lang-ru">Аварийный путь</span></h3>
+        <p><span class="lang-en"><span class="mono">braid.context.contextEmergencyOffload</span> fires on a context-window error: it plans the largest eligible results, flushes their full content to disk, and the retried request no longer carries them.</span><span class="lang-ru"><span class="mono">braid.context.contextEmergencyOffload</span> срабатывает на ошибку переполнения окна: он отбирает самые крупные подходящие результаты, сбрасывает их содержимое на диск, и повторный запрос их уже не несёт.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">A session, priced</span><span class="lang-ru">Сессия с ценой</span></h3>
+        <p><span class="lang-en"><span class="mono">packages/core/scripts/session-cost-report.mjs</span> reads one session file and splits its tokens by class (input, cacheRead, cacheWrite, output) and by tool, charging each assistant message to the tool results that entered the window before it, in proportion to the characters each contributed. Rates come from the caller; the script ships no tariff.</span><span class="lang-ru"><span class="mono">packages/core/scripts/session-cost-report.mjs</span> читает один файл сессии и делит его токены по классам (input, cacheRead, cacheWrite, output) и по инструментам: каждый ответ ассистента относится на результаты инструментов, вошедшие в окно перед ним, пропорционально их символам. Ставки задаёт вызывающий: своих тарифов у скрипта нет.</span></p>
+      </div>
+    </div>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">Freeing space is a choice, not a reflex. <span class="mono">context_compress</span> takes <span class="mono">action=compact</span> for what is obsolete or duplicated, <span class="mono">action=archive</span> to fold a range into a topic summary, <span class="mono">action=deep_clean</span> for both in one call, or <span class="mono">action=slide</span> for a deterministic cut that calls no model. Near the ceiling it refuses a model-driven compaction and names the deterministic mode instead.</span><span class="lang-ru">Освобождение места — выбор, а не рефлекс. <span class="mono">context_compress</span> принимает <span class="mono">action=compact</span> для устаревшего и дублей, <span class="mono">action=archive</span>, чтобы свернуть диапазон в тематическую сводку, <span class="mono">action=deep_clean</span>, чтобы сделать и то и другое одним вызовом, или <span class="mono">action=slide</span> для детерминированного среза без вызова модели. У самого потолка он отказывает в сжатии моделью и называет вместо него детерминированный режим.</span></p>
+    <p class="small mt-s" data-reveal style="--d:.24s"><span class="lang-en">When the lifecycle speaks, it speaks once per turn: the proposals a single observation raises ride in one whisper envelope, and the classes it names are closed with it.</span><span class="lang-ru">Когда жизненный цикл говорит, он говорит раз за шаг: предложения, поднятые одним наблюдением, едут в одном конверте шёпота, и названные им классы закрываются вместе с ним.</span></p>
+  </div>
+</section>
+
+<!-- ── Memory ────────── -->
 <section class="spread" id="memory">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">10</span> <span class="lang-en">Memory</span><span class="lang-ru">Память</span></p>
-    <h2 class="title" data-reveal><span class="lang-en">Three shapes of remembering</span><span class="lang-ru">Три формы памяти</span></h2>
-    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A flat log remembers what happened. Braid keeps three stores with different shapes and search semantics, plus working state that survives compaction.</span><span class="lang-ru">Плоский лог помнит, что произошло. Braid держит три хранилища разных форм с разной семантикой поиска, плюс рабочее состояние, переживающее сжатие.</span></p>
+    <p class="eyebrow" data-reveal><span class="num">11</span> <span class="lang-en">Memory</span><span class="lang-ru">Память</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">Different shapes of remembering</span><span class="lang-ru">Разные формы памяти</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A flat log remembers what happened. Braid keeps stores of different shapes and different search semantics, plus working state that survives compaction.</span><span class="lang-ru">Плоский лог помнит, что произошло. Braid держит хранилища разных форм и с разной семантикой поиска, плюс рабочее состояние, переживающее сжатие.</span></p>
     <div class="band cols-3 mt" data-reveal style="--d:.12s">
       <div class="stat">
         <span class="n k">episodes.jsonl</span>
@@ -757,10 +786,10 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 10. The worker pool ──────────────────────────────────────────── -->
+<!-- ── The worker pool ────────── -->
 <section class="spread" id="pool">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">11</span> <span class="lang-en">The worker pool</span><span class="lang-ru">Пул воркеров</span></p>
+    <p class="eyebrow" data-reveal><span class="num">12</span> <span class="lang-en">The worker pool</span><span class="lang-ru">Пул воркеров</span></p>
     <h2 class="title" data-reveal><span class="lang-en">One orchestrator, many hands</span><span class="lang-ru">Один оркестратор, много рук</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Large work does not fit one context. Braid delegates it: the orchestrator plans and decomposes, workers run in their own terminal panes and git worktrees, and results come back as artifacts, not prose.</span><span class="lang-ru">Большая работа не помещается в один контекст. Braid делегирует её: оркестратор планирует и декомпозирует, воркеры работают в терминальных панелях и git-ворктри, а результаты возвращаются артефактами, не прозой.</span></p>
     <div class="flow" data-reveal style="--d:.12s">
@@ -771,7 +800,7 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       <div class="step"><span class="sn">05</span><span class="st"><span class="lang-en">verify</span><span class="lang-ru">Проверка</span></span><span class="sd"><span class="lang-en">fresh eyes, never the author</span><span class="lang-ru">свежими глазами, не автором</span></span></div>
       <div class="step"><span class="sn">06</span><span class="st"><span class="lang-en">merge</span><span class="lang-ru">слияние</span></span><span class="sd"><span class="lang-en">verified only; a checker reads it</span><span class="lang-ru">только проверенное; чекер читает первым</span></span></div>
     </div>
-    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">A worker must name its output file and its gate exit codes; a close whose file count sits below the tree refuses the merge.</span><span class="lang-ru">Воркер обязан назвать выходной файл и коды выхода гейтов; если в закрытии файлов меньше, чем в дереве, слияния нет.</span></p>
+    <p class="body mt" data-reveal style="--d:.18s"><span class="lang-en">Every hand has a stated contract. A worker names its output file and its gate exit codes, and the registry keeps its vocabularies apart: stored status is what the row carries, close outcome is what a close records, computed verdict is what check-worker derives and never stores, and result attestation is what the worker's own result claims. An admission is exactly-once by request id, so a retried dispatch reuses the entry it already admitted. And a close's stamped file row is read against the census of the revision it names: below that census, the merge is refused before any ref moves.</span><span class="lang-ru">У каждой пары рук есть оговорённый контракт. Воркер называет выходной файл и коды выхода гейтов, а реестр держит свои словари раздельно: stored status — то, что несёт строка, close outcome — то, что записывает закрытие, computed verdict — то, что выводит check-worker и никогда не хранит, result attestation — то, что заявляет собственный результат воркера. Приём — ровно один на идентификатор запроса, поэтому повторный диспатч переиспользует уже принятую запись. А файловая строка закрытия сверяется с переписью названной в ней ревизии: ниже переписи слияние отклоняется прежде, чем сдвинется хоть одна ссылка.</span></p>
     <blockquote class="pull" data-reveal style="--d:.24s">
       <p><span class="lang-en">This deck is a worker artifact: built in an isolated worktree, every claim traced to a file, verified before it was called done.</span><span class="lang-ru">Эта презентация — артефакт воркера: собрана в изолированном ворктри, каждое утверждение прослежено до файла, и она проверена до того, как её назвали готовой.</span></p>
       <cite><span class="lang-en">Built the way the worker pool builds</span><span class="lang-ru">Собрано так, как собирает пул воркеров</span></cite>
@@ -779,10 +808,10 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 11. Discipline ───────────────────────────────────────────────── -->
+<!-- ── Discipline ────────── -->
 <section class="spread" id="discipline">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">12</span> <span class="lang-en">Discipline</span><span class="lang-ru">Дисциплина</span></p>
+    <p class="eyebrow" data-reveal><span class="num">13</span> <span class="lang-en">Discipline</span><span class="lang-ru">Дисциплина</span></p>
     <h2 class="title" data-reveal><span class="lang-en">Done is a claim; evidence is the proof</span><span class="lang-ru">«Готово» — утверждение; доказательство — улики</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Braid's cognitive tools make premature confidence expensive: think before a non-trivial move, hypothesize when a fix fails, verify before done, finalize only with the checks green.</span><span class="lang-ru">Когнитивные инструменты Braid делают преждевременную уверенность дорогой: think перед нетривиальным действием, hypothesize когда исправление не сработало, verify до завершения, finalize только с зелёными проверками.</span></p>
     <div class="tools" data-reveal style="--d:.12s">
@@ -798,16 +827,17 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 12. The long loop ────────────────────────────────────────────── -->
+<!-- ── The long loop ────────── -->
 <section class="spread" id="longloop">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">13</span> <span class="lang-en">The long loop</span><span class="lang-ru">Длинный цикл</span></p>
+    <p class="eyebrow" data-reveal><span class="num">14</span> <span class="lang-en">The long loop</span><span class="lang-ru">Длинный цикл</span></p>
     <h2 class="title" data-reveal><span class="lang-en">It iterates on itself</span><span class="lang-ru">Он итерирует сам себя</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Beyond the turn, there is a slower loop: measure what got used, reflect on what happened, and turn failures into procedures.</span><span class="lang-ru">За пределами шага есть более медленный цикл: измерять, что было использовано, рефлексировать о случившемся и превращать провалы в процедуры.</span></p>
     <div class="grid cols-2 mt" data-reveal style="--d:.12s">
       <div class="cell">
         <h3><span class="lang-en">Skill adoption</span><span class="lang-ru">Адопция навыков</span></h3>
-        <p><span class="lang-en">skill-usage counts what was suggested, loaded, claimed, and actually read. It is the instrument that keeps the skill library honest about what earns its place.</span><span class="lang-ru">skill-usage считает, что было предложено, загружено, заявлено использованным и действительно прочитано. Это инструмент, который не даёт библиотеке навыков обманывать себя насчёт того, что оправдывает своё место.</span></p>
+        <p><span class="lang-en">The skills tool keeps a durable per-skill record in <span class="mono">skills-usage.json</span>: <span class="mono">suggested</span>, <span class="mono">loaded</span>, <span class="mono">claimed</span>, <span class="mono">actual</span> and <span class="mono">reloads</span> — what was offered, what arrived, whether the load was claimed or actually read, and how often a compaction took away a body the session had read. <span class="mono">skill_stats</span> returns it; the skill-usage procedure is how a session reads adoption instead of guessing at it.</span><span class="lang-ru">Инструмент навыков ведёт в <span class="mono">skills-usage.json</span> долговременную запись по каждому навыку: <span class="mono">suggested</span>, <span class="mono">loaded</span>, <span class="mono">claimed</span>, <span class="mono">actual</span> и <span class="mono">reloads</span> — что предложено, что дошло, был ли загруз заявлен или действительно прочитан, и сколько раз сжатие отняло прочитанное сессией тело. <span class="mono">skill_stats</span> возвращает её; процедура skill-usage — способ читать адопцию, а не гадать о ней.</span></p>
+        <p><span class="lang-en">A delivery is a decision, not a phrase match: the whisper sends the prompt and a one-line row per skill to a utility model, which names what fits; with no model or key it goes silent and records why. The explicit catalog read keeps the deterministic scorer, because a tool call is not a delivery, and <span class="mono">skill_stats</span> carries the ranker's own counters beside the per-skill ones.</span><span class="lang-ru">Доставка — это решение, а не совпадение фраз: шёпот отправляет промпт и по одной строке на навык utility-модели, которая называет подходящее; без модели или ключа он молчит и записывает причину. Явное чтение каталога оставляет детерминированный скорер, ведь вызов инструмента — не доставка, а <span class="mono">skill_stats</span> несёт рядом с показниками по навыкам и счётчики ранкера.</span></p>
       </div>
       <div class="cell">
         <h3><span class="lang-en">New skills</span><span class="lang-ru">Новые навыки</span></h3>
@@ -827,45 +857,48 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 13. Sources ──────────────────────────────────────────────────── -->
+<!-- ── Sources ────────── -->
 <section class="spread" id="sources">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">14</span> <span class="lang-en">Sources</span><span class="lang-ru">Источники</span></p>
+    <p class="eyebrow" data-reveal><span class="num">15</span> <span class="lang-en">Sources</span><span class="lang-ru">Источники</span></p>
     <h2 class="title" data-reveal><span class="lang-en">The deck points; the repository answers</span><span class="lang-ru">Презентация указывает, репозиторий отвечает</span></h2>
-    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">No count, version, or date appears on these pages, because each of those is a line a reader would have to edit later. Every class of claim has one file that decides it, and the file is always current.</span><span class="lang-ru">Ни одного числа, версии или даты на этих страницах нет: каждое такое значение — строка, которую читателю придётся править. У каждого класса утверждений есть один файл, который решает, и этот файл всегда актуален.</span></p>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">No figure about the codebase appears on these pages: no version, no tally of tools, skills, tests or files. Each of those is a line a reader would have to edit later, and the tree moves faster than a page does. Every class of claim has one file that decides it, and the file is always current.</span><span class="lang-ru">Ни одного числа о самом коде на этих страницах нет: ни версии, ни переписи инструментов, навыков, тестов или файлов. Каждое такое значение — строка, которую читателю придётся править, а дерево движется быстрее страницы. У каждого класса утверждений есть один файл, который решает, и этот файл всегда актуален.</span></p>
     <div class="rows src mt" data-reveal style="--d:.12s">
       <div class="row"><span class="name">tools</span><span class="desc"><span class="mono">packages/core/TOOLS.md</span> <span class="lang-en">Every tool, its tier, and the line it adds to the prompt.</span><span class="lang-ru">Каждый инструмент, его уровень и строка, которую он добавляет в промпт.</span></span></div>
       <div class="row"><span class="name">modules</span><span class="desc"><span class="mono">packages/core/src/extensions/manifest.ts</span> <span class="lang-en">Which extensions exist, and each one's tier.</span><span class="lang-ru">Какие расширения есть и у каждого — его уровень.</span></span></div>
       <div class="row"><span class="name">skills</span><span class="desc"><span class="mono">packages/core/skills/</span> <span class="lang-en">One directory per procedure; description and verdict in the front matter.</span><span class="lang-ru">Один каталог на процедуру; описание и вердикт во фронтматтере.</span></span></div>
       <div class="row"><span class="name">lockstep</span><span class="desc"><span class="mono">packages/core/test/runtime/core/test-tool-pipelines.mjs</span> <span class="lang-en">The test that keeps catalog and injected guidelines identical.</span><span class="lang-ru">Тест, держащий каталог и директивы один в один.</span></span></div>
       <div class="row"><span class="name">packages</span><span class="desc"><span class="mono">packages/*/package.json</span> <span class="lang-en">Workspace list, declared versions, engine floor.</span><span class="lang-ru">Воркспейсы, объявленные версии, порог движка.</span></span></div>
+      <div class="row"><span class="name">context</span><span class="desc"><span class="mono">packages/core/docs/CONTEXT-POLICY.md</span> <span class="lang-en">The window, the bands, the caps, and the owner setting behind each.</span><span class="lang-ru">Окно, полосы, потолки и настройка-владелец каждого.</span></span></div>
+      <div class="row"><span class="name">workers</span><span class="desc"><span class="mono">packages/core/src/lib/orchestrator/workers.ts</span> <span class="lang-en">The lifecycle vocabularies and the close gate.</span><span class="lang-ru">Словари жизненного цикла и гейт закрытия.</span></span></div>
+      <div class="row"><span class="name">release</span><span class="desc"><span class="mono">release-ledger.json</span> <span class="lang-en">What each published version contains, and the commit it came from.</span><span class="lang-ru">Что содержит каждая опубликованная версия и с какого коммита.</span></span></div>
     </div>
     <p class="small mt-s" data-reveal style="--d:.2s"><span class="lang-en">A page that carries a figure needs an editor every time the repository moves. A page that carries the path only needs a reader.</span><span class="lang-ru">Странице с цифрой нужен редактор каждый раз, когда двигается репозиторий. Странице с путём нужен только читатель.</span></p>
   </div>
 </section>
 
-<!-- ── 14. Skills index ─────────────────────────────────────────────── -->
+<!-- ── Skills index ────────── -->
 <section class="spread" id="skills">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">15</span> <span class="lang-en">The library</span><span class="lang-ru">Библиотека</span></p>
+    <p class="eyebrow" data-reveal><span class="num">16</span> <span class="lang-en">The library</span><span class="lang-ru">Библиотека</span></p>
     <h2 class="title" data-reveal><span class="lang-en">Procedures, read on demand</span><span class="lang-ru">Процедуры, которые читают по запросу</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Skills are Markdown procedures, not capabilities. They are grouped here by the job they do, not by the package they ship in, because that is how the agent finds them: by description, for the task in front of it. The index below is a selection, not a census: it lists core procedures, and the satellite pack's procedures live in their own directory.</span><span class="lang-ru">Навыки — это Markdown-процедуры, а не возможности. Здесь они собраны по работе, которую делают, а не по пакету, в котором лежат: именно так агент их и находит — по описанию, под задачу. Индекс ниже — выборка, а не перепись: в нём процедуры ядра, а процедуры спутникового пакета лежат в своём каталоге.</span></p>
     <div class="tax" data-reveal style="--d:.12s">
-      <div class="t"><span class="tl"><span class="lang-en">Reason</span><span class="lang-ru">Рассуждение</span></span><span class="tn">meta-cognition, meta-improvement, research, probe-evaluation, skill-usage</span></div>
+      <div class="t"><span class="tl"><span class="lang-en">Reason</span><span class="lang-ru">Рассуждение</span></span><span class="tn">meta-cognition, meta-improvement, skill-authoring, research, probe-evaluation, skill-usage</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Build</span><span class="lang-ru">Сборка</span></span><span class="tn">software-engineer, code-refactoring, documentation, dox, agent-testing, subagent-orchestration</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Verify</span><span class="lang-ru">Проверка</span></span><span class="tn">subagent-verification, misdirection-audit, placement-discipline</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Operate</span><span class="lang-ru">Эксплуатация</span></span><span class="tn">healthcheck, pane-topology, release-pipeline</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Speak</span><span class="lang-ru">Речь</span></span><span class="tn">voice-replies, tone-quality</span></div>
       <div class="t"><span class="tl"><span class="lang-en">Reference</span><span class="lang-ru">Справка</span></span><span class="tn">braid-reference, pi-reference</span></div>
     </div>
-    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">The tombstone is left out: <span class="mono">code-search</span> is merged into <span class="mono">code-refactoring</span>. Each skill carries a verdict (KEEP, IMPROVE, UNVALIDATED, MOVE), and the record keeps the ones that did not pass.</span><span class="lang-ru">Надгробие не показано: <span class="mono">code-search</span> слит в <span class="mono">code-refactoring</span>. У каждого навыка есть вердикт (KEEP, IMPROVE, UNVALIDATED, MOVE), и запись хранит и те, что не прошли.</span></p>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">Each directory carries a verdict in its front matter (KEEP, IMPROVE, UNVALIDATED, MOVE, DEPRECATE), and a merged one stays behind as a tombstone and is left out of this index: <span class="mono">code-search</span> says what it became and points at <span class="mono">code-refactoring</span>. A session can price a read before taking it: <span class="mono">list_skills</span> answers the whole catalog with each skill's reach — its lines, bytes and <span class="mono">estTokens</span> — and its section map.</span><span class="lang-ru">У каждого каталога вердикт во фронтматтере (KEEP, IMPROVE, UNVALIDATED, MOVE, DEPRECATE), а слитый остаётся надгробием и в этот индекс не входит: <span class="mono">code-search</span> говорит, чем стал, и указывает на <span class="mono">code-refactoring</span>. Сессия может оценить цену чтения заранее: <span class="mono">list_skills</span> отдаёт весь каталог с reach по каждому навыку — строки, байты, <span class="mono">estTokens</span> — и картой разделов.</span></p>
   </div>
 </section>
 
-<!-- ── 15. The channel ──────────────────────────────────────────────── -->
+<!-- ── The channel ────────── -->
 <section class="spread" id="channel">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">16</span> <span class="lang-en">The channel</span><span class="lang-ru">Канал</span></p>
+    <p class="eyebrow" data-reveal><span class="num">17</span> <span class="lang-en">The channel</span><span class="lang-ru">Канал</span></p>
     <h2 class="title" data-reveal><span class="lang-en">A message away</span><span class="lang-ru">На расстоянии одного сообщения</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Telegram is the human interface: the agent sends reports and receives instructions from a phone, without a terminal in sight.</span><span class="lang-ru">Telegram — это человеческий интерфейс: агент отправляет отчёты и получает инструкции с телефона, без терминала на горизонте.</span></p>
     <div class="grid cols-2 mt" data-reveal style="--d:.12s">
@@ -883,16 +916,16 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
       </div>
       <div class="cell">
         <h3><span class="lang-en">Control</span><span class="lang-ru">Управление</span></h3>
-        <p><span class="lang-en">An inline keyboard pauses or resumes the work; a live-update message tracks progress in place and closes on Done.</span><span class="lang-ru">Inline-клавиатура ставит работу на паузу или возобновляет; живое сообщение отслеживает прогресс на месте и закрывается на Done.</span></p>
+        <p><span class="lang-en">An inline keyboard pauses or resumes the work. The message that carries it is a record on disk, so a restart edits the control it recorded instead of posting a second one under the first. The progress message is keyed by chat and edited in place until the last holder ends, and every outbound body opens with a line naming the process that sent it.</span><span class="lang-ru">Inline-клавиатура ставит работу на паузу или возобновляет. Сообщение с ней — запись на диске, поэтому перезапуск правит записанный контрол, а не публикует второй под первым. Сообщение прогресса привязано к чату и правится на месте, пока не закончит последний держатель, а каждое исходящее тело открывается строкой с именем процесса, который его отправил.</span></p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── 16. Ops ──────────────────────────────────────────────────────── -->
+<!-- ── Ops ────────── -->
 <section class="spread" id="ops">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">17</span> <span class="lang-en">Under the floor</span><span class="lang-ru">Под полом</span></p>
+    <p class="eyebrow" data-reveal><span class="num">18</span> <span class="lang-en">Under the floor</span><span class="lang-ru">Под полом</span></p>
     <h2 class="title" data-reveal><span class="lang-en">It keeps its own lights on</span><span class="lang-ru">Сам держит свои огни горящими</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">The suite also maintains the ground it stands on: liveness, errors, health, and the tunnel underneath.</span><span class="lang-ru">Набор обслуживает и собственную почву: живость, ошибки, здоровье и туннель внизу.</span></p>
     <div class="grid cols-2 mt" data-reveal style="--d:.12s">
@@ -916,10 +949,10 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 17. In practice ──────────────────────────────────────────────── -->
+<!-- ── In practice ────────── -->
 <section class="spread" id="built">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">18</span> <span class="lang-en">In practice</span><span class="lang-ru">На практике</span></p>
+    <p class="eyebrow" data-reveal><span class="num">19</span> <span class="lang-en">In practice</span><span class="lang-ru">На практике</span></p>
     <h2 class="title" data-reveal><span class="lang-en">Built by the loop it describes</span><span class="lang-ru">Собрана циклом, который сама описывает</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">This deck is its own test case: one dispatch, an isolated worktree, every claim traced to a file, gates before done. The worker pool page describes the machinery; this is what it produced.</span><span class="lang-ru">Эта презентация — собственный тест-кейс: одно задание, изолированный ворктри, каждое утверждение прослежено до файла, гейты до «готово». Раздел про пул воркеров описывает механику; это — то, что она произвела.</span></p>
     <div class="flow w4" data-reveal style="--d:.12s">
@@ -937,10 +970,10 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 18. Install ──────────────────────────────────────────────────── -->
+<!-- ── Install ────────── -->
 <section class="spread" id="install">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">19</span> <span class="lang-en">Install</span><span class="lang-ru">Установка</span></p>
+    <p class="eyebrow" data-reveal><span class="num">20</span> <span class="lang-en">Install</span><span class="lang-ru">Установка</span></p>
     <h2 class="title" data-reveal><span class="lang-en">A command, not a build</span><span class="lang-ru">Команда, а не сборка</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">pi has to exist first; then Braid is one package install, recorded in pi's own settings. A checkout is for working on Braid, not for using it.</span><span class="lang-ru">Сначала — pi. Затем Braid — это одна установка пакета, и pi записывает её в свои настройки. Клон — чтобы работать над Braid, а не пользоваться им.</span></p>
     <pre class="shell" data-reveal style="--d:.12s"><span class="c"><span class="lang-en"># pi, the harness</span><span class="lang-ru"># pi, среда</span></span>
@@ -970,10 +1003,38 @@ html.no-motion [data-reveal]{opacity:1 !important;transform:none !important;tran
   </div>
 </section>
 
-<!-- ── 19. End ──────────────────────────────────────────────────────── -->
+<!-- ── How it ships ────────── -->
+<section class="spread" id="release">
+  <div class="wrap">
+    <p class="eyebrow" data-reveal><span class="num">21</span> <span class="lang-en">How it ships</span><span class="lang-ru">Как это выходит</span></p>
+    <h2 class="title" data-reveal><span class="lang-en">One chain, wherever it runs</span><span class="lang-ru">Одна цепочка, где бы она ни шла</span></h2>
+    <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">A release is not a local <span class="mono">npm publish</span>. The desk and the runner execute the same chain, a tag names the version it publishes, and what the registry holds is read back against a ledger.</span><span class="lang-ru">Релиз — это не локальный <span class="mono">npm publish</span>. Рабочая машина и раннер выполняют одну и ту же цепочку, тег называет публикуемую версию, а то, что держит реестр, сверяется с журналом.</span></p>
+    <div class="grid cols-2 mt" data-reveal style="--d:.12s">
+      <div class="cell">
+        <h3><span class="lang-en">One chain</span><span class="lang-ru">Одна цепочка</span></h3>
+        <p><span class="lang-en"><span class="mono">npm run ci:check</span> is the gate: lint, types, the repository's own checks and the suite, in one script. CI runs that script, and a check added to the workflow instead of the chain fails the build.</span><span class="lang-ru"><span class="mono">npm run ci:check</span> и есть гейт: линт, типы, собственные проверки репозитория и набор тестов в одном скрипте. CI запускает его, а проверка, добавленная в воркфлоу вместо цепочки, роняет сборку.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">Trusted publishing</span><span class="lang-ru">Доверенная публикация</span></h3>
+        <p><span class="lang-en">The publish workflow mints its credential from the run itself: npm exchanges GitHub's OIDC token for a short-lived publish permission, so no long-lived registry token is stored anywhere, and the package carries a provenance record naming the workflow that built it.</span><span class="lang-ru">Воркфлоу публикации получает мандат из самого запуска: npm меняет OIDC-токен GitHub на короткое право публикации, поэтому долгоживущий токен реестра нигде не хранится, а пакет несёт запись происхождения с именем собравшего его воркфлоу.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">A tag names a version</span><span class="lang-ru">Тег называет версию</span></h3>
+        <p><span class="lang-en">A release tag carries the core manifest's version, and the workflow refuses a tag that does not; an iteration tag never reaches the publish step. A package whose version is already on the registry is skipped, so a re-run publishes nothing twice.</span><span class="lang-ru">Релизный тег несёт версию из манифеста ядра, и воркфлоу отказывает тегу, который её не называет; итерационный тег до шага публикации не доходит. Пакет, чья версия уже есть в реестре, пропускается, так что повторный запуск ничего не публикует дважды.</span></p>
+      </div>
+      <div class="cell">
+        <h3><span class="lang-en">The ledger remembers</span><span class="lang-ru">Журнал помнит</span></h3>
+        <p><span class="lang-en"><span class="mono">release-ledger.json</span> holds, per version, a digest of the packed file contents and the commit it was released from. <span class="mono">ci:check</span> refuses a recorded version whose content has moved, and after publishing the workflow compares the registry's own answer against the ledger.</span><span class="lang-ru"><span class="mono">release-ledger.json</span> хранит по каждой версии дайджест содержимого упакованных файлов и коммит, с которого она выпущена. <span class="mono">ci:check</span> отказывает, если содержимое записанной версии сдвинулось, а после публикации воркфлоу сверяет с журналом ответ самого реестра.</span></p>
+      </div>
+    </div>
+    <p class="small mt-s" data-reveal style="--d:.18s"><span class="lang-en">Nothing above is a figure this page has to keep: the chain, the tag rule and the ledger are files, and each is named.</span><span class="lang-ru">Ничто из перечисленного не нужно держать числом: цепочка, правило тега и журнал — это файлы, и каждый назван.</span></p>
+  </div>
+</section>
+
+<!-- ── End ────────── -->
 <section class="spread" id="end">
   <div class="wrap">
-    <p class="eyebrow" data-reveal><span class="num">20</span> <span class="lang-en">End</span><span class="lang-ru">Конец</span></p>
+    <p class="eyebrow" data-reveal><span class="num">22</span> <span class="lang-en">End</span><span class="lang-ru">Конец</span></p>
     <h2 class="title" data-reveal><span class="lang-en">Everything here was read, not remembered</span><span class="lang-ru">Всё здесь прочитано, а не вспомнено</span></h2>
     <p class="lede" data-reveal style="--d:.06s"><span class="lang-en">Every claim here came out of the pi-braid repository rather than out of a session: tools from the catalog, modules from the manifest, skills from their own directories. Every claim names the file that decides it. A name can move as well as a number, so a script beside this page reads the repository and names whatever has moved.</span><span class="lang-ru">Каждое утверждение здесь взято из репозитория pi-braid, а не из сессии: инструменты — из каталога, модули — из манифеста, навыки — из их каталогов. Каждое утверждение называет решающий его файл. Имя может сдвинуться, как и число, поэтому скрипт рядом со страницей читает репозиторий и называет то, что сдвинулось.</span></p>
     <p class="body mt" data-reveal style="--d:.12s"><span class="lang-en">Braid is early-stage software, as its README says: expect the API surface to move. What is already settled is the discipline around it. Claims get evidence, changes get a home, and done is something you prove.</span><span class="lang-ru">Braid — софт ранней стадии, как и написано в его README: ждите изменений API. Уже устоялась дисциплина вокруг него. Утверждения получают доказательства, изменения — дом, а «готово» — то, что нужно доказать.</span></p>

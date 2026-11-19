@@ -1,0 +1,48 @@
+name: facts
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # The page's claims are decided in another repository, so the gate needs a
+      # copy beside the page. A shallow clone is enough: every row reads a file,
+      # never history.
+      - name: Clone the repository the claims name
+        run: git clone --depth 1 https://github.com/kifirkin/pi-braid.git "$RUNNER_TEMP/pi-braid"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      # pi's own resolver settles the settings path, and it ships in the package
+      # the install section names. The gate reads it the way pi does, from the
+      # package directory PI_CORE points at.
+      - name: Install pi's path resolver
+        run: npm install --prefix "$RUNNER_TEMP/pi-core" --ignore-scripts --no-audit --no-fund @earendil-works/pi-coding-agent
+
+      # The render row reads a build branch that no public clone carries. Its
+      # absence is reported as an unchecked row, not a pass: the gate exits 3,
+      # and this wrapper keeps that a warning naming the row instead of a red run
+      # that would teach a reader to ignore the job. A moved claim or an
+      # unreadable page still fails it.
+      - name: Facts gate
+        env:
+          PI_CORE: ${{ runner.temp }}/pi-core/node_modules/@earendil-works/pi-coding-agent
+        run: |
+          status=0
+          node check-facts.mjs --source "$RUNNER_TEMP/pi-braid" || status=$?
+          case "$status" in
+            0) echo "every row checked and holds" ;;
+            1) echo "::error::a claim moved, or the two languages disagree about the span count"; exit 1 ;;
+            2) echo "::error::the page cannot be read"; exit 2 ;;
+            3) echo "::warning::a row could not be read in this clone: the run above names it, and README says what it needs" ;;
+            *) echo "::error::unexpected exit $status"; exit "$status" ;;
+          esac
